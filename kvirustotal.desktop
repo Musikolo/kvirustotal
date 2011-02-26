@@ -1,0 +1,12 @@
+[Desktop Entry]
+Exec=kvirustotal
+OnlyShowIn=KDE;
+Type=Application
+Terminal=false
+Icon=kvirustotal
+GenericName=Online antivirus and anti-phishing tool
+GenericName[es]=Herramienta online de antivirus y anti-phising
+Name=KVirustotal
+X-KDE-StartupNotify=false
+X-KDE-autostart-after=panel
+Categories=Qt;KDE;Utility;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="kvirustotalrc"/>
+  <group name="general">
+    <entry name="CurrentVersion" type="String">
+      <label>The current version. Used for upgrading operations only</label>
+    </entry>
+  </group>
+  <group name="mainwindow">
+    <entry name="MainWindowPos" type="Point">
+      <label>Coordinates of the main window</label>
+      <!--default code="true">QPoint()</default-->
+    </entry>
+    <entry name="MainWindowSize" type="Size">
+      <label>Size of the main window</label>
+      <!--default code="true">QSize(800,600)</default-->
+    </entry>
+    <entry name="SplitterState" type="IntList">
+      <label>State of the the main window's splitter</label>
+  </entry>
+    <!--entry name="StartDir" type="Url">
+      <label>Start directory for the application KFileDialog</label>
+      <default>kfiledialog:///kvirustotal</default>
+    </entry-->
+  </group>
+  <group name="network">
+    <entry name="ServiceKey" type="String">
+      <label>API key required to access the online services provided by VirusTotal</label>
+    </entry>
+    <entry name="SecureProtocol" type="Bool">
+      <label>Whether to use HTTPS protocol rather than unsecured HTTP</label>
+      <default>true</default>
+    </entry>
+    <entry name="ReuseLastReport" type="Bool">
+      <label>Whether to use existant reports first, if available</label>
+      <default>true</default>
+    </entry>
+  </group>
+</kcfg>

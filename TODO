@@ -1,0 +1,33 @@
+* Implement smarter queue engine to manage requests more efficiently
+* Save each column width for better customization
+* Find out a way to set the antivirus version and real version update
+
+* DONE - Create .desktop file
+* DONE - Replace the "<copyright holder> <email>" text in the license of each file
+* DONE - Translate the app into Spanish
+* DONE - Save the current version in the configuration
+* DONE - Add AUTHOR COPYING ChangeLog README TODO
+* DONE - Create preferences dialog
+* DONE - Show the number of positives out of the number of antivirus, e,g. "Finished (3/42)"
+* DONE - Remember the last accessed directory when opening a file
+* DONE - Remember main window position and size.
+* DONE - Create welcome dialog that asks for the service key.
+* DONE - Show warning when there are task in course
+* DONE - Show the upload rate while "Uploading" message is printed
+* DONE - Fix context menu "Re-scan" option
+* DONE - Fix re-scan option as it uploads the given file twice
+* DONE - Implement the ability to clean finished tasks
+* DONE - Create a context menu for the task view
+* DONE - Implement the actions "Select all" and "Invert Selection".
+* DONE - Implement the ability to abort tasks in course.
+* DONE - Manage network errors while "Retrieving report..." message is shown
+* DONE - Fix result icon not being shown when not enough space available.
+* DONE - Manage the -2 result: "Connection limit reached". Change delay to something bigger.
+* DONE - Prevent (ask for the user) the same file to be sumitted several times
+* DONE - Create Edit menu having: Select all and Invert selection entries.
+* DONE - Create Help menu having: About KVirusTotal and About KDE entries.
+* DONE - Show report directly when a task is selected.
+* DONE - Show the selected report when using arrow keys.
+* DONE - Resize graphic objects as the main window does it.
+* DONE - Try to re-use the last report available to improve response time. Otherwise, submit the file for anaylisis.
+* DONE - Calculate MD5, SHA1 and SHA256 within file reports.
