@@ -1,6 +1,7 @@
 * Implement smarter queue engine to manage requests more efficiently
 * Save each column width for better customization
 * Find out a way to set the antivirus version and real version update
+* Add drag and drop support
 
 * DONE - Create .desktop file
 * DONE - Replace the "<copyright holder> <email>" text in the license of each file
