@@ -24,6 +24,7 @@
 #include "taskviewhandler.h"
 #include <QHeaderView>
 #include "mainwindow.h"
+#include <settings.h>
 
 static const int DEFAULT_ROW_COUNT = 10;
 static const int DEFAULT_COL_COUNT = 5;
@@ -51,12 +52,24 @@ void TaskViewHandler::setupObject( QTableWidget* reportTableWidget ){
 	tableWidget->resizeRowsToContents();
 	tableWidget->setAlternatingRowColors( true );
 
-	// Set the headers and distribute the columns' width
+	// Set the headers
 	QStringList headers;
 	tableWidget->setHorizontalHeaderLabels( headers << i18n( "Type" ) << i18n( "Name" ) << i18n( "Size" ) << i18n( "Status" ) << i18n( "Elapsed Time" ) );
-	int width = tableWidget->topLevelWidget()->width() - 45;
-	for( int i = 0; i < tableWidget->columnCount(); i++ ) {
-		tableWidget->setColumnWidth( i, TaskRowViewHandler::getHintColumnSize( i, width ) );
+
+	// Set the columns' width done by the user, if any
+	QList< int > colsWidths = Settings::self()->taskTableCols();
+	kDebug() << "User-defined column widths=" << colsWidths;
+	if( !colsWidths.isEmpty() && colsWidths.size() == tableWidget->columnCount() ) {
+		for( int i = 0; i < colsWidths.size(); i++ ) {
+			tableWidget->setColumnWidth( i, colsWidths.at( i ) );
+		}
+	}
+	// Otherwise, distribute the columns' width based on own approximation algorithm
+	else {
+		int width = tableWidget->topLevelWidget()->width() - 45;
+		for( int i = 0; i < tableWidget->columnCount(); i++ ) {
+			tableWidget->setColumnWidth( i, TaskRowViewHandler::getHintColumnSize( i, width ) );
+		}
 	}
 
 	// Create a shared timer for all rows
@@ -74,11 +87,17 @@ void TaskViewHandler::setupObject( QTableWidget* reportTableWidget ){
 	connect( tableWidget, SIGNAL( itemSelectionChanged() ),
 			 this, SLOT( selectedRowChanged() ) );
 
-/*	connect( this, SIGNAL( widthChanged( int ) ),
-			 reportViewHandler, SLOT( widthChanged( int ) ) );*/
-
 	// Prepare our context menu
 	setupContextMenu();
+}
+
+void TaskViewHandler::tableWidthChanged( int width ) {
+	kDebug() << "TaskViewHandler::widthChanged() " << width;
+	int localWidth = width - 41;
+	for( int i = 0; i < tableWidget->columnCount(); i++ ) {
+		tableWidget->setColumnWidth( i, TaskRowViewHandler::getHintColumnSize( i, localWidth ) );
+	}
+	reportViewHandler->widthChanged( width );
 }
 
 void TaskViewHandler::setServiceKey( const QString serviceKey ) {
@@ -420,16 +439,6 @@ void TaskViewHandler::addRow2Timer( TaskRowViewHandler * rowViewHandler ) {
 void TaskViewHandler::removeRow2Timer( TaskRowViewHandler* rowViewHandler ) {
 	rowViewHandler->disconnect( this, SIGNAL( unsubscribeNextSecond( TaskRowViewHandler* ) ) );
 	timer->disconnect( rowViewHandler );
-}
-
-void TaskViewHandler::tableWidthChanged( int width ) {
-	//int width = tableWidget->topLevelWidget()->width() - 45;
-kDebug() << "TaskViewHandler::widthChanged() " << width;
-	int localWidth = width - 41;
-	for( int i = 0; i < tableWidget->columnCount(); i++ ) {
-		tableWidget->setColumnWidth( i, TaskRowViewHandler::getHintColumnSize( i, localWidth ) );
-	}
-	reportViewHandler->widthChanged( width );
 }
 
 bool TaskViewHandler::isUnfinishedTasks() {

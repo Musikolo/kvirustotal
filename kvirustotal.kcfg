@@ -20,11 +20,13 @@
     </entry>
     <entry name="SplitterState" type="IntList">
       <label>State of the the main window's splitter</label>
-  </entry>
-    <!--entry name="StartDir" type="Url">
-      <label>Start directory for the application KFileDialog</label>
-      <default>kfiledialog:///kvirustotal</default>
-    </entry-->
+    </entry>
+    <entry name="TaskTableCols" type="IntList">
+      <label>Width of the columns of the task table</label>
+    </entry>
+    <entry name="ReportTableCols" type="IntList">
+      <label>Width of the columns of the report table</label>
+    </entry>
   </group>
   <group name="network">
     <entry name="ServiceKey" type="String">

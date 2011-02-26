@@ -21,6 +21,7 @@
 #include "reportviewhandler.h"
 #include <QHeaderView>
 #include "mainwindow.h"
+#include <settings.h>
 
 ReportViewHandler::ReportViewHandler( MainWindow* mainwindow, QTableWidget* tableWidget ) {
 	this->mainWindow = mainwindow;
@@ -44,12 +45,20 @@ void ReportViewHandler::setupObject( QTableWidget* tableWidget ){
 	QStringList headers;
 	tableWidget->setHorizontalHeaderLabels( headers << i18n( "Antivirus" ) << i18n( "Version" ) << i18n( "Last update" ) << i18n( "Result" ) );
 
-//	kDebug() << "tableWidget->size()=" << tableWidget->topLevelWidget()->width();
-
-	// Distribute the columns' width
-	int width = ( tableWidget->topLevelWidget()->width() - 60 ) / tableWidget->columnCount();
-	for( int i = 0; i < tableWidget->columnCount(); i++ ) {
-		tableWidget->setColumnWidth( i, width );
+	// Set the columns' width done by the user, if any
+	QList< int > colsWidths = Settings::self()->reportTableCols();
+	kDebug() << "User-defined column widths=" << colsWidths;
+	if( !colsWidths.isEmpty() && colsWidths.size() == tableWidget->columnCount() ) {
+		for( int i = 0; i < colsWidths.size(); i++ ) {
+			tableWidget->setColumnWidth( i, colsWidths.at( i ) );
+		}
+	}
+	// Otherwise, distribute the columns' width based on own approximation algorithm
+	else {
+		int width = ( tableWidget->topLevelWidget()->width() - 60 ) / tableWidget->columnCount();
+		for( int i = 0; i < tableWidget->columnCount(); i++ ) {
+			tableWidget->setColumnWidth( i, width );
+		}
 	}
 }
 

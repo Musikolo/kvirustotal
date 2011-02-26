@@ -192,7 +192,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	connect( urlAction, SIGNAL( triggered( bool ) ), this, SLOT( openUrl() ) );
 	connect( abortAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( abortSelectedTask() ) );
 	connect( permanentLinkValue, SIGNAL( leftClickedUrl() ), this, SLOT( openPermanentLink() ) );
-	connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
 	connect( selectAllAction, SIGNAL( triggered( Qt::MouseButtons, Qt::KeyboardModifiers ) ),
 			 taskViewHandler, SLOT( selectAll() ) );
 	connect( invertSelectionAction, SIGNAL( triggered( Qt::MouseButtons, Qt::KeyboardModifiers ) ),
@@ -201,6 +200,9 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 			 this, SLOT( showSettingsDialog() ) );
 	connect( rescanAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( rescanTasks() ) );
 	connect( cleanFinishedAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( clearFinishedRows() ) );
+	
+	// Finally call the delayed connections. 
+	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
 }
 
 MainWindow::~MainWindow() {
@@ -210,6 +212,11 @@ MainWindow::~MainWindow() {
 	if( wizard != NULL ) {
 		delete wizard;
 	}
+}
+
+void MainWindow::delayedConnections() {
+	// Needed to be delayed, since MainWindow will throw the resizeWidth signal at construction time
+	connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
 }
 
 bool MainWindow::closeRequested() {
@@ -229,8 +236,18 @@ bool MainWindow::closeRequested() {
 	settings->setCurrentVersion( General::APP_VERSION );
 	settings->setMainWindowPos( pos()  );
 	settings->setMainWindowSize( size() );
-	kDebug() << splitter->sizes();
+	QList< int > taskTableCols;
+	for( int i = 0; i < taskTableWidget->columnCount(); i++ ) {
+		taskTableCols.append( taskTableWidget->columnWidth( i ) );
+	}
+	settings->setReportTableCols( taskTableCols );
+	QList< int > reportTableCols;
+	for( int i = 0; i < reportTableWidget->columnCount(); i++ ) {
+		reportTableCols.append( reportTableWidget->columnWidth( i ) );
+	}
+	settings->setReportTableCols( reportTableCols );
 	settings->setSplitterState( splitter->sizes() );
+	kDebug() << "Storing user config...";
 	settings->writeConfig();
 	return close();
 }

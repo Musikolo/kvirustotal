@@ -46,6 +46,7 @@ private slots:
 	void wizardFinished( int result );
 	void showSettingsDialog();
 	void settingsChanged();
+	void delayedConnections();
 
 public:
     MainWindow( );
