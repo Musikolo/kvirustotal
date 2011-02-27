@@ -35,18 +35,22 @@ private:
 	QLabel* resultIconLabel;
 	WelcomeWizard* wizard;
 
+	void dragEnterEvent( QDragEnterEvent* event );
+	void dropEvent( QDropEvent* event );
+	
 private slots:
 	bool closeRequested();
 	void openFile();
 	void openUrl();
 //	void submit();
 	void openPermanentLink();
-	void resizeEvent ( QResizeEvent * event );
+	void resizeEvent ( QResizeEvent* event );
 	void showWelcomeWizard();
 	void wizardFinished( int result );
 	void showSettingsDialog();
 	void settingsChanged();
 	void delayedConnections();
+	
 
 public:
     MainWindow( );

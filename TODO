@@ -1,7 +1,9 @@
 * Implement smarter queue engine to manage requests more efficiently
 * Find out a way to set the antivirus version and real version update
-* Add drag and drop support
+* Better integration with KDE tray message system
+* Make service menu integration
 
+* DONE - Add drag and drop support
 * DONE - Save each column width for better customization
 * DONE - Create .desktop file
 * DONE - Replace the "<copyright holder> <email>" text in the license of each file

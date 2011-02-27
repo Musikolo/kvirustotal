@@ -126,7 +126,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	actionMenu->addAction( cleanFinishedAction );
 	actionMenu->addAction( abortAction );
 
-
 	// Help menu
 	QMenu* helpMenu = ( new KHelpMenu( this, KCmdLineArgs::aboutData(), false ) )->menu();
 	helpMenu->addSeparator();
@@ -201,8 +200,9 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	connect( rescanAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( rescanTasks() ) );
 	connect( cleanFinishedAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( clearFinishedRows() ) );
 	
-	// Finally call the delayed connections. 
+	// Call the delayed connections and accept drops
 	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
+	setAcceptDrops( true );
 }
 
 MainWindow::~MainWindow() {
@@ -351,6 +351,32 @@ void MainWindow::showSettingsDialog() {
 
 void MainWindow::settingsChanged() {
 	HttpConnector::loadSettings(); // Re-establish the protocol (HTTPS or HTTP)
+}
+
+void MainWindow::dragEnterEvent( QDragEnterEvent* event ) {
+	kDebug() << "Receiving dragged object with mimeData" << event->mimeData()->text();
+	QUrl url( event->mimeData()->text() );
+	if( url.isValid() ) {
+		const QString scheme = url.scheme();
+		if( !scheme.isEmpty() && ( scheme == "file" || scheme.startsWith( "http" ) || scheme.startsWith( "ftp" ) ) ) {
+			event->acceptProposedAction();
+		}
+	}
+}
+
+void MainWindow::dropEvent( QDropEvent* event ) {
+	kDebug() << "Receiving dropped object with mimeData" << event->mimeData()->text();
+	QUrl url( event->mimeData()->text() );
+	const QString scheme = url.scheme();
+	if( scheme == "file" ) {
+		QFile file( url.path() );
+		if( file.exists() ) {
+			taskViewHandler->submitFile( url.path() );
+		}
+	}
+	else {
+		taskViewHandler->submitUrl( url.toString() );
+	}
 }
 
 #include "mainwindow.moc"
