@@ -23,6 +23,7 @@
 #include "taskrowviewhandler.h"
 #include <KAction>
 #include <qcoreevent.h>
+#include "mainwindow.h"
 
 //TODO: Better use QIODevice than QFile
 TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, HttpConnector* connector, const QFile& file ) {
@@ -231,6 +232,7 @@ void TaskRowViewHandler::scanningStarted() {
 void TaskRowViewHandler::errorOccurred( const QString& message ) {
 	this->finished = true;
 	setStatus( i18n( "Error" ), message );
+	MainWindow::showErrorNotificaton( i18n( "The next error ocurred while processing the task %1: %2 ", rowIndex, message ) );
 	emit( unsubscribeNextSecond( this ) );
 }
 
@@ -273,18 +275,24 @@ void TaskRowViewHandler::aborted() {
 }
 
 void TaskRowViewHandler::fileReportReady( FileReport* const report ) {
+	reportReady( report );
+}
+
+void TaskRowViewHandler::urlReportReady( UrlReport * const report ) {
+	reportReady( report );
+}
+
+void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 	setReport( report ); // Free the current report and set the new one
 	this->finished = true;
 	setStatus( i18n( "Finished (%1/%2)", report->getResultMatrixPositives(), report->getResultMatrix().size() ) );
+	// Only when the report takes more a a minute, will show a notification
+	if( seconds > 60 ) {
+		MainWindow::showCompleteTaskNotificaton( i18n( "Task %1 finished", rowIndex + 1 ), 
+												 ReportViewHandler::getReportIconName( report->getResultMatrixPositives() ) );
+	}
 	emit( unsubscribeNextSecond( this ) );
 	emit( reportCompleted( rowIndex ) );
 }
 
-void TaskRowViewHandler::urlReportReady( UrlReport * const report ) {
-	setReport( report ); // Free the current report and set the new one
-	this->finished = true;
-	setStatus( i18n( "Finished (%1/%2)", report->getResultMatrixPositives(), report->getResultMatrix().size() ) );
-	emit( unsubscribeNextSecond( this ) );
-	emit( reportCompleted( rowIndex ) );
-}
 #include "taskrowviewhandler.moc";

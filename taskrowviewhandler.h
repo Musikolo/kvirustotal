@@ -48,6 +48,7 @@ private:
 	void setReport( AbstractReport* const report );
     void addRowItem(int column, const QString& text, const QString& toolTip = QString() );
     void setupObject( TaskViewHandler* viewHandler, int rowIndex, HttpConnector* connector, const QString& type, const QString& name, int size );
+	void reportReady( AbstractReport* const report );
 
 private slots:
     void scanningStarted();

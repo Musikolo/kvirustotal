@@ -465,7 +465,8 @@ void HttpConnector::reportComplete() {
 	}
 	else {
 		kDebug() << "ERROR: " << reply->errorString();
-		emit( errorOccurred( reply->errorString() ) );
+//TODO: It should be unneeded to emit this signal here, as it should have been done already by the submissionReplyError() method
+//		emit( errorOccurred( reply->errorString() ) );
 	}
 
 	// Set the report mode to none
@@ -481,8 +482,7 @@ void HttpConnector::downloadProgressRate( qint64 bytesSent, qint64 bytesTotal ){
 }
 
 void HttpConnector::submissionReplyError( QNetworkReply::NetworkError error ) {
-	QString errorMsg( reply->errorString() );
-	errorMsg.append( " - (%1) " ).arg( error );
+	QString errorMsg( reply->errorString().append( " - (%1) " ).arg( error ) );
 	kDebug() << "ERROR:" << errorMsg;
 	emit( errorOccurred( errorMsg ) );
 	reportMode = ReportMode::NONE;

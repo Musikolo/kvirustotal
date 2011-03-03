@@ -41,6 +41,8 @@ public:
     virtual ~ReportViewHandler();
 	inline QTableWidget* getTableWidget(){ return this->tableWidget; }
 	void showReport( AbstractReport* const report );
+	
+	static QString getReportIconName( int numInfected );
 
 public slots:
 	void widthChanged( int width );

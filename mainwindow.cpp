@@ -35,6 +35,7 @@
 #include <KConfigDialog>
 #include <QSplitter>
 #include <KStandardAction>
+#include <KNotification>
 
 #include "constants.h"
 #include "httpconnector.h"
@@ -377,6 +378,30 @@ void MainWindow::dropEvent( QDropEvent* event ) {
 	else {
 		taskViewHandler->submitUrl( url.toString() );
 	}
+}
+
+void MainWindow::showInfoNotificaton( const QString& msg ) {
+	KNotification::event( KNotification::Notification, 
+						  i18nc( "Application name", "%1 information", General::APP_UI_NAME ), 
+						  msg, KIcon( General::APP_NAME ).pixmap( 48, 48 ) );
+}
+
+void MainWindow::showCompleteTaskNotificaton( const QString& msg, const QString& iconName ) {
+	KNotification::event( KNotification::Notification, 
+						  i18nc( "Application name", "%1 - Task completed", General::APP_UI_NAME ), 
+						  msg, KIcon( iconName ).pixmap( 48, 48 ) );
+}
+
+void MainWindow::showWarningNotificaton( const QString& msg ) {
+	KNotification::event( KNotification::Warning, 
+						  i18nc( "Application name", "%1 warning", General::APP_UI_NAME ), 
+						  msg, KIcon( "task-attention" ).pixmap( 48, 48 ), NULL, KNotification::CloseWhenWidgetActivated );
+}
+
+void MainWindow::showErrorNotificaton( const QString& msg ) {
+	KNotification::event( KNotification::Warning, 
+						  i18nc( "Application name", "%1 error", General::APP_UI_NAME ), 
+						  msg, KIcon( "task-reject" ).pixmap( 48, 48 ), NULL, KNotification::Persistent );
 }
 
 #include "mainwindow.moc"

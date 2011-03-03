@@ -26,6 +26,7 @@
 #include "taskviewhandler.h"
 #include "reportviewhandler.h"
 #include "welcomewizard.h"
+#include <KNotification>
 class MainWindow : public KMainWindow, private Ui::MainWindow
 {
 Q_OBJECT
@@ -61,6 +62,11 @@ public:
 	inline QLabel* getSha256Label(){ return this->sha256Value; }
 	inline KUrlLabel* getPermanentLink(){ return this->permanentLinkValue; }
 	void setResultIcon( const QString& iconName, bool enabled = true );
+	
+	static void showInfoNotificaton( const QString& msg );
+	static void showWarningNotificaton( const QString& msg );
+	static void showErrorNotificaton( const QString& msg );
+	static void showCompleteTaskNotificaton( const QString& msg, const QString& iconName );
 
 signals:
 	void resizeWidth( int width );

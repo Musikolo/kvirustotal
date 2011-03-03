@@ -118,15 +118,7 @@ void ReportViewHandler::showReport( AbstractReport* const report ) {
 		link->setText( permanentLink );
 
 		// Set the result icon depending on the number of infections detected
-		if( numInfected == 0 ) {
-			mainWindow->setResultIcon( "security-high" );
-		}
-		else if( numInfected < 4 ) {
-			mainWindow->setResultIcon( "security-medium" );
-		}
-		else {
-			mainWindow->setResultIcon( "security-low" );
-		}
+		mainWindow->setResultIcon( getReportIconName( numInfected ) );
 	}
 	else {
 		kDebug() << "The given report is null. Resetting the report view...";
@@ -162,6 +154,17 @@ kDebug() << "ReportViewHandler::widthChanged() " << width;
 	for( int i = 0; i < tableWidget->columnCount(); i++ ) {
 		tableWidget->setColumnWidth( i, width );
 	}
+}
+
+QString ReportViewHandler::getReportIconName( int numInfected ) {
+	// Return icon name depending on the number of infections detected
+	if( numInfected == 0 ) {
+		return "security-high" ;
+	}
+	if( numInfected < 4 ) {
+		return "security-medium";
+	}
+	return "security-low";
 }
 
 #include "reportviewhandler.moc"

@@ -437,7 +437,6 @@ void TaskViewHandler::addRow2Timer( TaskRowViewHandler * rowViewHandler ) {
 }
 
 void TaskViewHandler::removeRow2Timer( TaskRowViewHandler* rowViewHandler ) {
-	rowViewHandler->disconnect( this, SIGNAL( unsubscribeNextSecond( TaskRowViewHandler* ) ) );
 	timer->disconnect( rowViewHandler );
 }
 
