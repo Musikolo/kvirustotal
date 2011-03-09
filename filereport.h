@@ -21,6 +21,7 @@
 #include <QString>
 #include <QUrl>
 #include <QVariantMap>
+
 #include "abstractreport.h"
 #include "filehasher.h"
 
@@ -34,7 +35,6 @@ class FileReport : public virtual AbstractReport
 private:
 	QString fileName;
 	QUrl permanentLink;
-	bool localHasher;
 	FileHasher* hasher;
 
 	/** Sets up the current object from the given JSON string */

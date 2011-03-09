@@ -30,11 +30,9 @@ static const int DEFAULT_ROW_COUNT = 10;
 static const int DEFAULT_COL_COUNT = 5;
 static const long SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000;; // 20 MB
 
-TaskViewHandler::TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget, QNetworkAccessManager* networkManager, const QString& serviceKey ) {
+TaskViewHandler::TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget ) {
 	this->mainwindow 	 = mainwindow;
 	this->tableWidget 	 = taskTableWidget;
-	this->networkManager = networkManager;
-	this->serviceKey 	 = serviceKey;
 
 	setupObject( reportTableWidget );
 }
@@ -100,11 +98,6 @@ void TaskViewHandler::tableWidthChanged( int width ) {
 	reportViewHandler->widthChanged( width );
 }
 
-void TaskViewHandler::setServiceKey( const QString serviceKey ) {
-	this->serviceKey = serviceKey;
-}
-
-
 void TaskViewHandler::submitFile( const QString& fileName ) {
 	kDebug() << "Submitting file" << fileName << "...";
 	if( fileName.isEmpty() ) {
@@ -133,11 +126,10 @@ void TaskViewHandler::submitFile( const QString& fileName ) {
 	}
 	// Create a new entry
 	prepareTable();
-	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), new HttpConnector( networkManager, serviceKey ), file );
+	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), file );
 	connect( rowViewHandler, SIGNAL( reportCompleted( int ) ), this, SLOT( reportCompleted( int ) ) );
 	addRow2Timer( rowViewHandler );
 	rowViewHandlers.append( rowViewHandler );
-//FIXME:connect( rowViewHandler, SIGNAL( rowRemoved( int ) ), this, SLOT( rowRemoved( int ) ) );
 }
 
 
@@ -159,7 +151,7 @@ void TaskViewHandler::submitUrl( const QString& urlAddress ) {
 	}
 	prepareTable();
 	QUrl url( urlAddress );
-	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), new HttpConnector( networkManager, serviceKey ), url );
+	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), url );
 	connect( rowViewHandler, SIGNAL( reportCompleted( int ) ), this, SLOT( reportCompleted( int ) ) );
 	addRow2Timer( rowViewHandler );
 	rowViewHandlers.append( rowViewHandler );
@@ -244,7 +236,7 @@ void TaskViewHandler::removeRow( int rowIndex ) {
 	  }
 
 	  // Adjust the number of rows to its minium
-	  QTableWidget* const table = getTableWidget();
+	  QTableWidget*const table = getTableWidget();
 	  if( table->rowCount() < DEFAULT_ROW_COUNT ){
 		  table->setRowCount( DEFAULT_ROW_COUNT );
 		  table->resizeRowsToContents();

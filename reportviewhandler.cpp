@@ -90,8 +90,8 @@ void ReportViewHandler::showReport( AbstractReport* const report ) {
 		mainWindow->getScanAnaylisisDate()->setText( reportDate );
 
 		QString permanentLink;
-		FileReport* fileReport = dynamic_cast< FileReport * >( report );
-		KUrlLabel* const link = mainWindow->getPermanentLink();
+		FileReport* fileReport = dynamic_cast< FileReport* >( report );
+		KUrlLabel*const link = mainWindow->getPermanentLink();
 		if( fileReport != NULL ) {
 			// Set the MD5, SHA1 and SHA256 hashes
 			mainWindow->getMd5Label()->setText( fileReport->getMd5Sum() );

@@ -72,7 +72,6 @@ that will be tested against the main anti-phising sytems.<br><br>\
 Although %1 is a powerful tool, remember that <b>it is not \
 intended as a replacement of a full-fledged antivirus program.</b><br><br>\
 Please, click on the 'Next' button to set up the application.", General::APP_UI_NAME );
-//	text = "<b>Hello</b> <i>Qt!</i>";
 	QLabel* label = new QLabel( text, page );
 	label->setAlignment( Qt::AlignJustify | Qt::AlignVCenter );
 	label->setWordWrap( true );
@@ -200,14 +199,13 @@ void WelcomePage::startServiceKeyValidation() {
 	QString key = serviceKey();
 	kDebug() << "Validating the user-provided key " << key;
 	QNetworkAccessManager* manager = wizard->networkAccessManager();
-kDebug() << "manager=" << manager;
 	freeConnector(); // Should do nothing, but keep it just in case
 	connector = new HttpConnector( wizard->networkAccessManager(), key );
 	
-kDebug() << "WelcomePageId=" << wizard->currentId();
 	// Connect the connector needed signals
-	connect( connector, SIGNAL( fileReportReady( FileReport* const ) ),
-		     this, SLOT( testReportReceived( FileReport* const ) ) );
+	kDebug() << "WelcomePageId=" << wizard->currentId();
+	connect( connector, SIGNAL( reportReady( AbstractReport*const ) ),
+		     this, SLOT( testReportReceived( AbstractReport*const ) ) );
 	connect( connector, SIGNAL( invalidServiceKeyError() ),
 			 this, SLOT( testReportInvalidKey() ) );
 	connect( connector, SIGNAL( errorOccurred( QString ) ),
@@ -218,7 +216,7 @@ kDebug() << "WelcomePageId=" << wizard->currentId();
 	connector->retrieveFileReport( TEST_SERVICE_KEY_SCAN_ID );
 }
 
-void WelcomePage::testReportReceived( FileReport* const report ) {
+void WelcomePage::testReportReceived( AbstractReport*const report ) {
 //kDebug() << "testReportReceived() FileReport* report=" << report;
 	if( report != NULL ) {
 		const ServiceReplyResult::ServiceReplyResultEnum result = report->getServiceReplyResult();

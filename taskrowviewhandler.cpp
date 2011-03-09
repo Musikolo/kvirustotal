@@ -24,49 +24,36 @@
 #include <KAction>
 #include <qcoreevent.h>
 #include "mainwindow.h"
+#include "taskscheduler.h"
+#include <settings.h>
 
 //TODO: Better use QIODevice than QFile
-TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, HttpConnector* connector, const QFile& file ) {
-	setupObject( viewHandler, rowIndex, connector, i18nc( "Type of task", "File" ), file.fileName(), file.size() );
-	connector->submitFile( file.fileName() );
+TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QFile& file ) {
+	setupObject( viewHandler, rowIndex, i18nc( "Type of task", "File" ), file.fileName(), file.size(), JobType::FILE );
 }
 
-TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, HttpConnector* connector, const QUrl& url ) {
-	setupObject( viewHandler, rowIndex, connector, i18n( "URL" ), url.toString(), 0 );
-	connector->submitUrl( url );
+TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QUrl& url ) {
+	setupObject( viewHandler, rowIndex, i18n( "URL" ), url.toString(), 0, JobType::URL );
 }
 
 TaskRowViewHandler::~TaskRowViewHandler() {
-	connector->deleteLater();
 	setReport( NULL ); // Free the report
 }
 
-void TaskRowViewHandler::setupObject( TaskViewHandler* viewHandler, int rowIndex, HttpConnector* connector, const QString& type, const QString& name, int size ) {
+void TaskRowViewHandler::setupObject( TaskViewHandler* viewHandler, int rowIndex, const QString& type, const QString& name, int size, JobType::JobTypeEnum jobType ) {
 	// Assing inner objects
 	this->viewHandler = viewHandler;
-	this->connector = connector;
 	this->setRowIndex( rowIndex );
 	this->report = NULL;
 	this->finished = false;
+	this->jobId = TaskScheduler::self()->enqueueJob( name, jobType, this, Settings::reuseLastReport() );
 
 	// Show the item in the table view
 	setType( type );
 	setName( name );
 	setSize( size );
-	setStatus( QString() );
+//	setStatus( i18n( "Queued" ) ); // The "Submitting" message is already shown due to the enqueueJob() call above
 	setTime( this->seconds = 0 );
-
-	// Establish all connections
-	connect( connector, SIGNAL( startScanning() ), this, SLOT( scanningStarted() ) );
-	connect( connector, SIGNAL( uploadingProgressRate( qint64, qint64 ) ), this, SLOT( uploadProgressRate( qint64, qint64 ) ) );
-	connect( connector, SIGNAL( scanIdReady() ), this, SLOT( scanIdReady() ) );
-	connect( connector, SIGNAL( retrievingReport() ), this, SLOT( retrievingReport() ) );
-	connect( connector, SIGNAL( waitingForReport( int ) ), this, SLOT( waitingForReport( int ) ) );
-	connect( connector, SIGNAL( serviceLimitReached( int ) ), this, SLOT( serviceLimitReached( int ) ) );
-	connect( connector, SIGNAL( fileReportReady( FileReport* const ) ), this, SLOT( fileReportReady( FileReport* const ) ) );
-	connect( connector, SIGNAL( urlReportReady( UrlReport* const ) ), this, SLOT( urlReportReady( UrlReport* const) ) );
-	connect( connector, SIGNAL( aborted() ), this, SLOT( aborted() ) );
-	connect( connector, SIGNAL( errorOccurred( QString ) ), this, SLOT( errorOccurred( QString ) ) );
 }
 
 void TaskRowViewHandler::setRowIndex( int index ){
@@ -120,11 +107,10 @@ void TaskRowViewHandler::setTime( int seconds ) {
 	int minute = seconds / 60;
 	seconds -= minute * 60;
 
-	QLatin1Char zeroPadding = QLatin1Char( '0' );
-	QString text;
-	text = QString( "%1:%2:%3" ).arg( hour, 2, 10, zeroPadding ).
-								 arg( minute, 2, 10, zeroPadding ).
-								 arg( seconds, 2, 10, zeroPadding );
+	static const QLatin1Char zeroPadding( '0' );
+	QString text = QString( "%1:%2:%3" ).arg( hour, 2, 10, zeroPadding ).
+										 arg( minute, 2, 10, zeroPadding ).
+										 arg( seconds, 2, 10, zeroPadding );
 	addRowItem( Column::TIME, text );
 }
 
@@ -133,7 +119,7 @@ void TaskRowViewHandler::nextSecond() {
 }
 
 const QString& TaskRowViewHandler::getItemText( Column::ColumnEnum column ) const {
-	QTableWidget* table = viewHandler->getTableWidget();
+	QTableWidget*const table = viewHandler->getTableWidget();
 	QTableWidgetItem* item = table->item( rowIndex, column );
 	if( item != NULL ) {
 		return item->text();
@@ -143,7 +129,7 @@ const QString& TaskRowViewHandler::getItemText( Column::ColumnEnum column ) cons
 }
 
 void TaskRowViewHandler::addRowItem( int column, const QString& text, const QString& toolTip ) {
-	QTableWidget* table = viewHandler->getTableWidget();
+	QTableWidget*const table = viewHandler->getTableWidget();
 	QTableWidgetItem* item = new QTableWidgetItem( text );
 	switch( column ) {
 		case Column::TYPE:
@@ -188,8 +174,7 @@ int TaskRowViewHandler::getHintColumnSize(int column, int availableWidth ) {
 bool TaskRowViewHandler::abort() {
 	if( !isFinished() ) {
 		setStatus( i18n( "Aborting..." ) );
-		connector->abort();
-		return true;
+		return TaskScheduler::self()->abort( this->jobId );
 	}
 	return false;
 }
@@ -202,7 +187,7 @@ bool TaskRowViewHandler::rescan() {
 		if( file.exists() ) {
 			this->finished = false;
 			this->seconds = 0;
-			connector->uploadFile( itemName );
+			this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::FILE, this, false );
 			actionDone = true;
 		}
 		else {
@@ -210,7 +195,7 @@ bool TaskRowViewHandler::rescan() {
 			if( url.isValid() ) {
 				this->finished = false;
 				this->seconds = 0;
-				connector->submitUrl( url );
+				this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::URL, this, true );
 				actionDone = true;
 			}
 		}
@@ -225,12 +210,17 @@ bool TaskRowViewHandler::rescan() {
 	return actionDone;
 }
 
+void TaskRowViewHandler::queued() {
+	setStatus( i18n( "Queued" ) );
+}
+
 void TaskRowViewHandler::scanningStarted() {
 	setStatus( i18n( "Submitting..." ) );
 }
 
 void TaskRowViewHandler::errorOccurred( const QString& message ) {
 	this->finished = true;
+	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Error" ), message );
 	MainWindow::showErrorNotificaton( i18n( "The next error ocurred while processing the task %1: %2 ", rowIndex, message ) );
 	emit( unsubscribeNextSecond( this ) );
@@ -243,48 +233,30 @@ void TaskRowViewHandler::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal
 	setStatus( text );
 }
 
-void TaskRowViewHandler::scanIdReady() {
-	setStatus( i18n( "Queued" ) );
-}
-
 void TaskRowViewHandler::retrievingReport() {
 	setStatus( i18n( "Retrieving report..." ) );
 }
 
 void TaskRowViewHandler::waitingForReport( int seconds ) {
-	setStatus( i18n( "Waiting for %1 seconds...", seconds ) );
+	setStatus( seconds > 0 ? i18n( "Waiting for %1 seconds...", seconds ) : i18n( "Waiting..." ) );
 }
 
 void TaskRowViewHandler::serviceLimitReached( int seconds ) {
-	if( seconds > 0 ) {
-		setStatus( i18n( "Service limit reached! (wait %1)", seconds ) );
-	}
-	else {
-		setStatus( i18n( "Service limit reached! Please, try later." ) );
-		emit( unsubscribeNextSecond( this ) );
-		emit( reportCompleted( rowIndex ) );
-		this->finished = true;
-	}
+	setStatus( i18n( "Service limit reached! (wait %1)", seconds ) );
 }
 
 void TaskRowViewHandler::aborted() {
 	this->finished = true;
+	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	kDebug() << "Aborted!";
 	setStatus( i18n( "Aborted" ) );
 	emit( unsubscribeNextSecond( this ) );
 }
 
-void TaskRowViewHandler::fileReportReady( FileReport* const report ) {
-	reportReady( report );
-}
-
-void TaskRowViewHandler::urlReportReady( UrlReport * const report ) {
-	reportReady( report );
-}
-
 void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 	setReport( report ); // Free the current report and set the new one
 	this->finished = true;
+	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Finished (%1/%2)", report->getResultMatrixPositives(), report->getResultMatrix().size() ) );
 	// Only when the report takes more a a minute, will show a notification
 	if( seconds > 60 ) {

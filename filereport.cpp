@@ -17,21 +17,20 @@
 
 #include <QVariantMap>
 #include <KLocalizedString>
-
-#include "filereport.h"
 #include <QFile>
 #include <KDebug>
 
+#include "filereport.h"
+
 FileReport::FileReport( const QString& json, const QString& fileName, FileHasher* const hasher ) {
 	this->fileName = fileName;
-	this->localHasher = ( hasher == NULL );
-	this->hasher = ( localHasher ? new FileHasher( fileName ) : hasher );
+	this->hasher = ( hasher != NULL ? new FileHasher( hasher ) : new FileHasher( fileName ) );
 	commonSetup( json ); // It will call local extendedSetup() method
 }
 
 FileReport::~FileReport() {
 	// If the FileHasher object is alive, free its memory
-	if( localHasher && hasher != NULL ) {
+	if( hasher != NULL ) {
 		delete hasher;
 		hasher = NULL;
 	}

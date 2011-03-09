@@ -36,6 +36,7 @@
 #include <QSplitter>
 #include <KStandardAction>
 #include <KNotification>
+#include <QTimer>
 
 #include "constants.h"
 #include "httpconnector.h"
@@ -83,7 +84,7 @@ MainWindow::MainWindow()
 
 //TODO: Temporary button - Just for development use
 /*
-KAction * submitAction = new KAction( KIcon( "bookmark-new-list" ), "Submit", this );
+KAction* submitAction = new KAction( KIcon( "bookmark-new-list" ), "Submit", this );
 submitAction->setHelpText( i18n( "Submit" ) );
 submitAction->setShortcut( Qt::CTRL + Qt::Key_S );
 toolbar->addSeparator();
@@ -174,9 +175,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 		splitter->setSizes( splitterState );
 	}	
 	
-	// Initialize the network manager
-	networkManager = new QNetworkAccessManager( this );
-
 	// Load the user's service key
 	const QString serviceKey = settings->serviceKey();
 	if( serviceKey.isEmpty() ) {
@@ -185,7 +183,7 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 
 	// Setup the task table. If the serviceKey is empty, it will be updated later
 	HttpConnector::loadSettings();
-	taskViewHandler = new TaskViewHandler( this, taskTableWidget, reportTableWidget, networkManager, serviceKey );
+	taskViewHandler = new TaskViewHandler( this, taskTableWidget, reportTableWidget );
 
 	// Set up connections
 	connect( fileAction, SIGNAL( triggered( bool ) ), this, SLOT( openFile() ) );
@@ -207,9 +205,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 }
 
 MainWindow::~MainWindow() {
-	if( networkManager ) {
-		delete networkManager;
-	}
 	if( wizard != NULL ) {
 		delete wizard;
 	}
@@ -276,7 +271,7 @@ void MainWindow::openFile() {
 void MainWindow::openUrl() {
 	bool ok;
 	const QRegExp regex( "^((http)|(ftp))[s]?://[^..]+(\\.[^..]+)+$", Qt::CaseInsensitive );
-	QRegExpValidator * const validator = new QRegExpValidator( regex, this );
+	QRegExpValidator*const validator = new QRegExpValidator( regex, this );
 //TODO: Remove this after testing
 	QString url = KInputDialog::getText( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ), "http://", &ok, this, validator );
 //	QString url = KInputDialog::getText( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ), "http://blog.ben2367.fr/wp-includes/images/smilies/icon_wink.gif", &ok, this, validator );
@@ -303,7 +298,7 @@ void MainWindow::openPermanentLink() {
 	QDesktopServices::openUrl( permanentLinkValue->text() );
 }
 
-void MainWindow::resizeEvent ( QResizeEvent * event ) {
+void MainWindow::resizeEvent ( QResizeEvent* event ) {
 	int width = event->size().width();
 	int oldWidth = event->oldSize().width();
 	if( width != oldWidth ) {
@@ -317,7 +312,7 @@ void MainWindow::showWelcomeWizard() {
 		wizard->deleteLater();
 		wizard = NULL;
 	}
-	wizard = new WelcomeWizard( networkManager, centralwidget );
+	wizard = new WelcomeWizard( centralwidget );
 	wizard->show();
 	connect( wizard, SIGNAL( finished( int ) ), this, SLOT( wizardFinished( int ) ) );
 }
@@ -329,9 +324,6 @@ void MainWindow::wizardFinished( int result ) {
 		KMessageBox::sorry( this, i18n( "No service key found! Thus, the application must be closed." ) );
 		close();
 	}
-	
-	// Refresh the service key
-	taskViewHandler->setServiceKey( serviceKey );
 }	
 
 void MainWindow::showSettingsDialog() {

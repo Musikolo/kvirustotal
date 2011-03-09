@@ -28,7 +28,7 @@ private:
     void setupWizard( QWidget* parent = 0 );
 
 public:
-    WelcomeWizard( QNetworkAccessManager* manager, QWidget* parent );
+    WelcomeWizard( QWidget* parent );
     virtual ~WelcomeWizard();
     void show();
 	QNetworkAccessManager* const networkAccessManager() const;

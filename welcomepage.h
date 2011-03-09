@@ -46,7 +46,7 @@ private:
 private slots:
 	void openLink( const QString& link ) const;
 	void setValidationStatus( const QString& status );
-	void testReportReceived( FileReport* const report );
+	void testReportReceived( AbstractReport*const report );
 	void testReportInvalidKey();
 	void testReportFailed( const QString& message );
 	

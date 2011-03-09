@@ -18,7 +18,6 @@
 #ifndef MainWindow_H
 #define MainWindow_H
 
-#include <QNetworkAccessManager>
 #include <KMainWindow>
 #include <QResizeEvent>
 
@@ -31,7 +30,6 @@ class MainWindow : public KMainWindow, private Ui::MainWindow
 {
 Q_OBJECT
 private:
-	QNetworkAccessManager * networkManager;
     TaskViewHandler* taskViewHandler;
 	QLabel* resultIconLabel;
 	WelcomeWizard* wizard;

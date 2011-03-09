@@ -20,9 +20,9 @@
 
 #include <QList>
 #include <QTableWidget>
-#include <QNetworkAccessManager>
 #include <KMenu>
 #include <KAction>
+#include <QTimer>
 
 #include "reportviewhandler.h"
 #include "taskrowviewhandler.h"
@@ -40,8 +40,6 @@ private:
 	MainWindow* mainwindow;
 	QTableWidget* tableWidget;
 	ReportViewHandler* reportViewHandler;
-	QNetworkAccessManager* networkManager;
-	QString serviceKey;
 	QList< TaskRowViewHandler* > rowViewHandlers;
 	QTimer* timer;
 	KMenu* ctxMenu;
@@ -55,10 +53,9 @@ private:
 	void writeSelectedRowIndexes( QSet< int >& rowIds, RowSelection::RowSelectionEnum selection = RowSelection::ALL );
 
 public:
-    TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget, QNetworkAccessManager* networkManager, const QString& serviceKey );
+    TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget );
     virtual ~TaskViewHandler();
 	inline QTableWidget* getTableWidget(){ return this->tableWidget; }
-	void setServiceKey( const QString serviceKey );
 	bool isUnfinishedTasks() ;
 
 private slots:

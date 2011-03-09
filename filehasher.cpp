@@ -21,6 +21,7 @@
 #include <QCryptographicHash>
 #include <KLocalizedString>
 #include <QtCrypto/QtCrypto>
+
 #include "filehasher.h"
 
 static const QString NO_RESULT = "";
@@ -31,6 +32,12 @@ FileHasher::FileHasher( const QString& fileName ) {
 	sha1sum = NO_RESULT;
 	sha256sum = NO_RESULT;
 	setupObject( fileName );
+}
+
+FileHasher::FileHasher( FileHasher*const hasher ) {
+	md5sum = QString( hasher->md5sum );
+	sha1sum = QString( hasher->sha1sum );
+	sha256sum = QString( hasher->sha256sum );
 }
 
 FileHasher::~FileHasher() {

@@ -33,6 +33,7 @@ private:
 
 public:
     FileHasher( const QString& fileName );
+	FileHasher( FileHasher*const hasher );
     virtual ~FileHasher();
 	const QString& getMd5Sum();
 	const QString& getSha1Sum();

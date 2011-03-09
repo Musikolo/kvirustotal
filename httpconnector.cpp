@@ -19,11 +19,11 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <qjson/parser.h>
+#include <KLocalizedString>
 #include <KDebug>
 
 #include "filereport.h"
 #include "httpconnector.h"
-#include <klocalizedstring.h>
 #include "settings.h"
 
 /** Tags used to manage JSON objects. Extends ServiceBasicReply namespace. */
@@ -62,18 +62,15 @@ void HttpConnector::loadSettings() {
 	ServiceUrl::MAKE_COMMENT    = MAKE_COMMENT_PATTERN.arg( protocol );
 }
 
-HttpConnector::HttpConnector( QNetworkAccessManager * manager, const QString & key ) {
+HttpConnector::HttpConnector( QNetworkAccessManager*const manager, const QString& key ) {
 	this->manager = manager;
 	this->key = key;
 	this->reply = NULL;
 	this->file = NULL;
-	this->timer = NULL;
-	this->scanId = QString();
 	this->reportMode = ReportMode::NONE;
 	this->abortRequested = false;
 	this->hasher = NULL;
 	this->reusingLastReport = false;
-	this->requestDelay = ServiceRequestDelay::DELAY_LEVEL_3;
 }
 
 HttpConnector::~HttpConnector() {
@@ -98,16 +95,14 @@ void HttpConnector::createNetworkReply( const QNetworkRequest& request, const QB
 	this->reply = manager->post( request, multipart );
 }
 
-void HttpConnector::submitFile( const QString& fileName ){
+void HttpConnector::submitFile( const QString& fileName, const bool reuseLastReport ){
 	kDebug() << "Submitting file " << fileName << "...";
 	if( fileName.isEmpty() ) {
-		kDebug() << "Nothing will be done as the file name is empty!";
+		kWarning() << "Nothing will be done as the file name is empty!";
 		return;
 	}
 	this->fileName = fileName;
-	emit( startScanning() );
 
-	const bool reuseLastReport = Settings::self()->reuseLastReport();
 	if( reuseLastReport ) {
 		retrieveLastReport( fileName );
 	}
@@ -118,36 +113,17 @@ void HttpConnector::submitFile( const QString& fileName ){
 
 void HttpConnector::retrieveLastReport( const QString& fileName ) {
 
-	// Se the report mode. If other than none is active, abort.
-	if( this->reportMode != ReportMode::NONE ) {
-		QString msg( i18n( "An invalid report mode is active: %1. Aborting...", reportMode ) );
-		kDebug() << msg;
-		emit( errorOccurred( msg ) );
-		return;
-	}
-	reportMode = ReportMode::FILE_MODE;
-	reusingLastReport = true;
-
 	if( hasher ) {
 		delete hasher;
 	}
 	kDebug() << "Generating hashes...";
 	hasher = new FileHasher( fileName );
 	kDebug() << "Reusing existing report, if possible...";
+	reusingLastReport = true;
 	emit( retrieveFileReport( hasher->getSha256Sum() ) );
 }
 
 void HttpConnector::uploadFile( const QString& fileName ) {
-
-	// Se the report mode. If other than none is active, abort.
-	if( this->reportMode != ReportMode::NONE ) {
-		QString msg( i18n( "An invalid report mode is active: %1. Aborting...", reportMode ) );
-		kDebug() << msg;
-		emit( errorOccurred( msg ) );
-		return;
-	}
-	reportMode = ReportMode::FILE_MODE;
-	reusingLastReport = false;
 
 	// Set up the request
 	QUrl url( ServiceUrl::SEND_FILE_SCAN );
@@ -164,6 +140,7 @@ void HttpConnector::uploadFile( const QString& fileName ) {
 	}
 
 	// Submit data and establish all connections to this object from scratch
+	reusingLastReport = false;
 	createNetworkReply( request, multipartform );
 	connect( reply, SIGNAL( finished() ), this, SLOT( submissionReply() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
@@ -187,7 +164,7 @@ bool HttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteArray&
 	QFile file( fileName );
 	file.open( QIODevice::ReadOnly );
 	if( !file.isOpen() ) {
-		kDebug() << "Could not open file " << fileName;
+		kError() << "Could not open file " << fileName;
 		return false;
 	}
 
@@ -210,7 +187,6 @@ bool HttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteArray&
 	return true;
 }
 
-//-void HttpConnector::submissionReply( QNetworkReply * reply ) {
 void HttpConnector::submissionReply() {
 
 	kDebug()  << reply << " - File submission reply received. Processing data...";
@@ -234,44 +210,35 @@ void HttpConnector::submissionReply() {
 				// Emit the signal that informs about the scan Id
 				const QString scanId = data[ JsonTag::SCAN_ID ].toString();
 				if( !scanId.isEmpty() ){
-					emit( scanIdReady() );
-					switch( reportMode ) {
-						case ReportMode::FILE_MODE:
-							retrieveFileReport( scanId );
-							break;
-						case ReportMode::URL_MODE:
-							retrieveUrlReport( scanId );
-							break;
-					}
+					kDebug() << "Received scan Id " << scanId;
+					emit( scanIdReady( scanId ) );
 				}
 			}
 			else if( resultReply == ServiceReplyResult::REQUEST_LIMIT_REACHED ) {
-				// Reset the report mode and emit the service limit reached signal with value -1 (try later).
+				// Reset the report mode and emit the service limit reached signal
 				reportMode = ReportMode::NONE;
-				emit( serviceLimitReached( -1 ) );
+				emit( serviceLimitReached() );
 			}
 			else {
 				QString msg;
 				msg.append( i18n( "ERROR: Unexpected service result reply: %1", getServiceReplyResult() ) );
-				kDebug() << msg;
+				kError() << msg;
 				emit( errorOccurred( msg ) );
 			}
 		}
 		else {
-			QString msg( "ERROR: No valid reponse received!" );
-			kDebug() << msg;
+			QString msg( "ERROR: No valid response received!" );
+			kError() << msg;
 			emit( errorOccurred( msg ) );
 		}
 	}
 	else {
 		QString msg;
 		msg.append( i18n( "ERROR: %1", reply->errorString() ) );
-		kDebug() << msg;
+		kError() << msg;
 		emit( errorOccurred( msg ) );
 	}
 
-	// If the with are in file report mode and the file is open, it must be close
-//	if( reportMode == ReportMode::FILE_MODE && file != NULL && file->isOpen() ) {
 	// If the the file is open, it must be close
 	if( file != NULL && file->isOpen() ) {
 		file->close();
@@ -279,14 +246,10 @@ void HttpConnector::submissionReply() {
 	}
 }
 
-void HttpConnector::retrieveFileReport( const QString & scanId ){
-//	kDebug() << "Received scan Id " << scanId;
-kDebug() << "Received scan Id " << scanId;
+void HttpConnector::retrieveFileReport( const QString& scanId ){
+	kDebug() << "Using scan Id " << scanId;
 	emit( retrievingReport() );
-
-	// Update the scan Id inner property
-	this->scanId = scanId;
-
+	
 	// Prepare the data to submit
 	QNetworkRequest request( QUrl( ServiceUrl::GET_FILE_REPORT ) );
 	request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
@@ -303,8 +266,7 @@ kDebug() << "Received scan Id " << scanId;
 	kDebug() << "Retrieving file report, waiting for reply...";
 }
 
-void HttpConnector::submitUrl( const QUrl & url2Scan ) {
-	emit( startScanning() );
+void HttpConnector::submitUrl( const QUrl& url2Scan ) {
 	if( !url2Scan.isValid() ) {
 		QString msg;
 		msg.append( i18n( "Invalid URL: %1", url2Scan.toString() ) );
@@ -313,17 +275,7 @@ void HttpConnector::submitUrl( const QUrl & url2Scan ) {
 		return;
 	}
 
-	// Se the report mode. If other than none is active, abort.
-	if( this->reportMode != ReportMode::NONE ) {
-		QString msg;
-		msg.append( i18n( "An invalid report mode is active: %1. Aborting...", reportMode ) );
-		kDebug() << msg;
-		emit( errorOccurred( msg ) );
-		return;
-	}
-	reportMode = ReportMode::URL_MODE;
-
-	// Prepare the request
+// Prepare the request
 	QNetworkRequest request( ServiceUrl::SEND_URL_SCAN );
 	QByteArray params;
 	params.append( JsonTag::KEY ).append( "=" ).append( key ).append("&").
@@ -338,11 +290,8 @@ void HttpConnector::submitUrl( const QUrl & url2Scan ) {
 }
 
 void HttpConnector::retrieveUrlReport( const QString& scanId ) {
-	kDebug() << "Received scan Id " << scanId;
+	kDebug() << "Using scan Id " << scanId;
 	emit( retrievingReport() );
-
-	// Update the scan Id inner property
-	this->scanId = scanId;
 
 	// Prepare the data to submit
 	QNetworkRequest request( QUrl( ServiceUrl::GET_URL_REPORT ) );
@@ -361,20 +310,8 @@ void HttpConnector::retrieveUrlReport( const QString& scanId ) {
 	kDebug() << "Retrieving URL report, waiting for reply...";
 }
 
-void HttpConnector::reportChecker() {
-	switch( reportMode ) {
-		case ReportMode::FILE_MODE:
-			retrieveFileReport( this->scanId );
-			break;
-		case ReportMode::URL_MODE:
-			retrieveUrlReport( this->scanId );
-			break;
-	}
-}
-
 void HttpConnector::reportComplete() {
 	kDebug() << "Report reply received. Processing data...";
-
 	if( this->abortRequested ) {
 		abortCurrentTask(); // Will free and reset all resources
 	}
@@ -403,35 +340,13 @@ void HttpConnector::reportComplete() {
 					uploadFile( fileName );
 					return;
 				}
-				requestDelay = getSuitableDelay( replyResult );
-				kDebug() << "Report not ready yet, waiting for" << requestDelay << "seconds...";
-				emit( waitingForReport( requestDelay ) );
-				if( timer == NULL ) {
-					kDebug() << "A new timer will be used.";
-					timer = new QTimer();
-					connect( timer, SIGNAL( timeout() ), this, SLOT( reportChecker() ) );
-					timer->start( requestDelay * 1000 );
-				}
-				else {
-					timer->stop();
-					timer->start( requestDelay * 1000 );
-				}
+				kDebug() << "Report not ready yet...";
+				emit( reportNotReady() );
 				return;
 			}
 			else if( replyResult == ServiceReplyResult::REQUEST_LIMIT_REACHED ) {
-				requestDelay = getSuitableDelay( replyResult );
-				kDebug() << "Service limit reached! Waiting for" << requestDelay << "seconds...";
-				emit( serviceLimitReached( requestDelay ) );
-				if( timer == NULL ) {
-					kDebug() << "A new timer will be used.";
-					timer = new QTimer();
-					connect( timer, SIGNAL( timeout() ), this, SLOT( reportChecker() ) );
-					timer->start( requestDelay * 1000 );
-				}
-				else {
-					timer->stop();
-					timer->start( requestDelay * 1000 );
-				}
+				kDebug() << "Service limit reached!";
+				emit( serviceLimitReached() );
 				return;
 			}
 			else if( replyResult == ServiceReplyResult::INVALID_SERVICE_KEY ) {
@@ -441,30 +356,22 @@ void HttpConnector::reportComplete() {
 			}
 		}
 
-		// If we have used a timer, disconect it and delete it
-		if( timer != NULL ) {
-			kDebug() << "The current timer will be stopped and deleted";
-			timer->disconnect();
-			delete timer;
-			timer = NULL;
-		}
-
 		// Make up a new FileReport object and emits a signal
 		switch( reportMode ) {
 			case ReportMode::FILE_MODE: {
-				FileReport * const report = new FileReport( json, fileName, hasher ); // Share the FileHasher object
-				emit( fileReportReady( report ) );
+				FileReport*const report = new FileReport( json, fileName, hasher ); // Share the FileHasher object
+				emit( reportReady( report ) );
 				break;
 			}
 			case ReportMode::URL_MODE: {
-				UrlReport * const report = new UrlReport( json );
-				emit( urlReportReady( report ) );
+				UrlReport*const report = new UrlReport( json );
+				emit( reportReady( report ) );
 				break;
 			}
 		}
 	}
 	else {
-		kDebug() << "ERROR: " << reply->errorString();
+		kError() << "ERROR: " << reply->errorString();
 //TODO: It should be unneeded to emit this signal here, as it should have been done already by the submissionReplyError() method
 //		emit( errorOccurred( reply->errorString() ) );
 	}
@@ -482,14 +389,13 @@ void HttpConnector::downloadProgressRate( qint64 bytesSent, qint64 bytesTotal ){
 }
 
 void HttpConnector::submissionReplyError( QNetworkReply::NetworkError error ) {
-	QString errorMsg( reply->errorString().append( " - (%1) " ).arg( error ) );
-	kDebug() << "ERROR:" << errorMsg;
-	emit( errorOccurred( errorMsg ) );
+	// Emit the signal for all errors, but when either close() or abort() methods are invoked
+	if( error != QNetworkReply::OperationCanceledError ){
+		QString errorMsg( reply->errorString().append( " - (%1) " ).arg( error ) );
+		kError() << "ERROR:" << errorMsg;
+		emit( errorOccurred( errorMsg ) );
+	}
 	reportMode = ReportMode::NONE;
-}
-
-ReportMode::ReportModeEnum HttpConnector::getReportMode() {
-	return this->reportMode;
 }
 
 void HttpConnector::abort() {
@@ -500,14 +406,6 @@ void HttpConnector::abort() {
 void HttpConnector::abortCurrentTask() {
 
 	kDebug() << "Aborting the current task...";
-	// If we have used a timer, disconect it and delete it
-	if( timer != NULL ) {
-		timer->stop();
-		timer->disconnect();
-		delete timer;
-		timer = NULL;
-	}
-
 	// If the file is open, it must be close
 	if( file != NULL && file->isOpen() ) {
 		file->close();
@@ -522,47 +420,6 @@ void HttpConnector::abortCurrentTask() {
 	abortRequested = false;
 	kDebug() << "Abortion action complete.";
 	emit( aborted() );
-}
-
-ServiceRequestDelay::ServiceRequestDelayEnum HttpConnector::getSuitableDelay( ServiceReplyResult::ServiceReplyResultEnum result ) {
-	switch( result ) {
-	case ServiceReplyResult::ITEM_NOT_PRESENT:
-		switch( requestDelay ) {
-		case ServiceRequestDelay::DELAY_LEVEL_1:
-		case ServiceRequestDelay::DELAY_LEVEL_2:
-			return ServiceRequestDelay::DELAY_LEVEL_1;
-		case ServiceRequestDelay::DELAY_LEVEL_3:
-		default:
-			return ServiceRequestDelay::DELAY_LEVEL_2;
-		case ServiceRequestDelay::DELAY_LEVEL_4:
-			return ServiceRequestDelay::DELAY_LEVEL_3;
-		case ServiceRequestDelay::DELAY_LEVEL_5:
-			return ServiceRequestDelay::DELAY_LEVEL_4;
-		case ServiceRequestDelay::DELAY_LEVEL_6:
-			return ServiceRequestDelay::DELAY_LEVEL_5;
-		case ServiceRequestDelay::DELAY_LEVEL_7:
-			return ServiceRequestDelay::DELAY_LEVEL_6;
-		}
-	case ServiceReplyResult::REQUEST_LIMIT_REACHED:
-		switch( requestDelay ) {
-		case ServiceRequestDelay::DELAY_LEVEL_1:
-			return ServiceRequestDelay::DELAY_LEVEL_2;
-		case ServiceRequestDelay::DELAY_LEVEL_2:
-		default:
-			return ServiceRequestDelay::DELAY_LEVEL_3;
-		case ServiceRequestDelay::DELAY_LEVEL_3:
-			return ServiceRequestDelay::DELAY_LEVEL_4;
-		case ServiceRequestDelay::DELAY_LEVEL_4:
-			return ServiceRequestDelay::DELAY_LEVEL_5;
-		case ServiceRequestDelay::DELAY_LEVEL_5:
-			return ServiceRequestDelay::DELAY_LEVEL_6;
-		case ServiceRequestDelay::DELAY_LEVEL_6:
-		case ServiceRequestDelay::DELAY_LEVEL_7:
-			return ServiceRequestDelay::DELAY_LEVEL_7;
-		}
-	default:
-		return ServiceRequestDelay::DELAY_LEVEL_2;
-	};
 }
 
 #include "httpconnector.moc"
