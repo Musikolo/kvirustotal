@@ -18,7 +18,7 @@
 #include <KDebug>
 #include "servicebasicreply.h"
 
-const ServiceReplyResult::ServiceReplyResultEnum ServiceBasicReply::getServiceReplyResult() const {
+ServiceReplyResult::ServiceReplyResultEnum ServiceBasicReply::getServiceReplyResult() const {
 	return this->result;
 }
 

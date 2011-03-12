@@ -24,13 +24,13 @@ class WelcomeWizard : public QWizard
 {
 private:
 	QNetworkAccessManager* networkManager;
-    void setupWizard( QWidget* parent = 0 );
+    void setupWizard();
 
 public:
     WelcomeWizard( QNetworkAccessManager*const networkManager, QWidget* parent );
     virtual ~WelcomeWizard();
     void show();
-	QNetworkAccessManager* const networkAccessManager() const;
+	QNetworkAccessManager* networkAccessManager() const;
 };
 
 #endif // WELCOMEDIALOG_H

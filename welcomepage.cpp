@@ -197,7 +197,6 @@ QWizardPage* WelcomePage::createConclusionPage( WelcomeWizard* wizard ) {
 void WelcomePage::startServiceKeyValidation() {
 	QString key = serviceKey();
 	kDebug() << "Validating the user-provided key " << key;
-	QNetworkAccessManager* manager = wizard->networkAccessManager();
 	freeConnector(); // Should do nothing, but keep it just in case
 	connector = new HttpConnector( wizard->networkAccessManager(), key );
 	

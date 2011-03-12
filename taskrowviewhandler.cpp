@@ -118,7 +118,7 @@ void TaskRowViewHandler::nextSecond() {
 	setTime( ++seconds );
 }
 
-const QString& TaskRowViewHandler::getItemText( Column::ColumnEnum column ) const {
+QString TaskRowViewHandler::getItemText( Column::ColumnEnum column ) const {
 	QTableWidget*const table = viewHandler->getTableWidget();
 	QTableWidgetItem* item = table->item( rowIndex, column );
 	if( item != NULL ) {
@@ -261,8 +261,8 @@ void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 	
 	// Show a notification only when the conditions are met
 	const int notificationTime = Settings::self()->taskNotificationTime();
-	bool showNotification = notificationTime > 0 && seconds >= notificationTime ||
-							report->isInfected() && Settings::self()->infectedTaskNotification();
+	bool showNotification = ( notificationTime > 0 && seconds >= notificationTime ) ||
+							( report->isInfected() && Settings::self()->infectedTaskNotification() );
 	if( showNotification ) {
 		MainWindow::showCompleteTaskNotificaton( i18n( "Task %1 finished", rowIndex + 1 ), 
 												 ReportViewHandler::getReportIconName( report->getResultMatrixPositives() ) );
@@ -271,4 +271,4 @@ void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 	emit( reportCompleted( rowIndex ) );
 }
 
-#include "taskrowviewhandler.moc";
+#include "taskrowviewhandler.moc"

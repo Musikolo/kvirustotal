@@ -137,7 +137,7 @@ bool TaskScheduler::abort( const uint jobId ) {
 	return false;
 }
 
-Job*const TaskScheduler::findJob( const uint jobId ) {
+Job* TaskScheduler::findJob( const uint jobId ) {
 	if( !fileQueue.isEmpty() ) {
 		for( int i = 0; i < fileQueue.size(); i++ ) {
 			Job*const job = fileQueue[ i ];
@@ -158,11 +158,11 @@ Job*const TaskScheduler::findJob( const uint jobId ) {
 	return NULL;
 }
 
-QQueue< Job* >*const TaskScheduler::queueByType( JobType::JobTypeEnum type ) {
+QQueue< Job* >* TaskScheduler::queueByType( JobType::JobTypeEnum type ) {
 	return type == JobType::FILE ? &fileQueue : &urlQueue;
 }
 
-Job*const TaskScheduler::activeJob( JobType::JobTypeEnum type ) {
+Job* TaskScheduler::activeJob( JobType::JobTypeEnum type ) {
 	QQueue< Job* >*const queue = queueByType( type );
 kDebug() << "Queue size" << queue->size();
 	if( !queue->isEmpty() ){

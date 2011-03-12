@@ -38,7 +38,7 @@ protected:
 
 public:
     inline ~ServiceBasicReply(){};
-	const ServiceReplyResult::ServiceReplyResultEnum getServiceReplyResult() const;
+	ServiceReplyResult::ServiceReplyResultEnum getServiceReplyResult() const;
 };
 
 #endif // BASICJSONOBJECT_H

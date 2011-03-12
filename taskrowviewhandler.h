@@ -59,7 +59,7 @@ protected slots:
 	void serviceLimitReached( int seconds );
 	void aborted();
 	void reportReady( AbstractReport* const report );
-    const QString& getItemText( Column::ColumnEnum column ) const;
+    QString getItemText( Column::ColumnEnum column ) const;
 
 public slots:
 	void nextSecond();

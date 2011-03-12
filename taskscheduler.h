@@ -58,9 +58,9 @@ private:
 	
 	TaskScheduler();
 
-	Job* const findJob( const uint jobId );
-	Job* const activeJob( JobType::JobTypeEnum type );
-	QQueue< Job* >*const queueByType( JobType::JobTypeEnum type );
+	Job* findJob( const uint jobId );
+	Job* activeJob( JobType::JobTypeEnum type );
+	QQueue< Job* >* queueByType( JobType::JobTypeEnum type );
 	void processNewJob( Job*const job );
 	void nextActiveJob( JobType::JobTypeEnum type );
 	void processUnsubmittedJobs();

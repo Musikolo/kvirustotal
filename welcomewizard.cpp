@@ -29,13 +29,13 @@
 
 WelcomeWizard::WelcomeWizard( QNetworkAccessManager*const networkManager, QWidget* parent ) : QWizard( parent ) {
 	this->networkManager = networkManager;
-	setupWizard( parent );
+	setupWizard();
 }
 
 WelcomeWizard::~WelcomeWizard() { 
 }
 
-void WelcomeWizard::setupWizard( QWidget* parent ) {
+void WelcomeWizard::setupWizard() {
 	// Create setup the wizard and its pages
 	setTitleFormat( Qt::RichText );
 	setSubTitleFormat( Qt::RichText );
@@ -56,6 +56,6 @@ void WelcomeWizard::show() {
 	wizard->show();
 }
 
-QNetworkAccessManager* const WelcomeWizard::networkAccessManager() const {
+QNetworkAccessManager* WelcomeWizard::networkAccessManager() const {
 	return this->networkManager;
 }

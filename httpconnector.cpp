@@ -389,6 +389,10 @@ void HttpConnector::reportComplete() {
 				emit( reportReady( report ) );
 				break;
 			}
+			case ReportMode::NONE:
+			default:
+				kWarning() << "Unexpected report mode. Please, check this situation!";
+				break;
 		}
 	}
 	else {

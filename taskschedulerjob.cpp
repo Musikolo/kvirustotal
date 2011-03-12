@@ -152,5 +152,6 @@ void TaskSchedulerJob::onAbort() {
 }
 
 void TaskSchedulerJob::onErrorOccurred( const QString& message ) {
+	Q_UNUSED( message );
 	emit( finished( this ) ); // Signal to the scheduler
 }
