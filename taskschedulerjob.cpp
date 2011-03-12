@@ -147,11 +147,17 @@ void TaskSchedulerJob::onReportNotReady() {
 }
 
 void TaskSchedulerJob::onServiceLimitReached() {
+	this->submitting = false;
 	if( retrySubmitionDelay > 0 ) {
-		kDebug() << "Setting retry submittion in" << retrySubmitionDelay << "seconds...";
-		this->waitingRetransmittion = true;
-		QTimer::singleShot( retrySubmitionDelay * 1000, this, SLOT( submitJob() ) );
-		emit( serviceLimitReached( retrySubmitionDelay ) ); // Signal to the listener
+		if( !this->isRunning() ) {
+			kDebug() << "Setting retry submittion in" << retrySubmitionDelay << "seconds...";
+			this->waitingRetransmittion = true;
+			QTimer::singleShot( retrySubmitionDelay * 1000, this, SLOT( submitJob() ) );
+			emit( serviceLimitReached( retrySubmitionDelay ) ); // Signal to the listener
+		}
+		else {
+			kWarning() << "Ignoring retransmittion for job" << id << "since it's currently running...";
+		}
 	}
 	else {
 		emit( serviceLimitReached( this ) ); // Signal to the scheduler
