@@ -37,6 +37,7 @@
 #include <KStandardAction>
 #include <KNotification>
 #include <QTimer>
+#include <QProgressBar>
 
 #include "constants.h"
 #include "httpconnector.h"
@@ -48,9 +49,11 @@
 
 static const KUrl START_DIR_URL( "kfiledialog:///kvirustotal" );
 
-MainWindow::MainWindow()
-{
+MainWindow::MainWindow() {
+	
 	kDebug() << QString( "Starting up %1..." ).arg( General::APP_UI_NAME );
+	networkManager = NULL;
+	workloadConnector = NULL;
 	wizard = NULL;
 	setupUi( this );
 	// Setup the toolbar
@@ -181,9 +184,16 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 		showWelcomeWizard();
 	}
 
+	// Create a network access manager object
+	networkManager = new QNetworkAccessManager( this );
+	workloadConnector = new HttpConnector( networkManager, QString::null ); // The service key is unneeded for this
+
 	// Setup the task table. If the serviceKey is empty, it will be updated later
 	HttpConnector::loadSettings();
 	taskViewHandler = new TaskViewHandler( this, taskTableWidget, reportTableWidget );
+	
+	// Set up the workload progress bars
+	setupWorkloadProgressBars();
 
 	// Set up connections
 	connect( fileAction, SIGNAL( triggered( bool ) ), this, SLOT( openFile() ) );
@@ -198,6 +208,13 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 			 this, SLOT( showSettingsDialog() ) );
 	connect( rescanAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( rescanTasks() ) );
 	connect( cleanFinishedAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( clearFinishedRows() ) );
+	connect( workloadConnector, SIGNAL( serviceWorkloadReady( ServiceWorkload ) ),
+			 this, SLOT( onWorkloadReady( ServiceWorkload ) ) );
+	
+	// Show the minimum level and ask for the service workload
+	ServiceWorkload workload = { ServiceWorkload::MIN_VALUE ,ServiceWorkload::MIN_VALUE };
+	updateWorkloadProgressBars( workload );
+	workloadConnector->retrieveServiceWorkload();
 	
 	// Call the delayed connections and accept drops
 	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
@@ -207,6 +224,12 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 MainWindow::~MainWindow() {
 	if( wizard != NULL ) {
 		delete wizard;
+	}
+	if( workloadConnector != NULL ) {
+		workloadConnector->deleteLater();
+	}
+	if( networkManager != NULL ) {
+		networkManager->deleteLater();;
 	}
 }
 
@@ -312,7 +335,7 @@ void MainWindow::showWelcomeWizard() {
 		wizard->deleteLater();
 		wizard = NULL;
 	}
-	wizard = new WelcomeWizard( centralwidget );
+	wizard = new WelcomeWizard( networkManager, centralwidget );
 	wizard->show();
 	connect( wizard, SIGNAL( finished( int ) ), this, SLOT( wizardFinished( int ) ) );
 }
@@ -370,6 +393,64 @@ void MainWindow::dropEvent( QDropEvent* event ) {
 	else {
 		taskViewHandler->submitUrl( url.toString() );
 	}
+}
+
+void MainWindow::setupWorkloadProgressBars() {
+	kDebug() << "Setting up workload progress bars...";
+
+	// Antivirus progress bar
+	QProgressBar* progressBar = new QProgressBar( this );
+	progressBar->setObjectName( "antivirusProgressBar" );
+	progressBar->setMinimum( ServiceWorkload::MIN_VALUE - 1 ); // Set one below the min not to show zero
+	progressBar->setMaximum( ServiceWorkload::MAX_VALUE );
+	progressBar->setToolTip( i18n( "Antivirus service workload" ) );
+	progressBar->setFormat( i18n( "Antivirus %1", QString( "%p%" ) ) );
+	progressBar->setMaximumSize( 120, 20 );
+	statusBar()->setContentsMargins( 6, -2, 6, 0 );
+	statusBar()->addPermanentWidget( progressBar );
+	
+	// Anti-phising progress bar 
+	progressBar = new QProgressBar( this );
+	progressBar->setObjectName( "antiphisingProgressBar" );
+	progressBar->setMinimum( ServiceWorkload::MIN_VALUE - 1 ); // Set one below the min not to show zero
+	progressBar->setMaximum( ServiceWorkload::MAX_VALUE );
+	progressBar->setToolTip( i18n( "Anti-phising service workload" ) );
+	progressBar->setFormat( i18n( "Anti-phising %1", QString( "%p%" ) ) );
+	progressBar->setMaximumSize( 120, 20 );
+	statusBar()->addPermanentWidget( progressBar );
+	kDebug() << "Workload progress bars ready!";
+}
+
+void MainWindow::onWorkloadReady( ServiceWorkload workload  ) {
+	// Update the progress bars with the given argument
+	updateWorkloadProgressBars( workload );
+	
+	// Prepare the next connection to refresh the workload
+	const int nextShot = 300;
+	kDebug() << "Preparing" << nextShot << "seconds singleShot to refresh the workload bars...";
+	QTimer::singleShot( nextShot * 1000, workloadConnector, SLOT( retrieveServiceWorkload() ) );
+}
+
+void MainWindow::updateWorkloadProgressBars(ServiceWorkload workload) {
+	kDebug() << "Updating workload progress bars...";
+	static QProgressBar* const antivirusPb   = statusBar()->findChild< QProgressBar* >( "antivirusProgressBar" );
+	static QProgressBar* const antiphisingPb = statusBar()->findChild< QProgressBar* >( "antiphisingProgressBar" );
+	static QColor colors[] = { QColor( 72, 182, 0 ), QColor( 72, 182, 0 ), QColor( 255, 140, 0 ), QColor( 255, 140, 0 )
+							 , QColor( 255, 69, 0 ), QColor( 255, 69, 0 ), QColor( 255, 0, 0 )  };
+	
+	// Update the antivirus progress bar
+	int value = workload.file;
+	antivirusPb->setValue( value );
+	QPalette palette = antiphisingPb->palette();
+	palette.setColor( QPalette::Highlight, colors[ value - 1 ] );
+	antivirusPb->setPalette( palette );
+
+	// Update the anti-phising progress bar
+	value = workload.url;
+	antiphisingPb->setValue( value );
+	palette = antiphisingPb->palette();
+	palette.setColor( QPalette::Highlight, colors[ value - 1 ] );
+	antiphisingPb->setPalette( palette );
 }
 
 void MainWindow::showInfoNotificaton( const QString& msg ) {

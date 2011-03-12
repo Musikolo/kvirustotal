@@ -30,6 +30,14 @@ namespace ReportMode {
 	enum ReportModeEnum { NONE, FILE_MODE, URL_MODE };
 }
 
+/** Service workload structure */
+struct ServiceWorkload {
+	static const uchar MIN_VALUE = 1;
+	static const uchar MAX_VALUE = 7;
+	uchar file;
+	uchar url;
+};
+
 class HttpConnector : public QObject, public virtual ServiceBasicReply
 {
 Q_OBJECT
@@ -47,6 +55,8 @@ private:
     void retrieveLastReport(const QString& fileName);
 	bool setupMultipartRequest( QNetworkRequest& request, QByteArray& multipartform, const QString& fileName );
 	void abortCurrentTask();
+	bool freeNetworkReply(); //Should be called as soon as the reply is no longer needed
+	void createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart, bool usePostMethod = true );
 
 private slots:
 	/** Process the reply of a previous file submission and emits retrieveFileReport() signal */
@@ -55,6 +65,9 @@ private slots:
 	/** Deals with the reply of a previous file report request */
 	void reportComplete();
 
+	/** Deals with the reply of a service workload request */
+	void onServiceWorkloadComplete();
+	
 	/** Deals with error that might happen during a file or URL submission */
 	void submissionReplyError( QNetworkReply::NetworkError );
 
@@ -63,8 +76,6 @@ private slots:
 
 	/** Indicates the amount of dowloaded data out of the total */
 	void downloadProgressRate( qint64 bytesSent, qint64 bytesTotal );
-
-	void createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart );
 
 public:
 	/** Does some initialization tasks common to all instances. Thus, it should be called before invoking the constructor. */
@@ -94,6 +105,10 @@ public:
 	/** Request the current taks to be aborted */
 	void abort();
 
+public slots:
+	/** Returns the service workload */
+	void retrieveServiceWorkload();
+	
 //TODO: Implement this methods
 /*	void makeComment( QFile file );
 	void makeComment( QUrl url ); */
@@ -102,6 +117,7 @@ signals:
 	void uploadingProgressRate( qint64 bytesSent, qint64 bytesTotal );
 	void errorOccurred( const QString& message );
 	void scanIdReady( const QString& scanId );
+	void serviceWorkloadReady( ServiceWorkload workload );
 	void retrievingReport();
 	void reportNotReady();
 	void serviceLimitReached();

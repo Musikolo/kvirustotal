@@ -27,13 +27,12 @@
 #include "welcomepage.h"
 #include "welcomewizard.h"
 
-WelcomeWizard::WelcomeWizard( QWidget* parent ) : QWizard( parent ) {
-	this->networkManager = new QNetworkAccessManager( this );
+WelcomeWizard::WelcomeWizard( QNetworkAccessManager*const networkManager, QWidget* parent ) : QWizard( parent ) {
+	this->networkManager = networkManager;
 	setupWizard( parent );
 }
 
 WelcomeWizard::~WelcomeWizard() { 
-	this->networkAccessManager()->deleteLater();
 }
 
 void WelcomeWizard::setupWizard( QWidget* parent ) {

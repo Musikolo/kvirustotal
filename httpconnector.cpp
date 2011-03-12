@@ -40,6 +40,7 @@ namespace JsonTag {
 namespace ServiceUrl {
 	static QString GET_FILE_REPORT;
 	static QString GET_URL_REPORT;
+	static QString GET_SERVICE_WORKLOAD;
 	static QString SEND_FILE_SCAN;
 	static QString SEND_URL_SCAN;
 	static QString MAKE_COMMENT;
@@ -49,17 +50,19 @@ namespace ServiceUrl {
 void HttpConnector::loadSettings() {
 	static const QString GET_FILE_REPORT_PATTERN = "%1://www.virustotal.com/api/get_file_report.json";
 	static const QString GET_URL_REPORT_PATTERN  = "%1://www.virustotal.com/api/get_url_report.json";
+	static const QString GET_SERVICE_WORKLOAD	 = "%1://www.virustotal.com/get_workload.json";
 	static const QString SEND_FILE_SCAN_PATTERN  = "%1://www.virustotal.com/api/scan_file.json";
 	static const QString SEND_URL_SCAN_PATTERN   = "%1://www.virustotal.com/api/scan_url.json";
 	static const QString MAKE_COMMENT_PATTERN    = "%1://www.virustotal.com/api/make_comment.json";
 	
 	const QString protocol( Settings::self()->secureProtocol() ? "https" : "http" );
 	kDebug() << "Establishing the " << protocol << " protocol for any forthcomming connection...";
-	ServiceUrl::GET_FILE_REPORT = GET_FILE_REPORT_PATTERN.arg( protocol );
-	ServiceUrl::GET_URL_REPORT  = GET_URL_REPORT_PATTERN.arg( protocol );
-	ServiceUrl::SEND_FILE_SCAN  = SEND_FILE_SCAN_PATTERN.arg( protocol );
-	ServiceUrl::SEND_URL_SCAN   = SEND_URL_SCAN_PATTERN.arg( protocol );
-	ServiceUrl::MAKE_COMMENT    = MAKE_COMMENT_PATTERN.arg( protocol );
+	ServiceUrl::GET_FILE_REPORT 	  = GET_FILE_REPORT_PATTERN.arg( protocol );
+	ServiceUrl::GET_URL_REPORT  	  = GET_URL_REPORT_PATTERN.arg( protocol );
+	ServiceUrl::GET_SERVICE_WORKLOAD  = GET_SERVICE_WORKLOAD.arg( protocol );
+	ServiceUrl::SEND_FILE_SCAN  	  = SEND_FILE_SCAN_PATTERN.arg( protocol );
+	ServiceUrl::SEND_URL_SCAN   	  = SEND_URL_SCAN_PATTERN.arg( protocol );
+	ServiceUrl::MAKE_COMMENT    	  = MAKE_COMMENT_PATTERN.arg( protocol );
 }
 
 HttpConnector::HttpConnector( QNetworkAccessManager*const manager, const QString& key ) {
@@ -75,24 +78,34 @@ HttpConnector::HttpConnector( QNetworkAccessManager*const manager, const QString
 
 HttpConnector::~HttpConnector() {
 	// Since we receive ownership of the reply object, we need to handle deletion.
-	if( reply ) {
-		reply->deleteLater();
-		reply = NULL;
-	}
+	freeNetworkReply();
 	if( hasher ) {
 		delete hasher;
 		hasher = NULL;
 	}
 }
 
-void HttpConnector::createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart ) {
-	// Since we receive ownership of the reply object, we need to handle deletion.
+bool HttpConnector::freeNetworkReply() {
 	if( reply ) {
 		reply->deleteLater();
 		reply = NULL;
+		return true;
+	}
+	return false;
+}
+
+void HttpConnector::createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart, bool usePostMethod ) {
+	// Since we receive ownership of the reply object, we need to handle deletion.
+	if( freeNetworkReply() ) {
+		kWarning() << "FREEING THE CURRENT REPLY. SINCE THIS MIGHT CAUSE PROBLEMS, IT'S RECOMMENDED TO CHECK THE ROOT OF THE CAUSE..!";
 	}
 
-	this->reply = manager->post( request, multipart );
+	if( usePostMethod ) {
+		this->reply = manager->post( request, multipart );
+	}
+	else {
+		this->reply = manager->get( request );
+	}
 }
 
 void HttpConnector::submitFile( const QString& fileName, const bool reuseLastReport ){
@@ -150,7 +163,7 @@ void HttpConnector::uploadFile( const QString& fileName ) {
 	connect( reply, SIGNAL( downloadProgress( qint64, qint64 ) ),
 			 this, SLOT( downloadProgressRate( qint64, qint64 ) ) );
 
-	// Retransmit the uploadProgress signal
+	// Retransmit the uploadProgress signal (signal-to-signal)
 	connect( reply, SIGNAL( uploadProgress( qint64, qint64 ) ),
 			 this, SIGNAL( uploadingProgressRate( qint64, qint64 ) ) );
 
@@ -244,6 +257,9 @@ void HttpConnector::submissionReply() {
 		file->close();
 		file = NULL;
 	}
+	
+	// The reply must be freed here
+	freeNetworkReply();
 }
 
 void HttpConnector::retrieveFileReport( const QString& scanId ){
@@ -329,7 +345,7 @@ void HttpConnector::reportComplete() {
 		QJson::Parser parser;
 		QMap< QString, QVariant > jsonMap = parser.parse( json.toAscii(), &ok ).toMap();
 		if( ok && !jsonMap.isEmpty() ) {
-			// Set and check the service reply result and chekc if the result state. If not present, wait for some time...
+			// Set and check the service reply result and check the result state.
 			setServiceReplyResult( jsonMap[ JsonTag::RESULT ].toInt() );
 			ServiceReplyResult::ServiceReplyResultEnum replyResult = getServiceReplyResult();
 			if( replyResult == ServiceReplyResult::ITEM_NOT_PRESENT ) {
@@ -337,6 +353,7 @@ void HttpConnector::reportComplete() {
 					kDebug() << QString( "There is no re-usable report. Submitting the file %1..." ).arg( fileName );
 					reportMode = ReportMode::NONE;
 					reusingLastReport = false;
+					freeNetworkReply(); // Free the reply as it's no longer needed
 					uploadFile( fileName );
 					return;
 				}
@@ -376,9 +393,53 @@ void HttpConnector::reportComplete() {
 //		emit( errorOccurred( reply->errorString() ) );
 	}
 
-	// Set the report mode to none
+	// Set the report mode to none and free the reply
 	reportMode = ReportMode::NONE;
+	freeNetworkReply();
 }
+
+void HttpConnector::retrieveServiceWorkload() {
+	// Prepare the data to submit
+	QNetworkRequest request( QUrl( ServiceUrl::GET_SERVICE_WORKLOAD ) );
+	createNetworkReply( request, QByteArray(), false );
+	connect( reply, SIGNAL( finished() ), this, SLOT( onServiceWorkloadComplete() ) );
+	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
+			 this, SLOT( submissionReplyError( QNetworkReply::NetworkError ) ) );
+	kDebug() << "Retrieving URL report, waiting for reply...";
+}
+
+void HttpConnector::onServiceWorkloadComplete() {
+	if( reply->error() == QNetworkReply::NoError ) {
+		// Convert the reply into a JSON string
+		const QString json( reply->readAll() );
+		kDebug() << "Data: " << json;
+		if( json.isEmpty() ) {
+			kDebug() << "The reply is empty. Ignoring event... ";
+			return;
+		}
+
+		// Extract the data from the JSON string
+		bool ok;
+		QJson::Parser parser;
+		QMap< QString, QVariant > jsonMap = parser.parse( json.toAscii(), &ok ).toMap();
+		if( ok && !jsonMap.isEmpty() ) {
+
+			ServiceWorkload workload = { ( uchar ) jsonMap[ "file" ].toInt()
+									   , ( uchar ) jsonMap[ "url"  ].toInt() };
+			emit( serviceWorkloadReady( workload ) );
+		} 
+		else {
+			kError() << "ERROR: An unknown error ocurred while processing the data";
+		}
+	}
+	else {
+		// This code should never be reached, but left as a guard
+		kError() << "ERROR: " << reply->errorString(); //
+	}
+	// The reply must be freed here
+	freeNetworkReply();
+}
+
 
 void HttpConnector::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal ){
 	kDebug() << "Uploaded " << bytesSent << "/" << bytesTotal << QString( "(%1 %)").arg( ( double ) bytesSent / bytesTotal * 100 , -1, 'f', 1, '0' );
@@ -396,6 +457,7 @@ void HttpConnector::submissionReplyError( QNetworkReply::NetworkError error ) {
 		emit( errorOccurred( errorMsg ) );
 	}
 	reportMode = ReportMode::NONE;
+	freeNetworkReply();// The reply must be freed here
 }
 
 void HttpConnector::abort() {
@@ -420,6 +482,7 @@ void HttpConnector::abortCurrentTask() {
 	abortRequested = false;
 	kDebug() << "Abortion action complete.";
 	emit( aborted() );
+	freeNetworkReply();// The reply must be freed here
 }
 
 #include "httpconnector.moc"

@@ -15,7 +15,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef WELCOMEDIALOG_H
 #define WELCOMEDIALOG_H
 
@@ -28,7 +27,7 @@ private:
     void setupWizard( QWidget* parent = 0 );
 
 public:
-    WelcomeWizard( QWidget* parent );
+    WelcomeWizard( QNetworkAccessManager*const networkManager, QWidget* parent );
     virtual ~WelcomeWizard();
     void show();
 	QNetworkAccessManager* const networkAccessManager() const;

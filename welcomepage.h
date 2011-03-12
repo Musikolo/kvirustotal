@@ -61,6 +61,5 @@ public:
 	QString serviceKey() const;
 	virtual void initializePage(); // Overrride
 	virtual bool validatePage(); // Override
-	virtual void cleanupPage(); // Overrride
 };
 #endif // WELCOMEPAGE_H

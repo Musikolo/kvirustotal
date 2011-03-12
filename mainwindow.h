@@ -20,22 +20,27 @@
 
 #include <KMainWindow>
 #include <QResizeEvent>
+#include <KNotification>
 
 #include "ui_mainwindow.h"
 #include "taskviewhandler.h"
 #include "reportviewhandler.h"
 #include "welcomewizard.h"
-#include <KNotification>
+
 class MainWindow : public KMainWindow, private Ui::MainWindow
 {
 Q_OBJECT
 private:
+	QNetworkAccessManager* networkManager;
+	HttpConnector* workloadConnector;
     TaskViewHandler* taskViewHandler;
 	QLabel* resultIconLabel;
 	WelcomeWizard* wizard;
 
 	void dragEnterEvent( QDragEnterEvent* event );
 	void dropEvent( QDropEvent* event );
+	void setupWorkloadProgressBars();
+	void updateWorkloadProgressBars( ServiceWorkload workload );
 	
 private slots:
 	bool closeRequested();
@@ -49,8 +54,8 @@ private slots:
 	void showSettingsDialog();
 	void settingsChanged();
 	void delayedConnections();
+	void onWorkloadReady( ServiceWorkload workload );
 	
-
 public:
     MainWindow( );
     virtual ~MainWindow();

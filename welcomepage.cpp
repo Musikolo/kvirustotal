@@ -121,7 +121,6 @@ Now, just copy and paste it below:", General::APP_UI_NAME, VIRUSTOTAL_REGISTRATI
 	page->setLayout( layout );
 
 	// Set mandatory fields
-//FIXME: When the keyText is not empty by default, is shoudl allow to continue
 	page->setMandatoryField( "keyText*", keyText );
 
 	return page;
@@ -291,12 +290,9 @@ void WelcomePage::initializePage() {
 
 bool WelcomePage::validatePage() {
 	// If we are in the last page
-kDebug() << wizard->currentId();
+	kDebug() << wizard->currentId();
 	const int pageId = wizard->currentId();
-	if( pageId == WelcomePageConst::CHECK_SERVICE_KEY_PAGE ) {
-		freeConnector(); // Delete the connector when pressing 'Next'
-	}
-	else if( pageId == WelcomePageConst::CONCLUSION_PAGE ) {
+	if( pageId == WelcomePageConst::CONCLUSION_PAGE ) {
 		QString key = serviceKey();
 		kDebug() << "Storing user service key " << key;
 		Settings::self()->setServiceKey( key );
@@ -304,14 +300,4 @@ kDebug() << wizard->currentId();
 	}
 	return true;
 }
-
-void WelcomePage::cleanupPage() {
-    QWizardPage::cleanupPage();
-	const int pageId = wizard->currentId();
-	if( pageId == WelcomePageConst::CHECK_SERVICE_KEY_PAGE ) {
-		kDebug() << pageId;
-		freeConnector(); // Delete the connector when pressing 'Back' or 'Cancel'
-	}
-}
-
 #include "welcomepage.moc"
