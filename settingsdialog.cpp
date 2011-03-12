@@ -15,26 +15,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "settingsdialog.h"
 #include <QVBoxLayout>
 #include <KLocalizedString>
 #include <QCheckBox>
+#include <QSpinBox>
+#include <QLabel>
+#include <QHBoxLayout>
+
 #include <settings.h>
+#include "settingsdialog.h"
 
 SettingsDialog::SettingsDialog( QWidget * parent, Qt::WindowFlags flags ) : QWidget( parent, flags ) {
-	QCheckBox* secureProtocol = new QCheckBox( i18n( "Use secure connections (HTTPS)" ) );
+	QCheckBox*const secureProtocol = new QCheckBox( i18n( "Use secure connections (HTTPS)" ) );
 	secureProtocol->setObjectName( "kcfg_SecureProtocol" );
 	
-	QCheckBox* reuseLastReport = new QCheckBox( i18n( "Show first existing reports, if available" ) );
+	QCheckBox*const reuseLastReport = new QCheckBox( i18n( "Show first existing reports, if available" ) );
 	reuseLastReport->setObjectName( "kcfg_ReuseLastReport" );
 	
-	QVBoxLayout* layout = new QVBoxLayout( this );
+	QSpinBox*const notificationTime = new QSpinBox();
+	notificationTime->setSingleStep( 10 ); // 10-unit steps
+	notificationTime->setObjectName( "kcfg_TaskNotificationTime" );
+	QLabel*const notificationTimeLabel = new QLabel( i18n( "Time tasks must take to show a notification (0=disabled)" ) );
+	notificationTimeLabel->setBuddy( notificationTime );
+	QHBoxLayout*const notificationLayout = new QHBoxLayout();
+	notificationLayout->addWidget( notificationTimeLabel );
+	notificationLayout->addWidget( notificationTime );
+	
+	QCheckBox*const infectedTaskNotification = new QCheckBox( i18n( "Show always notifications for infected tasks" ) );
+	infectedTaskNotification->setObjectName( "kcfg_InfectedTaskNotification" );
+	
+	QVBoxLayout*const layout = new QVBoxLayout( this );
 	layout->addWidget( secureProtocol );
 	layout->addWidget( reuseLastReport );
+	layout->addLayout( notificationLayout );
+	layout->addWidget( infectedTaskNotification );
 	this->setLayout( layout );
 }
 
 SettingsDialog::~SettingsDialog() {
 
 }
-

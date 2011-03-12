@@ -258,8 +258,12 @@ void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Finished (%1/%2)", report->getResultMatrixPositives(), report->getResultMatrix().size() ) );
-	// Only when the report takes more a a minute, will show a notification
-	if( seconds > 60 ) {
+	
+	// Show a notification only when the conditions are met
+	const int notificationTime = Settings::self()->taskNotificationTime();
+	bool showNotification = notificationTime > 0 && seconds >= notificationTime ||
+							report->isInfected() && Settings::self()->infectedTaskNotification();
+	if( showNotification ) {
 		MainWindow::showCompleteTaskNotificaton( i18n( "Task %1 finished", rowIndex + 1 ), 
 												 ReportViewHandler::getReportIconName( report->getResultMatrixPositives() ) );
 	}

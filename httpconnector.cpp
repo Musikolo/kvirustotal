@@ -337,6 +337,7 @@ void HttpConnector::reportComplete() {
 		kDebug() << "Data: " << json;
 		if( json.isEmpty() ) {
 			kDebug() << "The reply is empty. Ignoring event... ";
+			freeNetworkReply(); // Free the reply as it's no longer needed
 			return;
 		}
 
@@ -359,16 +360,19 @@ void HttpConnector::reportComplete() {
 				}
 				kDebug() << "Report not ready yet...";
 				emit( reportNotReady() );
+				freeNetworkReply(); // Free the reply as it's no longer needed
 				return;
 			}
 			else if( replyResult == ServiceReplyResult::REQUEST_LIMIT_REACHED ) {
 				kDebug() << "Service limit reached!";
 				emit( serviceLimitReached() );
+				freeNetworkReply(); // Free the reply as it's no longer needed
 				return;
 			}
 			else if( replyResult == ServiceReplyResult::INVALID_SERVICE_KEY ) {
 				kDebug() << "Emitting signal invalidServiceKeyError()...";
 				emit( invalidServiceKeyError() );
+				freeNetworkReply(); // Free the reply as it's no longer needed
 				return;
 			}
 		}

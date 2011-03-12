@@ -8,6 +8,16 @@
     <entry name="CurrentVersion" type="String">
       <label>The current version. Used for upgrading operations only</label>
     </entry>
+    <entry name="TaskNotificationTime" type="Int">
+      <label>Time tasks must take to show a notification (0=disabled)</label>
+      <default>60</default>
+      <min>0</min>
+      <max>999</max>
+    </entry>
+    <entry name="InfectedTaskNotification" type="Bool">
+      <label>Show always notifications for infected tasks</label>
+      <default>true</default>
+    </entry>
   </group>
   <group name="mainwindow">
     <entry name="MainWindowPos" type="Point">
