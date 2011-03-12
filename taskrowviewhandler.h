@@ -37,6 +37,7 @@ private:
 	AbstractReport* report;
     int rowIndex;
     int seconds;
+	int startUploadSeconds;
 	bool finished;
 	uint jobId;
 

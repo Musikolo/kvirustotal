@@ -47,6 +47,7 @@ void TaskRowViewHandler::setupObject( TaskViewHandler* viewHandler, int rowIndex
 	this->report = NULL;
 	this->finished = false;
 	this->jobId = TaskScheduler::self()->enqueueJob( name, jobType, this, Settings::reuseLastReport() );
+	this->startUploadSeconds = 0;
 
 	// Show the item in the table view
 	setType( type );
@@ -215,6 +216,7 @@ void TaskRowViewHandler::queued() {
 }
 
 void TaskRowViewHandler::scanningStarted() {
+	this-> startUploadSeconds = seconds;
 	setStatus( i18n( "Submitting..." ) );
 }
 
@@ -227,6 +229,7 @@ void TaskRowViewHandler::errorOccurred( const QString& message ) {
 }
 
 void TaskRowViewHandler::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
+	int seconds = this->seconds - this->startUploadSeconds; // Current time - start time
 	double rate = 100.0 * bytesSent / bytesTotal;
 	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
 	QString text( i18n( "Uploading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'g', 3 ).arg( speed ) );
