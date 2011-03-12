@@ -69,8 +69,13 @@ void TaskScheduler::processUnsubmittedJobs() {
 		for( int j = 0; j < queue->size(); j++ ) {
 			Job*const job = queue->at( j );
 			if( !job->isRunning() && !serviceLimit ) {
-				kDebug() << "Submitting job id=" << job->jobId();
-				job->submit();
+				if( !job->isAborting() ) {
+					kDebug() << "Submitting job id=" << job->jobId();
+					job->submit();
+				}
+				else {
+					kDebug() << "Job " << job->jobId() << "is being aborted. Doing nothing!";
+				}
 			}
 		}
 	}
@@ -96,19 +101,34 @@ void TaskScheduler::nextActiveJob( JobType::JobTypeEnum type ) {
 void TaskScheduler::scanIdReady( TaskSchedulerJob*const job ) {
 	serviceLimit = false;
 	Job*const aJob = activeJob( job->jobType() );
-	const int seconds = ( aJob == job ? firstSuitableDelay( job ) : -1 );
-	job->checkReportReady( seconds );
+	if( !job->isAborting() ) {
+		const int seconds = ( aJob == job ? firstSuitableDelay( job ) : -1 );
+		job->checkReportReady( seconds );
+	}
+	else {
+		kDebug() << "Job " << job->jobId() << "is being aborted. Doing nothing!";
+	}
 }
 
 void TaskScheduler::reportNotReady( TaskSchedulerJob*const job ) {
 	serviceLimit = false;
-	job->checkReportReady( getSuitableDelay( job ) );
+	if( !job->isAborting() ) {
+		job->checkReportReady( getSuitableDelay( job ) );
+	}
+	else {
+		kDebug() << "Job " << job->jobId() << "is being aborted. Doing nothing!";
+	}
 }
 
 void TaskScheduler::serviceLimitReached( TaskSchedulerJob*const job ) {
 	serviceLimit = true;
 	if( job->isRunning() ){
-		job->checkReportReady( getSuitableDelay( job, true ), true );
+		if( !job->isAborting() ) {
+			job->checkReportReady( getSuitableDelay( job, true ), true );
+		}
+		else {
+			kDebug() << "Job " << job->jobId() << "is being aborted. Doing nothing!";
+		}
 	}
 }
 

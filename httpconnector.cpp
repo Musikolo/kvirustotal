@@ -244,12 +244,12 @@ void HttpConnector::submissionReply() {
 			kError() << msg;
 			emit( errorOccurred( msg ) );
 		}
+		// The reply as it's no longer needed
+		freeNetworkReply();
 	}
 	else {
-		QString msg;
-		msg.append( i18n( "ERROR: %1", reply->errorString() ) );
-		kError() << msg;
-		emit( errorOccurred( msg ) );
+		// This situation should be managed by submissionReplyError()
+		kError() << "ERROR: " << reply->errorString();
 	}
 
 	// If the the file is open, it must be close
@@ -257,9 +257,6 @@ void HttpConnector::submissionReply() {
 		file->close();
 		file = NULL;
 	}
-	
-	// The reply must be freed here
-	freeNetworkReply();
 }
 
 void HttpConnector::retrieveFileReport( const QString& scanId ){
@@ -377,7 +374,7 @@ void HttpConnector::reportComplete() {
 			}
 		}
 
-		// Make up a new FileReport object and emits a signal
+		// Make up a new AbstractReport object and emits a signal
 		switch( reportMode ) {
 			case ReportMode::FILE_MODE: {
 				FileReport*const report = new FileReport( json, fileName, hasher ); // Share the FileHasher object
@@ -394,16 +391,16 @@ void HttpConnector::reportComplete() {
 				kWarning() << "Unexpected report mode. Please, check this situation!";
 				break;
 		}
+		// Free the reply as it's no longer needed
+		freeNetworkReply();
 	}
 	else {
+		// This situation should have been managed by the submissionReplyError() method
 		kError() << "ERROR: " << reply->errorString();
-//TODO: It should be unneeded to emit this signal here, as it should have been done already by the submissionReplyError() method
-//		emit( errorOccurred( reply->errorString() ) );
 	}
 
-	// Set the report mode to none and free the reply
+	// Set the report mode to none
 	reportMode = ReportMode::NONE;
-	freeNetworkReply();
 }
 
 void HttpConnector::retrieveServiceWorkload() {
@@ -422,6 +419,8 @@ void HttpConnector::onServiceWorkloadComplete() {
 		const QString json( reply->readAll() );
 		kDebug() << "Data: " << json;
 		if( json.isEmpty() ) {
+			// The reply must be freed here
+			freeNetworkReply();
 			kDebug() << "The reply is empty. Ignoring event... ";
 			return;
 		}
@@ -439,13 +438,13 @@ void HttpConnector::onServiceWorkloadComplete() {
 		else {
 			kError() << "ERROR: An unknown error ocurred while processing the data";
 		}
+		// The reply must be freed here
+		freeNetworkReply();
 	}
 	else {
 		// This code should never be reached, but left as a guard
 		kError() << "ERROR: " << reply->errorString(); //
 	}
-	// The reply must be freed here
-	freeNetworkReply();
 }
 
 

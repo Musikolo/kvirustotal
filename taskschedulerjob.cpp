@@ -34,6 +34,9 @@ TaskSchedulerJob::TaskSchedulerJob( const QString& resourceName, JobType::JobTyp
 	this->reuseLastReport = reuseLastReport;
 	this->scanId = QString::null;
 	this->retrySubmitionDelay = 0;
+	this->submitting = false;
+	this->waitingRetransmittion = false;
+	this->aborting = false;
 	
 	// Establish all connections between the connector and job
 	connect( connector, SIGNAL( scanIdReady( QString ) ), this, SLOT( onScanIdReady( QString ) ) );
@@ -63,7 +66,8 @@ TaskSchedulerJob::~TaskSchedulerJob() {
 	this->connector->deleteLater();
 }
 
-void TaskSchedulerJob::submit() {
+void TaskSchedulerJob::submitJob() {
+	this->submitting = true;
 	emit( startScanning() );
 	switch( type ) {
 	case JobType::FILE:
@@ -73,7 +77,22 @@ void TaskSchedulerJob::submit() {
 		connector->submitUrl( QUrl( resourceName ) );
 		break;
 	}
+	// Update the retransmition flag
+	this->waitingRetransmittion = false;
 }
+
+void TaskSchedulerJob::submit() {
+	if( submitting ) {
+		kWarning() << "This job(" << id << ") is now already being submitted. Thus, nothing will be done!";
+	}
+	else if( !waitingRetransmittion ) {
+		submitJob();
+	}
+	else {
+		kWarning() << "There is a programmed submit() retransmittion. Thus, nothing will be done!";
+	}
+}
+
 void TaskSchedulerJob::retrySubmittionEvery( int seconds ) {
 	this->retrySubmitionDelay = ( seconds > 0 ? seconds : 0 );
 }
@@ -112,11 +131,13 @@ void TaskSchedulerJob::onCheckReportReady() {
 }
 
 void TaskSchedulerJob::abort() {
+	this->aborting = true;
 	connector->abort();
 }
 
 void TaskSchedulerJob::onScanIdReady( const QString& scanId ) {
 	this->scanId = scanId;
+	this->submitting = false;
 //	emit( queued() ); // Signal to the listener
 	emit( scanIdReady( this ) ); // Signal to the scheduler
 }
@@ -128,7 +149,8 @@ void TaskSchedulerJob::onReportNotReady() {
 void TaskSchedulerJob::onServiceLimitReached() {
 	if( retrySubmitionDelay > 0 ) {
 		kDebug() << "Setting retry submittion in" << retrySubmitionDelay << "seconds...";
-		QTimer::singleShot( retrySubmitionDelay * 1000, this, SLOT( submit() ) );
+		this->waitingRetransmittion = true;
+		QTimer::singleShot( retrySubmitionDelay * 1000, this, SLOT( submitJob() ) );
 		emit( serviceLimitReached( retrySubmitionDelay ) ); // Signal to the listener
 	}
 	else {
@@ -148,10 +170,12 @@ void TaskSchedulerJob::onInvalidServiceKeyError() {
 }
 
 void TaskSchedulerJob::onAbort() {
+	this->aborting = false;
 	emit( finished( this ) ); // Signal to the scheduler
 }
 
 void TaskSchedulerJob::onErrorOccurred( const QString& message ) {
 	Q_UNUSED( message );
+	this->submitting = false;
 	emit( finished( this ) ); // Signal to the scheduler
 }

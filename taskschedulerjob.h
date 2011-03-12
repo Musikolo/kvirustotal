@@ -41,17 +41,20 @@ private:
 	QString scanId;
 	HttpConnectorListener* listener;
 	int retrySubmitionDelay;
+	bool submitting;
+	bool aborting;
+	bool waitingRetransmittion;
 	
 private slots:
 	void onCheckReportReady();
 	void onScanIdReady( const QString& scanId );
-//	void retrievingReport();
 	void onReportNotReady();
 	void onReportReady();
 	void onServiceLimitReached();
 	void onInvalidServiceKeyError();
 	void onAbort();
 	void onErrorOccurred( const QString& message );
+	void submitJob();
 	
 public:
     TaskSchedulerJob( const QString& resourceName, JobType::JobTypeEnum type, 
@@ -61,7 +64,8 @@ public:
 	
 	uint jobId() { return this->id; }
 	JobType::JobTypeEnum jobType() { return this->type; }
-	bool isRunning() { return !scanId.isEmpty(); }
+	bool isRunning() { return !this->scanId.isEmpty(); }
+	bool isAborting() { return this->aborting; }
 	
 	/** Retries submittions every given seconds when the service limit is reached */
 	void retrySubmittionEvery( int seconds );
