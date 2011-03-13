@@ -201,12 +201,8 @@ bool HttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteArray&
 }
 
 void HttpConnector::submissionReply() {
-
 	kDebug()  << reply << " - File submission reply received. Processing data...";
-	if( this->abortRequested ) {
-		abortCurrentTask(); // Will free and reset all resources
-	}
-	else if( reply->error() == QNetworkReply::NoError ) {
+	if( !this->abortRequested && reply->error() == QNetworkReply::NoError ) {
 		// Convert the replay into a JSON string
 		const QString json( reply->readAll() );
 		kDebug() << "Data: " << json;
@@ -244,8 +240,6 @@ void HttpConnector::submissionReply() {
 			kError() << msg;
 			emit( errorOccurred( msg ) );
 		}
-		// The reply as it's no longer needed
-		freeNetworkReply();
 	}
 	else {
 		// This situation should be managed by submissionReplyError()
@@ -257,6 +251,8 @@ void HttpConnector::submissionReply() {
 		file->close();
 		file = NULL;
 	}
+	// The reply as it's no longer needed
+	freeNetworkReply();
 }
 
 void HttpConnector::retrieveFileReport( const QString& scanId ){
@@ -288,7 +284,7 @@ void HttpConnector::submitUrl( const QUrl& url2Scan ) {
 		return;
 	}
 
-// Prepare the request
+	// Prepare the request
 	QNetworkRequest request( ServiceUrl::SEND_URL_SCAN );
 	QByteArray params;
 	params.append( JsonTag::KEY ).append( "=" ).append( key ).append("&").
@@ -325,10 +321,7 @@ void HttpConnector::retrieveUrlReport( const QString& scanId ) {
 
 void HttpConnector::reportComplete() {
 	kDebug() << "Report reply received. Processing data...";
-	if( this->abortRequested ) {
-		abortCurrentTask(); // Will free and reset all resources
-	}
-	else if( reply->error() == QNetworkReply::NoError ) {
+	if( !this->abortRequested && reply->error() == QNetworkReply::NoError ) {
 		// Convert the reply into a JSON string
 		const QString json( reply->readAll() );
 		kDebug() << "Data: " << json;
@@ -391,16 +384,15 @@ void HttpConnector::reportComplete() {
 				kWarning() << "Unexpected report mode. Please, check this situation!";
 				break;
 		}
-		// Free the reply as it's no longer needed
-		freeNetworkReply();
 	}
 	else {
 		// This situation should have been managed by the submissionReplyError() method
 		kError() << "ERROR: " << reply->errorString();
 	}
 
-	// Set the report mode to none
+	// Set the report mode to none and free the reply
 	reportMode = ReportMode::NONE;
+	freeNetworkReply();
 }
 
 void HttpConnector::retrieveServiceWorkload() {
@@ -438,15 +430,14 @@ void HttpConnector::onServiceWorkloadComplete() {
 		else {
 			kError() << "ERROR: An unknown error ocurred while processing the data";
 		}
-		// The reply must be freed here
-		freeNetworkReply();
 	}
 	else {
 		// This code should never be reached, but left as a guard
 		kError() << "ERROR: " << reply->errorString(); //
 	}
+	// The reply must be freed here
+	freeNetworkReply();
 }
-
 
 void HttpConnector::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal ){
 	kDebug() << "Uploaded " << bytesSent << "/" << bytesTotal << QString( "(%1 %)").arg( ( double ) bytesSent / bytesTotal * 100 , -1, 'f', 1, '0' );
@@ -459,12 +450,11 @@ void HttpConnector::downloadProgressRate( qint64 bytesSent, qint64 bytesTotal ){
 void HttpConnector::submissionReplyError( QNetworkReply::NetworkError error ) {
 	// Emit the signal for all errors, but when either close() or abort() methods are invoked
 	if( error != QNetworkReply::OperationCanceledError ){
-		QString errorMsg( reply->errorString().append( " - (%1) " ).arg( error ) );
+		QString errorMsg( reply->errorString().append( " - (Error code: %1) " ).arg( error ) );
 		kError() << "ERROR:" << errorMsg;
 		emit( errorOccurred( errorMsg ) );
 	}
 	reportMode = ReportMode::NONE;
-	freeNetworkReply();// The reply must be freed here
 }
 
 void HttpConnector::abort() {
@@ -475,21 +465,23 @@ void HttpConnector::abort() {
 void HttpConnector::abortCurrentTask() {
 
 	kDebug() << "Aborting the current task...";
+	//Abort the given reply (will be deleted before the abortion completes)
+	if( reply != NULL ) {
+		reply->abort(); // Will throw a call to submittionReplyError() and finished() methods
+	}
+
 	// If the file is open, it must be close
 	if( file != NULL && file->isOpen() ) {
 		file->close();
 		file = NULL;
 	}
+	freeNetworkReply();// The reply should have already been freed here
 
-	// Reset the report mode and abort the given reply (will be deleted when the connector dies)
+	// Reset the report mode and the flag
 	reportMode = ReportMode::NONE;
-	if( reply != NULL ) {
-		reply->abort();
-	}
 	abortRequested = false;
 	kDebug() << "Abortion action complete.";
 	emit( aborted() );
-	freeNetworkReply();// The reply must be freed here
 }
 
 #include "httpconnector.moc"
