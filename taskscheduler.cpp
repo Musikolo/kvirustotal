@@ -184,7 +184,7 @@ QQueue< Job* >* TaskScheduler::queueByType( JobType::JobTypeEnum type ) {
 
 Job* TaskScheduler::activeJob( JobType::JobTypeEnum type ) {
 	QQueue< Job* >*const queue = queueByType( type );
-kDebug() << "Queue size" << queue->size();
+	kDebug() << "Queue size" << queue->size();
 	if( !queue->isEmpty() ){
 		return queue->head();
 	}

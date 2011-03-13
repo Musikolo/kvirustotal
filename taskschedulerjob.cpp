@@ -156,7 +156,7 @@ void TaskSchedulerJob::onServiceLimitReached() {
 			emit( serviceLimitReached( retrySubmitionDelay ) ); // Signal to the listener
 		}
 		else {
-			kWarning() << "Ignoring retransmittion for job" << id << "since it's currently running...";
+			emit( serviceLimitReached( this ) ); // Signal to the scheduler
 		}
 	}
 	else {
