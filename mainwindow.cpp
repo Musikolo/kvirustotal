@@ -261,7 +261,7 @@ bool MainWindow::closeRequested() {
 	for( int i = 0; i < taskTableWidget->columnCount(); i++ ) {
 		taskTableCols.append( taskTableWidget->columnWidth( i ) );
 	}
-	settings->setReportTableCols( taskTableCols );
+	settings->setTaskTableCols( taskTableCols );
 	QList< int > reportTableCols;
 	for( int i = 0; i < reportTableWidget->columnCount(); i++ ) {
 		reportTableCols.append( reportTableWidget->columnWidth( i ) );
