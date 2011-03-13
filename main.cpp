@@ -33,6 +33,8 @@ int main( int argc, char** argv ) {
 	about.addCredit( ki18n( General::APP_AUTHOR ), ki18n( "Translator" ), email.toLatin1(), General::APP_HOMEPAGE );
 	const QString deEmail( QString( "Sascha Manns" ).append( "<saigkill" ).append( "@" ).append( "opensuse" ).append( ".org>" ) );
 	about.addCredit( ki18n( "Sascha Manns" ), ki18n( "Translator" ), deEmail.toLatin1() );
+	const QString itEmail( QString( "Gianluca Boiano" ).append( "<morf3089" ).append( "@" ).append( "gmail" ).append( ".com>" ) );
+	about.addCredit( ki18n( "Gianluca Boiano" ), ki18n( "Translator" ), itEmail.toLatin1() );
 	about.setOtherText( ki18n( "KVirusTotal is based on the service provided by VirusTotal which is owned by \
 Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember that <b>it is not \
 intended as a replacement of a full-fledged antivirus program.</b><br><br>\
