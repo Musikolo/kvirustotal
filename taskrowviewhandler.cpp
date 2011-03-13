@@ -229,6 +229,11 @@ void TaskRowViewHandler::errorOccurred( const QString& message ) {
 }
 
 void TaskRowViewHandler::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
+	// The task will be finished when an error has ocurred. In such a case, do nothing...
+	if( finished ) {
+		kWarning() << "The task is finished. Thus, the uploadProgressRate() event will be ignored!";
+		return;
+	}
 	int seconds = this->seconds - this->startUploadSeconds; // Current time - start time
 	double rate = 100.0 * bytesSent / bytesTotal;
 	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
