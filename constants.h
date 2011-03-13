@@ -21,7 +21,7 @@
 namespace General {
 	static const char* APP_UI_NAME  = "KVirusTotal";
 	static const char* APP_NAME 	= "kvirustotal";
-	static const char* APP_VERSION 	= "0.10" ;
+	static const char* APP_VERSION 	= "0.10.1" ;
 	static const char* APP_HOMEPAGE	= "http://kde-apps.org/content/show.php?content=139065";
 	static const char* APP_AUTHOR	= "Carlos López Sánchez";
 }

@@ -1,6 +1,11 @@
-------------------
+---------------------
+2011-03-13 - v.0.10.1
+---------------------
+- Fixed segmentation fault while entering the service key in the welcome wizard
+
+-------------------
 2011-03-13 - v.0.10
-------------------
+-------------------
 - Added German translation (thanks to Sascha Manns)
 - Implemented smarter queue engine to manage requests more efficiently
 - Integration with KDE notification message system
