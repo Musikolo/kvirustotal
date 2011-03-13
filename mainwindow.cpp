@@ -176,12 +176,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	QList< int > splitterState = settings->splitterState();
 	if( !splitterState.isEmpty() ) {
 		splitter->setSizes( splitterState );
-	}	
-	
-	// Load the user's service key
-	const QString serviceKey = settings->serviceKey();
-	if( serviceKey.isEmpty() ) {
-		showWelcomeWizard();
 	}
 
 	// Create a network access manager object
@@ -216,6 +210,14 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	updateWorkloadProgressBars( workload );
 	workloadConnector->retrieveServiceWorkload();
 	
+	// Load the user's service key and, if empty, show the welcome wizard
+	const QString serviceKey = settings->serviceKey();
+	if( serviceKey.isEmpty() ) {
+		// This connection will guarantee that the task table's columns adapt the size of the window
+		connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
+		showWelcomeWizard();
+	}
+
 	// Call the delayed connections and accept drops
 	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
 	setAcceptDrops( true );
