@@ -1,8 +1,14 @@
-* Implement smarter queue engine to manage requests more efficiently
-* Find out a way to set the antivirus version and real version update
-* Better integration with KDE tray message system
 * Make service menu integration
+* Warn the user when a new version is available
+* Tray icon integration
+* Start up automatically when the user logs in, if wanted.
+* Find out a way to set the antivirus version and real version update (when available in API)
+* Base workload progress bars on the API rather than on the Web (when available in API)
 
+* DONE - Add option to set the minimum time to show notification messages
+* DONE - Show antivirus and anti-phishing services' workload
+* DONE - Integration with KDE notification system. 
+* DONE - Implement smarter queue engine to manage requests more efficiently
 * DONE - Add drag and drop support
 * DONE - Save each column width for better customization
 * DONE - Create .desktop file

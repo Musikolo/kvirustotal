@@ -1,4 +1,14 @@
 ------------------
+2011-03-13 - v.0.10
+------------------
+- Added German translation (thanks to Sascha Manns)
+- Implemented smarter queue engine to manage requests more efficiently
+- Integration with KDE notification message system
+- Added drag and drop support
+- Save each column width for better customization
+- A lot of miscellaneous improvements
+
+------------------
 2011-02-22 - v.0.9
 ------------------
 - First public version
