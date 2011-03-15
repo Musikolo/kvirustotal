@@ -1,6 +1,15 @@
+# (1) Standard way: having root permission
 cd /path/to/kvirustotal/
 mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` ..
+make
+make install
+
+# (2) Alternative way: have non-root permission
+cd /path/to/kvirustotal/
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --localprefix` ..
 make
 make install
