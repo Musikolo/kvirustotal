@@ -27,9 +27,10 @@
 #include "httpconnector.h"
 #include "filereport.h"
 #include "welcomewizard.h"
+#include <httpconnectorfactory.h>
 
 namespace WelcomePageConst {
-	enum WelComePageEnum { INTRO_PAGE, GET_SERVICE_KEY_PAGE, CHECK_SERVICE_KEY_PAGE, CONCLUSION_PAGE };
+	enum WelComePageEnum { INTRO_PAGE, CONNECTOR_SELECTION_PAGE, GET_SERVICE_KEY_PAGE, CHECK_SERVICE_KEY_PAGE, CONCLUSION_PAGE };
 }
 class WelcomePage : public QWizardPage {
 Q_OBJECT
@@ -39,6 +40,9 @@ private:
 	 KLineEdit* serviceKeyLineEdit;
 	 QLabel* validationStatus;
 	 QAbstractButton* validationKeyOk;
+	 QAbstractButton* connectorValidation;
+	 bool connectorChosen;
+	 HttpConnectorEngine::HttpConnectorEngineEnum connectorType;
 
      void setMandatoryField( const QString& name, QWidget* widget, const char* property = 0, const char* changedSignal = 0 );
 	 void freeConnector();
@@ -46,14 +50,17 @@ private:
 private slots:
 	void openLink( const QString& link ) const;
 	void setValidationStatus( const QString& status );
-	void testReportReceived( AbstractReport*const report );
+	void testReportReceived( Report*const report );
 	void testReportInvalidKey();
 	void testReportFailed( const QString& message );
+	void onApiConnectorChosen( bool chosen );
+	void onWebConnectorChosen( bool chosen );
 	
 public:
     WelcomePage( WelcomeWizard* wizard );
     virtual ~WelcomePage();
 	static QWizardPage* createIntroPage( WelcomeWizard* wizard );
+	static QWizardPage* createConnectorSelectionPage( WelcomeWizard* wizard );
 	static QWizardPage* createGetServiceKeyPage( WelcomeWizard* wizard );
 	static QWizardPage* createCheckServiceKeyPage(WelcomeWizard* wizard );
 	static QWizardPage* createConclusionPage( WelcomeWizard* wizard );
@@ -61,5 +68,6 @@ public:
 	QString serviceKey() const;
 	virtual void initializePage(); // Overrride
 	virtual bool validatePage(); // Override
+	virtual int nextId ()const; // Override
 };
 #endif // WELCOMEPAGE_H

@@ -17,12 +17,12 @@
 
 #include <QTableWidget>
 #include <KLocalizedString>
+#include <KAction>
+#include <qcoreevent.h>
 #include <KDebug>
 
 #include "taskviewhandler.h"
 #include "taskrowviewhandler.h"
-#include <KAction>
-#include <qcoreevent.h>
 #include "mainwindow.h"
 #include "taskscheduler.h"
 #include <settings.h>
@@ -97,7 +97,7 @@ void TaskRowViewHandler::setSize( qint64 size ) {
 }
 
 void TaskRowViewHandler::setStatus( const QString& status, const QString& toolTip ) {
-kDebug() << "Writting status " << status;
+// 	kDebug() << "Writting status " << status;
 	addRowItem( Column::STATUS, status, toolTip );
 }
 
@@ -146,11 +146,11 @@ void TaskRowViewHandler::addRowItem( int column, const QString& text, const QStr
 	table->setItem( rowIndex, column, item );
 }
 
-AbstractReport* TaskRowViewHandler::getReport() const {
+Report* TaskRowViewHandler::getReport() const {
 	return report;
 }
 
-void TaskRowViewHandler::setReport( AbstractReport*const report ) {
+void TaskRowViewHandler::setReport( Report*const report ) {
 	if( this->report != NULL ) {
 		delete this->report;
 	}
@@ -211,16 +211,16 @@ bool TaskRowViewHandler::rescan() {
 	return actionDone;
 }
 
-void TaskRowViewHandler::queued() {
+void TaskRowViewHandler::onQueued() {
 	setStatus( i18n( "Queued" ) );
 }
 
-void TaskRowViewHandler::scanningStarted() {
+void TaskRowViewHandler::onScanningStarted() {
 	this-> startUploadSeconds = seconds;
 	setStatus( i18n( "Submitting..." ) );
 }
 
-void TaskRowViewHandler::errorOccurred( const QString& message ) {
+void TaskRowViewHandler::onErrorOccurred( const QString& message ) {
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Error" ), message );
@@ -228,7 +228,7 @@ void TaskRowViewHandler::errorOccurred( const QString& message ) {
 	emit( unsubscribeNextSecond( this ) );
 }
 
-void TaskRowViewHandler::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
+void TaskRowViewHandler::onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
 	// The task will be finished when an error has ocurred. In such a case, do nothing...
 	if( finished ) {
 		kWarning() << "The task is finished. Thus, the uploadProgressRate() event will be ignored!";
@@ -241,19 +241,19 @@ void TaskRowViewHandler::uploadProgressRate( qint64 bytesSent, qint64 bytesTotal
 	setStatus( text );
 }
 
-void TaskRowViewHandler::retrievingReport() {
+void TaskRowViewHandler::onRetrievingReport() {
 	setStatus( i18n( "Retrieving report..." ) );
 }
 
-void TaskRowViewHandler::waitingForReport( int seconds ) {
+void TaskRowViewHandler::onWaitingForReport( int seconds ) {
 	setStatus( seconds > 0 ? i18n( "Waiting for %1 seconds...", seconds ) : i18n( "Waiting..." ) );
 }
 
-void TaskRowViewHandler::serviceLimitReached( int seconds ) {
+void TaskRowViewHandler::onServiceLimitReached( int seconds ) {
 	setStatus( i18n( "Service limit reached! (wait %1)", seconds ) );
 }
 
-void TaskRowViewHandler::aborted() {
+void TaskRowViewHandler::onAborted() {
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	kDebug() << "Aborted!";
@@ -261,11 +261,11 @@ void TaskRowViewHandler::aborted() {
 	emit( unsubscribeNextSecond( this ) );
 }
 
-void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
+void TaskRowViewHandler::onReportReady( Report*const report ) {
 	setReport( report ); // Free the current report and set the new one
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
-	setStatus( i18n( "Finished (%1/%2)", report->getResultMatrixPositives(), report->getResultMatrix().size() ) );
+	setStatus( i18n( "Finished (%1/%2)", report->getNumPositives(), report->getResultList().size() ) );
 	
 	// Show a notification only when the conditions are met
 	const int notificationTime = Settings::self()->taskNotificationTime();
@@ -273,7 +273,7 @@ void TaskRowViewHandler::reportReady( AbstractReport*const report ) {
 							( report->isInfected() && Settings::self()->infectedTaskNotification() );
 	if( showNotification ) {
 		MainWindow::showCompleteTaskNotificaton( i18n( "Task %1 finished", rowIndex + 1 ), 
-												 ReportViewHandler::getReportIconName( report->getResultMatrixPositives() ) );
+												 ReportViewHandler::getReportIconName( report->getNumPositives() ) );
 	}
 	emit( unsubscribeNextSecond( this ) );
 	emit( reportCompleted( rowIndex ) );

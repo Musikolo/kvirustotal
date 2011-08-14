@@ -14,6 +14,11 @@
       <min>0</min>
       <max>999</max>
     </entry>
+    <entry name="HttpConnectorEngine" type="Int">
+      <label>HttpConnector implementation engine</label>
+      <default>1</default>
+      <min>0</min>
+    </entry>
     <entry name="InfectedTaskNotification" type="Bool">
       <label>Show always notifications for infected tasks</label>
       <default>true</default>

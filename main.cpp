@@ -23,7 +23,7 @@
 
 int main( int argc, char** argv ) {
 
-	KAboutData about( General::APP_NAME, 0, ki18n( General::APP_UI_NAME ), General::APP_VERSION, 
+	KAboutData about( General::APP_NAME, 0, ki18n( General::APP_UI_NAME ), General::APP_VERSION.toAscii(), 
 					   ki18n( "Online antivirus and anti-phishing tool" ), KAboutData::License_GPL_V3 );
 	about.setProgramIconName( "kvirustotal" );
 	about.setCopyrightStatement( ki18n( "Copyright (c) 2011 - Carlos López Sánchez" ) );

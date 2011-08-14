@@ -69,6 +69,7 @@ public:
 	
 	/** Retries submittions every given seconds when the service limit is reached */
 	void retrySubmittionEvery( int seconds );
+	HttpConnectorCfg getJobHttpConnectorCfg();
 	
 public slots:
 	void submit();

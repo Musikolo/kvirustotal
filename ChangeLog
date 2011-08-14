@@ -1,8 +1,20 @@
+---------------------
+2011-08-XX - v.0.20.0
+---------------------
+- New web-based connector (WebHttpConnector)
+- Deep internal recode for better extensibility and flexibility
+- Added permanent link for URL scans too (ApiHttpConnector)
+- Show green or red padlock when HTTPs is enabled or disabled, respectively
+- Separate erroneous or unrated results from positive ones (displayed in orange color)
+- Fixed internal bug when building a POST message (filename attribute)
+- Fixed crash when starting up and quitting too fast.
+- Some other minor improvements
+
 -------------------
 2011-03-15 - v.0.11
 -------------------
 - Added Italian translation (thanks to Gianluca Boiano)
-- Fixed bug that prevents task columns' width from being saved on exit
+- Fixed bug that prevents the width of the task table's columns from being saved on exit
 
 ---------------------
 2011-03-13 - v.0.10.1

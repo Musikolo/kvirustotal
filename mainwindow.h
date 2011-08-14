@@ -41,6 +41,10 @@ private:
 	void dropEvent( QDropEvent* event );
 	void setupWorkloadProgressBars();
 	void updateWorkloadProgressBars( ServiceWorkload workload );
+	void setProgressBarSecurityIcon();
+	void validateCurrentVersion();
+	bool isPreviousVersion();
+	bool isPreviousVersionTo( uchar major, uchar minor, uchar bugfix );
 	
 private slots:
 	bool closeRequested();

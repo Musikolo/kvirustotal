@@ -19,7 +19,7 @@
 #define REPORTVIEWHANDLER_H
 
 #include <QTableWidget>
-#include "abstractreport.h"
+#include "core/report.h"
 #include "reportrowviewhandler.h"
 
 class MainWindow;
@@ -40,7 +40,7 @@ public:
     ReportViewHandler( MainWindow* mainwindow, QTableWidget* tableWidget );
     virtual ~ReportViewHandler();
 	inline QTableWidget* getTableWidget(){ return this->tableWidget; }
-	void showReport( AbstractReport* const report );
+	void showReport( Report* const report );
 	
 	static QString getReportIconName( int numInfected );
 

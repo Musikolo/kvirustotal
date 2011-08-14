@@ -41,6 +41,7 @@ void WelcomeWizard::setupWizard() {
 	setSubTitleFormat( Qt::RichText );
 	setWindowIcon( KIcon( "kvirustotal") );
 	setPage( WelcomePageConst::INTRO_PAGE, WelcomePage::createIntroPage( this ) );
+	setPage( WelcomePageConst::CONNECTOR_SELECTION_PAGE, WelcomePage::createConnectorSelectionPage( this ) );
 	setPage( WelcomePageConst::GET_SERVICE_KEY_PAGE, WelcomePage::createGetServiceKeyPage( this ) );
 	setPage( WelcomePageConst::CHECK_SERVICE_KEY_PAGE, WelcomePage::createCheckServiceKeyPage( this ) );
 	setPage( WelcomePageConst::CONCLUSION_PAGE, WelcomePage::createConclusionPage( this ) );
@@ -50,10 +51,8 @@ void WelcomeWizard::setupWizard() {
 }
 
 void WelcomeWizard::show() {
-//FIXME: For some misterious reason, without wizard varible the show() method does not work!!
-	QWizard* wizard = this;
-	wizard->setModal( true );
-	wizard->show();
+	setModal( true );
+	QWizard::show();
 }
 
 QNetworkAccessManager* WelcomeWizard::networkAccessManager() const {

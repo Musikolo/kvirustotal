@@ -18,7 +18,9 @@
 #ifndef TASKROWVIEWHANDLER_H
 #define TASKROWVIEWHANDLER_H
 
-#include "abstractreport.h"
+#include <QFile>
+
+#include "core/report.h"
 #include "httpconnector.h"
 #include "httpconnectorlistener.h"
 #include "taskschedulerjob.h"
@@ -34,7 +36,7 @@ class TaskRowViewHandler : public HttpConnectorListener
 Q_OBJECT
 private:
     TaskViewHandler* viewHandler;
-	AbstractReport* report;
+	Report* report;
     int rowIndex;
     int seconds;
 	int startUploadSeconds;
@@ -46,20 +48,20 @@ private:
     void setSize( qint64 size );
     void setStatus( const QString& status, const QString& toolTip = QString() );
     void setTime( int seconds );
-	void setReport( AbstractReport* const report );
+	void setReport( Report*const report );
     void addRowItem(int column, const QString& text, const QString& toolTip = QString() );
     void setupObject( TaskViewHandler* viewHandler, int rowIndex, const QString& type, const QString& name, int size, JobType::JobTypeEnum jobType );
 
 protected slots:
-	void queued();
-    void scanningStarted();
-    void errorOccurred( const QString& message );
-	void uploadProgressRate( qint64 bytesSent, qint64 bytesTotal );
-	void retrievingReport();
-	void waitingForReport( int seconds );
-	void serviceLimitReached( int seconds );
-	void aborted();
-	void reportReady( AbstractReport* const report );
+	void onQueued();
+    void onScanningStarted();
+    void onErrorOccurred( const QString& message );
+	void onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal );
+	void onRetrievingReport();
+	void onWaitingForReport( int seconds );
+	void onServiceLimitReached( int seconds );
+	void onAborted();
+	void onReportReady( Report*const report );
     QString getItemText( Column::ColumnEnum column ) const;
 
 public slots:
@@ -78,7 +80,7 @@ public:
 	QString getName() const;
 	bool isFinished() { return finished; }
 	static int getHintColumnSize( int column, int availableWidth );
-    AbstractReport* getReport() const;
+    Report* getReport() const;
 	bool abort();
 	bool rescan();
 };

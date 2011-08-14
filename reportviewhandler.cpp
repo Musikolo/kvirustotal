@@ -18,9 +18,11 @@
 #include <KLocalizedString>
 #include <KDebug>
 
-#include "reportviewhandler.h"
 #include <QHeaderView>
+
+#include "reportviewhandler.h"
 #include "mainwindow.h"
+#include "core/filereport.h"
 #include <settings.h>
 
 ReportViewHandler::ReportViewHandler( MainWindow* mainwindow, QTableWidget* tableWidget ) {
@@ -62,7 +64,7 @@ void ReportViewHandler::setupObject( QTableWidget* tableWidget ){
 	}
 }
 
-void ReportViewHandler::showReport( AbstractReport* const report ) {
+void ReportViewHandler::showReport( Report*const report ) {
 	// It cannot be globally defined because the i18n function will not be ready
 	static const QString NO_RESULT = i18n( "N/A" );
 
@@ -70,8 +72,8 @@ void ReportViewHandler::showReport( AbstractReport* const report ) {
 	freeRowHandlers();
 	if( report != NULL ) {
 		kDebug() << "Setting the given report...";
-		QMap< QString, RowResult > matrix = report->getResultMatrix();
-		tableWidget->setRowCount( matrix.size() );
+		const QList< ResultItem > resultList = report->getResultList();
+		tableWidget->setRowCount( resultList.size() );
 		tableWidget->resizeRowsToContents();
 
 		// Create brand-new row view handlers
@@ -79,8 +81,8 @@ void ReportViewHandler::showReport( AbstractReport* const report ) {
 		rowViewHandlers = new QList< ReportRowViewHandler* >;
 		int numInfected = 0;
 		const QString antivirusDate = report->getReportDate().date().toString( Qt::DefaultLocaleShortDate );
-		for( QMap< QString, RowResult >::const_iterator curRow = matrix.constBegin(); curRow != matrix.constEnd(); ++curRow ) {
-			ReportRowViewHandler* rowViewHandler = new ReportRowViewHandler( this, rowViewHandlers->size(), curRow.key(), antivirusDate, curRow.value() );
+		for( QList< ResultItem >::const_iterator curRow = resultList.constBegin(); curRow != resultList.constEnd(); ++curRow ) {
+			ReportRowViewHandler* rowViewHandler = new ReportRowViewHandler( this, rowViewHandlers->size(), (*curRow) );
 			numInfected += rowViewHandler->isInfected() ? 1 : 0;
 			rowViewHandlers->append( rowViewHandler );
 		}
@@ -89,33 +91,45 @@ void ReportViewHandler::showReport( AbstractReport* const report ) {
 		QString reportDate = report->getReportDate().toString( Qt::DefaultLocaleShortDate );
 		mainWindow->getScanAnaylisisDate()->setText( reportDate );
 
-		QString permanentLink;
-		FileReport* fileReport = dynamic_cast< FileReport* >( report );
+		// Set the permanent URL
 		KUrlLabel*const link = mainWindow->getPermanentLink();
-		if( fileReport != NULL ) {
-			// Set the MD5, SHA1 and SHA256 hashes
-			mainWindow->getMd5Label()->setText( fileReport->getMd5Sum() );
-			mainWindow->getSha1Label()->setText( fileReport->getSha1Sum() );
-			mainWindow->getSha256Label()->setText( fileReport->getSha256Sum() );
-
-			// Set the permanent URL
-			kDebug() << "Permanent URL: " << fileReport->getPermanentLink();
-			permanentLink.append( fileReport->getPermanentLink().toString() );
+		if( report->getPermanentLink().isValid() ) {
+			kDebug() << "Permanent URL: " << report->getPermanentLink();
+			link->setText( report->getPermanentLink().toString() );
 			link->setTextInteractionFlags( Qt::TextBrowserInteraction );
 			link->setEnabled( true );
 		}
 		else {
-			// Set default the MD5, SHA1 and SHA256 hashes
-			mainWindow->getMd5Label()->setText( NO_RESULT );
-			mainWindow->getSha1Label()->setText( NO_RESULT );
-			mainWindow->getSha256Label()->setText( NO_RESULT );
-
-			// Set the default permanent URL
-			permanentLink.append( NO_RESULT );
+			link->setText( NO_RESULT );
 			link->setTextInteractionFlags( Qt::NoTextInteraction );
 			link->setEnabled( false );
 		}
-		link->setText( permanentLink );
+
+		switch( report->getReportType() ) {
+			case ReportType::FILE: {
+				FileReport*const fileReport = dynamic_cast< FileReport *>( report );
+				if( fileReport != NULL ) {
+					mainWindow->getMd5Label()->setText( fileReport->getMd5Sum() );
+					mainWindow->getSha1Label()->setText( fileReport->getSha1Sum() );
+					mainWindow->getSha256Label()->setText( fileReport->getSha256Sum() );
+				}
+				else {
+					kError() << "The class of report object is not derived from FileReport!!!";
+				}
+				break;
+			}
+			case ReportType::URL: {
+				// Set default the MD5, SHA1 and SHA256 hashes
+				mainWindow->getMd5Label()->setText( NO_RESULT );
+				mainWindow->getSha1Label()->setText( NO_RESULT );
+				mainWindow->getSha256Label()->setText( NO_RESULT );
+				break;
+			}
+			case ReportType::UNKNOWN:
+			default:
+				kError() << "Unknown report type " << report->getReportType();
+				break;
+		}
 
 		// Set the result icon depending on the number of infections detected
 		mainWindow->setResultIcon( getReportIconName( numInfected ) );

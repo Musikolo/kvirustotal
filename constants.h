@@ -18,12 +18,17 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QString>
+
 namespace General {
-	static const char* APP_UI_NAME  = "KVirusTotal";
-	static const char* APP_NAME 	= "kvirustotal";
-	static const char* APP_VERSION 	= "0.11" ;
-	static const char* APP_HOMEPAGE	= "http://kde-apps.org/content/show.php?content=139065";
-	static const char* APP_AUTHOR	= "Carlos López Sánchez";
+	static const char* APP_UI_NAME  	  = "KVirusTotal";
+	static const char* APP_NAME 		  = "kvirustotal";
+	static const uchar APP_VERSION_MAJOR  =  0;
+	static const uchar APP_VERSION_MINOR  = 20;
+	static const uchar APP_VERSION_BUGFIX =  0;
+	static const QString APP_VERSION	  = QString( QString( "%1.%2.%3" ).arg( APP_VERSION_MAJOR ).arg( APP_VERSION_MINOR ).arg( APP_VERSION_BUGFIX ) );
+	static const char* APP_HOMEPAGE 	  = "http://kde-apps.org/content/show.php?content=139065";
+	static const char* APP_AUTHOR		  = "Carlos López Sánchez";
 }
 
 #endif // CONSTANTS_H

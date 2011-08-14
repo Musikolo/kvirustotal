@@ -18,8 +18,8 @@
 #include <QTimer>
 #include <KDebug>
 
-#include <settings.h>
 #include "taskschedulerjob.h"
+#include <httpconnectorfactory.h>
 
 uint TaskSchedulerJob::nextJobId = 1;
 
@@ -27,7 +27,7 @@ TaskSchedulerJob::TaskSchedulerJob( const QString& resourceName, JobType::JobTyp
 									QNetworkAccessManager*const manager, HttpConnectorListener*const listener,
 								    const bool reuseLastReport ) {
 	this->id = nextJobId++;
-	this->connector = new HttpConnector( manager, Settings::self()->serviceKey() );
+ 	this->connector = HttpConnectorFactory::getHttpConnector( manager );
 	this->listener = listener;
 	this->type = type;
 	this->resourceName = resourceName;
@@ -41,25 +41,25 @@ TaskSchedulerJob::TaskSchedulerJob( const QString& resourceName, JobType::JobTyp
 	// Establish all connections between the connector and job
 	connect( connector, SIGNAL( scanIdReady( QString ) ), this, SLOT( onScanIdReady( QString ) ) );
 	connect( connector, SIGNAL( reportNotReady() ), this, SLOT( onReportNotReady() ) );
-	connect( connector, SIGNAL( reportReady( AbstractReport*const ) ), this, SLOT( onReportReady() ) );
+	connect( connector, SIGNAL( reportReady( Report*const ) ), this, SLOT( onReportReady() ) );
 	connect( connector, SIGNAL( serviceLimitReached() ), this, SLOT( onServiceLimitReached() ) );
 	connect( connector, SIGNAL( invalidServiceKeyError()), this, SLOT( onInvalidServiceKeyError() ) );
 	connect( connector, SIGNAL( aborted() ), this, SLOT( onAbort() ) );
 	connect( connector, SIGNAL( errorOccurred( QString ) ), this, SLOT( onErrorOccurred( QString ) ) );
 
 	// Set up all connections between this job and the listener
-	connect( this, SIGNAL( queued() ), listener, SLOT( queued() ) );
-	connect( this, SIGNAL( startScanning() ), listener, SLOT( scanningStarted() ) );
-	connect( this, SIGNAL( waitingForReport( int ) ), listener, SLOT( waitingForReport( int ) ) );
-	connect( this, SIGNAL( serviceLimitReached( int ) ), listener, SLOT( serviceLimitReached( int ) ) );
+	connect( this, SIGNAL( queued() ), listener, SLOT( onQueued() ) );
+	connect( this, SIGNAL( startScanning() ), listener, SLOT( onScanningStarted() ) );
+	connect( this, SIGNAL( waitingForReport( int ) ), listener, SLOT( onWaitingForReport( int ) ) );
+	connect( this, SIGNAL( serviceLimitReached( int ) ), listener, SLOT( onServiceLimitReached( int ) ) );
 	
 	// Set up all connections between the connector and the listener
 	connect( connector, SIGNAL( uploadingProgressRate( qint64, qint64 ) ), 
-			 listener, SLOT( uploadProgressRate( qint64, qint64 ) ) );
-	connect( connector, SIGNAL( retrievingReport() ), listener, SLOT( retrievingReport() ) );
-	connect( connector, SIGNAL( reportReady( AbstractReport*const ) ), listener, SLOT( reportReady( AbstractReport*const) ) );
-	connect( connector, SIGNAL( aborted() ), listener, SLOT( aborted() ) );
-	connect( connector, SIGNAL( errorOccurred( QString ) ), listener, SLOT( errorOccurred( QString ) ) );
+			 listener, SLOT( onUploadProgressRate( qint64, qint64 ) ) );
+	connect( connector, SIGNAL( retrievingReport() ), listener, SLOT( onRetrievingReport() ) );
+	connect( connector, SIGNAL( reportReady( Report*const ) ), listener, SLOT( onReportReady( Report*const) ) );
+	connect( connector, SIGNAL( aborted() ), listener, SLOT( onAborted() ) );
+	connect( connector, SIGNAL( errorOccurred( QString ) ), listener, SLOT( onErrorOccurred( QString ) ) );
 }
 
 TaskSchedulerJob::~TaskSchedulerJob() {
@@ -95,6 +95,17 @@ void TaskSchedulerJob::submit() {
 
 void TaskSchedulerJob::retrySubmittionEvery( int seconds ) {
 	this->retrySubmitionDelay = ( seconds > 0 ? seconds : 0 );
+}
+
+HttpConnectorCfg TaskSchedulerJob::getJobHttpConnectorCfg() {
+	switch( jobType() ) {
+		case JobType::URL:
+			return connector->getUrlHttpConnectorCfg();
+		default:
+			kWarning() << "Unknown job type. Assuming JobType::FILE...";
+		case JobType::FILE:
+			return connector->getFileHttpConnectorCfg();
+	}
 }
 
 void TaskSchedulerJob::checkReportReady( int seconds, bool limitReached ) {
@@ -138,7 +149,6 @@ void TaskSchedulerJob::abort() {
 void TaskSchedulerJob::onScanIdReady( const QString& scanId ) {
 	this->scanId = scanId;
 	this->submitting = false;
-//	emit( queued() ); // Signal to the listener
 	emit( scanIdReady( this ) ); // Signal to the scheduler
 }
 

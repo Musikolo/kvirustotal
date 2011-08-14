@@ -26,19 +26,6 @@
 #include "httpconnectorlistener.h"
 #include "taskschedulerjob.h"
 
-/** Delays used to wait for the service to have reports ready */
-namespace ServiceRequestDelay {
-	enum ServiceRequestDelayEnum {
-		DELAY_LEVEL_1 = 15,
-		DELAY_LEVEL_2 = 30,
-		DELAY_LEVEL_3 = 45,
-		DELAY_LEVEL_4 = 60,
-		DELAY_LEVEL_5 = 90,
-		DELAY_LEVEL_6 = 150,
-		DELAY_LEVEL_7 = 300
-	};
-}
-
 typedef TaskSchedulerJob Job;
 
 class TaskScheduler : public QObject
@@ -51,8 +38,8 @@ private:
 	QNetworkAccessManager* manager;
 	QQueue< Job* > fileQueue;
 	QQueue< Job* > urlQueue;
-	int fileDelayLevel;
-	int urlDelayLevel;
+	uchar fileDelayLevel;
+	uchar urlDelayLevel;
 	int nextJobId;
 	bool serviceLimit;
 	
@@ -64,8 +51,8 @@ private:
 	void processNewJob( Job*const job );
 	void nextActiveJob( JobType::JobTypeEnum type );
 	void processUnsubmittedJobs();
-	ServiceRequestDelay::ServiceRequestDelayEnum getSuitableDelay( Job*const job, bool serviceLimitReached = false );
-	ServiceRequestDelay::ServiceRequestDelayEnum firstSuitableDelay( Job*const job );
+	int getSuitableDelay( Job*const job, bool serviceLimitReached = false );
+	int firstSuitableDelay( Job*const job );
 	void initDelayLevels( bool showKDebug = true );
 
 private slots:

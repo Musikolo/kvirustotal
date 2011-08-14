@@ -12,6 +12,7 @@ xargs --arg-file=${WDIR}/rcfiles.list extractrc > ${WDIR}/rc.cpp
 # additional string for KAboutData
 echo 'i18nc("NAME OF TRANSLATORS","Your names");' >> ${WDIR}/rc.cpp
 echo 'i18nc("EMAIL OF TRANSLATORS","Your emails");' >> ${WDIR}/rc.cpp
+echo 'i18nc("HOMEPAGE OF TRANSLATORS","Your homepages");' >> ${WDIR}/rc.cpp
 cd ${WDIR}
 echo "Done preparing rc files"
  

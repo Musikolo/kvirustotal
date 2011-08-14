@@ -40,12 +40,12 @@
 #include <QProgressBar>
 
 #include "constants.h"
-#include "httpconnector.h"
 #include "taskviewhandler.h"
 #include "mainwindow.h"
 #include "welcomewizard.h"
 #include "settings.h"
 #include "settingsdialog.h"
+#include <httpconnectorfactory.h>
 
 static const KUrl START_DIR_URL( "kfiledialog:///kvirustotal" );
 
@@ -84,17 +84,6 @@ MainWindow::MainWindow() {
 	abortAction->setHelpText( i18n( "Abort the selected tasks" ) );
 	abortAction->setShortcut( Qt::CTRL + Qt::Key_B );
 	toolbar->addAction( abortAction );
-
-//TODO: Temporary button - Just for development use
-/*
-KAction* submitAction = new KAction( KIcon( "bookmark-new-list" ), "Submit", this );
-submitAction->setHelpText( i18n( "Submit" ) );
-submitAction->setShortcut( Qt::CTRL + Qt::Key_S );
-toolbar->addSeparator();
-toolbar->addAction( submitAction );
-
-connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
-*/
 
 	KAction* quitAction = KStandardAction::quit( this, SLOT( closeRequested() ), this );
 	quitAction->setHelpText( i18n( "Quit %1", General::APP_UI_NAME ) );
@@ -158,7 +147,6 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	layout->addWidget( splitter );
 
 	statusBar()->showMessage( i18n( "Ready..." ) );
-//	setWindowIcon( KIcon( General::APP_NAME ) );
 	setWindowTitle( i18n( "Online antivirus and anti-phishing tool - %1", General::APP_UI_NAME ) );
 	
 	// Restore the main window state, if available
@@ -180,10 +168,10 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 
 	// Create a network access manager object
 	networkManager = new QNetworkAccessManager( this );
-	workloadConnector = new HttpConnector( networkManager, QString::null ); // The service key is unneeded for this
+	workloadConnector = HttpConnectorFactory::getHttpConnector( networkManager );
 
 	// Setup the task table. If the serviceKey is empty, it will be updated later
-	HttpConnector::loadSettings();
+	HttpConnectorFactory::loadHttpConnectorSettings();
 	taskViewHandler = new TaskViewHandler( this, taskTableWidget, reportTableWidget );
 	
 	// Set up the workload progress bars
@@ -208,16 +196,11 @@ connect( submitAction, SIGNAL( triggered( bool ) ), this, SLOT( submit() ) );
 	// Show the minimum level and ask for the service workload
 	ServiceWorkload workload = { ServiceWorkload::MIN_VALUE ,ServiceWorkload::MIN_VALUE };
 	updateWorkloadProgressBars( workload );
-	workloadConnector->retrieveServiceWorkload();
+	workloadConnector->onRetrieveServiceWorkload();
 	
-	// Load the user's service key and, if empty, show the welcome wizard
-	const QString serviceKey = settings->serviceKey();
-	if( serviceKey.isEmpty() ) {
-		// This connection will guarantee that the task table's columns adapt the size of the window
-		connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
-		showWelcomeWizard();
-	}
-
+	// Validate version
+	validateCurrentVersion();
+	
 	// Call the delayed connections and accept drops
 	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
 	setAcceptDrops( true );
@@ -228,6 +211,7 @@ MainWindow::~MainWindow() {
 		delete wizard;
 	}
 	if( workloadConnector != NULL ) {
+		workloadConnector->abort(); // Needed to prevent the app from crashing if started up and closed too fast.
 		workloadConnector->deleteLater();
 	}
 	if( networkManager != NULL ) {
@@ -297,9 +281,7 @@ void MainWindow::openUrl() {
 	bool ok;
 	const QRegExp regex( "^((http)|(ftp))[s]?://[^..]+(\\.[^..]+)+$", Qt::CaseInsensitive );
 	QRegExpValidator*const validator = new QRegExpValidator( regex, this );
-//TODO: Remove this after testing
 	QString url = KInputDialog::getText( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ), "http://", &ok, this, validator );
-//	QString url = KInputDialog::getText( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ), "http://blog.ben2367.fr/wp-includes/images/smilies/icon_wink.gif", &ok, this, validator );
 	if( ok && !url.isEmpty() ) {
 		kDebug() << "Entered URL is" << url;
 		taskViewHandler->submitUrl( url );
@@ -307,12 +289,6 @@ void MainWindow::openUrl() {
 	validator->deleteLater();
 }
 
-//TODO: Just for testing
-/*
-void MainWindow::submit() {
-	taskViewHandler->submitFile( "/home/musikolo/workspace-qt/kvirustotal/test/fileReportTest.json" );
-}
-*/
 void MainWindow::setResultIcon( const QString& iconName, bool enabled ) {
 	KIcon icon( iconName ); // Expected values are: security-high, security-medium, security-low
 	resultIconLabel->setEnabled( enabled );
@@ -344,10 +320,13 @@ void MainWindow::showWelcomeWizard() {
 
 void MainWindow::wizardFinished( int result ) {
 	kDebug() << "result=" << result;
-	const QString serviceKey = Settings::self()->serviceKey();
-	if( serviceKey.isEmpty() ) {
-		KMessageBox::sorry( this, i18n( "No service key found! Thus, the application must be closed." ) );
-		close();
+	if( HttpConnectorFactory::getFileHttpConnectorCfg().serviceKeyRequired ||
+		HttpConnectorFactory::getUrlHttpConnectorCfg().serviceKeyRequired ) {
+		const QString serviceKey = Settings::self()->serviceKey();
+		if( serviceKey.isEmpty() ) {
+			KMessageBox::sorry( this, i18n( "No service key found! Thus, the application must be closed." ) );
+			close();
+		}
 	}
 }	
 
@@ -368,7 +347,8 @@ void MainWindow::showSettingsDialog() {
 }
 
 void MainWindow::settingsChanged() {
-	HttpConnector::loadSettings(); // Re-establish the protocol (HTTPS or HTTP)
+	HttpConnectorFactory::loadHttpConnectorSettings();// Re-establish the protocol (HTTPS or HTTP)
+	setProgressBarSecurityIcon();
 }
 
 void MainWindow::dragEnterEvent( QDragEnterEvent* event ) {
@@ -421,6 +401,31 @@ void MainWindow::setupWorkloadProgressBars() {
 	progressBar->setMaximumSize( 120, 20 );
 	statusBar()->addPermanentWidget( progressBar );
 	kDebug() << "Workload progress bars ready!";
+	
+	// Set the security icon
+	setProgressBarSecurityIcon();
+}
+
+void MainWindow::setProgressBarSecurityIcon() {
+	// Find the icon container or create a new one, if none exists
+	QLabel* iconContainer = statusBar()->findChild< QLabel* >( "padlock" );
+	if( iconContainer == NULL ) {
+		iconContainer = new QLabel();
+		iconContainer->setObjectName( "padlock" );
+		statusBar()->addPermanentWidget( iconContainer );
+	}
+	
+	// Update the icon accordingly
+	KIcon padlock;
+	if( Settings::self()->secureProtocol() ) {
+		padlock = KIcon( "padlock-green" );
+		iconContainer->setToolTip( i18n( "HTTPs is enabled, so data is being transmitted securely!" ) );
+	}
+	else {
+		padlock = KIcon( "padlock-red" );
+		iconContainer->setToolTip( i18n( "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is highly recommended to enable it!" ) );
+	}
+	iconContainer->setPixmap( padlock.pixmap( 20, 20 ) );
 }
 
 void MainWindow::onWorkloadReady( ServiceWorkload workload  ) {
@@ -433,7 +438,7 @@ void MainWindow::onWorkloadReady( ServiceWorkload workload  ) {
 	QTimer::singleShot( nextShot * 1000, workloadConnector, SLOT( retrieveServiceWorkload() ) );
 }
 
-void MainWindow::updateWorkloadProgressBars(ServiceWorkload workload) {
+void MainWindow::updateWorkloadProgressBars( ServiceWorkload workload ) {
 	kDebug() << "Updating workload progress bars...";
 	static QProgressBar* const antivirusPb   = statusBar()->findChild< QProgressBar* >( "antivirusProgressBar" );
 	static QProgressBar* const antiphisingPb = statusBar()->findChild< QProgressBar* >( "antiphisingProgressBar" );
@@ -477,6 +482,73 @@ void MainWindow::showErrorNotificaton( const QString& msg ) {
 	KNotification::event( KNotification::Warning, 
 						  i18nc( "Application name", "%1 error", General::APP_UI_NAME ), 
 						  msg, KIcon( "task-reject" ).pixmap( 48, 48 ), NULL, KNotification::Persistent );
+}
+
+void MainWindow::validateCurrentVersion() {
+	// If no currentVersion, then it's the first run. Thus, show the welcome wizard
+	if( Settings::self()->currentVersion().isEmpty() ) {
+		// This connection will guarantee that the task table's columns adapt the size of the window
+		connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
+		showWelcomeWizard();
+	}
+	// If the serviceKey is required and it's empty, show the welcome wizard
+	else if( ( HttpConnectorFactory::getFileHttpConnectorCfg().serviceKeyRequired ||
+			   HttpConnectorFactory::getUrlHttpConnectorCfg().serviceKeyRequired  ) &&
+			 Settings::self()->serviceKey().isEmpty() ) {
+		KMessageBox::information( this, 
+									i18n( "The current connector requires a service key, but none has been found. Thus, the welcome wizard will be shown so you can now either set it up or change the connector to be used."),
+									i18n( "Service key required" ) );
+		// This connection will guarantee that the task table's columns adapt the size of the window
+		connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
+		showWelcomeWizard();
+	}
+	// Show the a message to warn the user that a new connector has been implemented
+	else if ( isPreviousVersionTo( (uchar)0, (uchar)20, (uchar)0 ) ) {
+		if( KMessageBox::questionYesNo( this, 
+									    i18n( "The new version of KVirusTotal has a new connector. Do you want the welcome wizard to be shown so you can change it?" ), 
+										i18n( "Show welcome wizard" ) ) == KMessageBox::Yes ) {
+			// This connection will guarantee that the task table's columns adapt the size of the window
+			connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
+			showWelcomeWizard();
+		}
+		else {
+			// Leave the API connector
+			Settings::self()->setHttpConnectorEngine( HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE );
+			Settings::self()->writeConfig();
+		}
+	} 
+}
+
+bool MainWindow::isPreviousVersion() {
+	return isPreviousVersionTo( General::APP_VERSION_MAJOR, General::APP_VERSION_MINOR, General::APP_VERSION_BUGFIX );
+}
+
+bool MainWindow::isPreviousVersionTo( uchar major, uchar minor, uchar bugfix ) {
+	const QString version = Settings::self()->currentVersion();
+	if( !version.isEmpty() ) {
+		QStringList versions = version.split( ".", QString::SkipEmptyParts );
+		// Major
+		if( versions.size() > 0 ) {
+			bool ok = false;
+			int aux = versions[ 0 ].toInt( &ok );
+			if( ok && aux >= major ) {
+				// Minor
+				if( versions.size() > 1 ) {
+					aux = versions[ 1 ].toInt( &ok );
+					if( ok && aux >= minor ) {
+						if( versions.size() > 2 ) {
+							aux = versions[ 2 ].toInt( &ok );
+							if( ok && aux >= bugfix ) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	kDebug() << "Previous version detected!";
+	return true;
 }
 
 #include "mainwindow.moc"

@@ -198,7 +198,7 @@ void TaskViewHandler::reportCompleted( int rowIndex ) {
 
 void TaskViewHandler::selectRow( int rowIndex ) {
 //	kDebug() << "selectRow() " << rowIndex;
-	AbstractReport* report = NULL;
+	Report* report = NULL;
 	if( rowIndex > -1 && rowViewHandlers.size() > rowIndex ) {
 		TaskRowViewHandler* selectedRow = rowViewHandlers.at( rowIndex );
 		report = selectedRow->getReport();

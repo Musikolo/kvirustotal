@@ -19,7 +19,7 @@
 #define REPORTROWVIEWHANDLER_H
 
 #include <QString>
-#include "abstractreport.h"
+#include <report.h>
 //#include <reportviewhandler.h>
 class ReportViewHandler;
 
@@ -29,19 +29,19 @@ private:
     ReportViewHandler* viewHandler;
     int rowIndex;
     QString antivirus;
-	RowResult rowResult;
+	ResultItem resultItem;
 
-    void setupObject( const QString& antivirus, const QString& antivirusDate, const RowResult& rowResult );
+    void setupObject( const ResultItem& resultItem );
 	void setAntivirus( const QString& antivirus );
 	void setVersion( const QString& version );
 	void setLastUpdateDate( const QString& date );
-	void setResult( const RowResult& rowResult );
+	void setResultItem( const ResultItem& resultItem );
 	void addRowItem(int column, const QString& text, const QString& toolTip = QString() );
 
 public:
-    ReportRowViewHandler( ReportViewHandler* viewHandler, int rowIndex, const QString& antivirus, const QString& antivirusDate, const RowResult& rowResult );
+    ReportRowViewHandler( ReportViewHandler* viewHandler, int rowIndex, const ResultItem& resultItem );
     virtual ~ReportRowViewHandler();
-	inline bool isInfected(){ return this->rowResult.infected; }
+	inline bool isInfected(){ return this->resultItem.infected == InfectionType::YES; }
 };
 
 #endif // REPORTROWVIEWHANDLER_H

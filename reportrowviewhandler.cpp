@@ -27,22 +27,21 @@ namespace Column {
 	enum ColumnEnum { ANTIVIRUS, VERSION, LAST_UPDATE_DATE, RESULT };
 }
 
-ReportRowViewHandler::ReportRowViewHandler( ReportViewHandler* viewHandler, int rowIndex, const QString& antivirus, const QString& antivirusDate, const RowResult& rowResult  ) {
+ReportRowViewHandler::ReportRowViewHandler( ReportViewHandler* viewHandler, int rowIndex, const ResultItem& resultItem  ) {
 	this->viewHandler = viewHandler;
 	this->rowIndex = rowIndex;
-	setupObject( antivirus, antivirusDate, rowResult );
+	setupObject( resultItem );
 }
 
 ReportRowViewHandler::~ReportRowViewHandler() {
 
 }
 
-void ReportRowViewHandler::setupObject( const QString& antivirus, const QString& antivirusDate, const RowResult& rowResult ) {
-	setResult( rowResult ); // Must be the first one!
-	setAntivirus( antivirus );
-	setVersion( i18n( "N/A" ) );
-//	setLastUpdateDate( QDate::currentDate().toString( Qt::DefaultLocaleShortDate ) ); // For the moment being, we'll assume it's up-to-dated
-	setLastUpdateDate( antivirusDate );
+void ReportRowViewHandler::setupObject( const ResultItem& resultItem ) {
+	setResultItem( resultItem ); // Must be the first one!
+	setAntivirus( resultItem.antivirus );
+	setVersion( resultItem.version );
+	setLastUpdateDate( resultItem.lastUpdate.date().toString( Qt::DefaultLocaleShortDate ) );
 }
 
 void ReportRowViewHandler::setAntivirus( const QString& antivirus ) {
@@ -58,10 +57,23 @@ void ReportRowViewHandler::setLastUpdateDate( const QString& date ) {
 	addRowItem( Column::LAST_UPDATE_DATE, date );
 }
 
-void ReportRowViewHandler::setResult( const RowResult& rowResult ) {
-//	this->result = result;
-	this->rowResult = rowResult;
-	addRowItem( Column::RESULT, !rowResult.infected ? i18n( "OK" ) : rowResult.result );
+void ReportRowViewHandler::setResultItem( const ResultItem& resultItem ) {
+	this->resultItem = resultItem;
+	QString text;
+	switch( resultItem.infected ) {
+		case InfectionType::YES:
+			text = resultItem.result;
+			break;
+		case InfectionType::UNKNOWN:
+			text = i18n( "N/A" );
+			break;
+		default:
+			kWarning() << "Unknown InfectionType: " + resultItem.infected << ". Asumming is not infected";
+		case InfectionType::NO:
+			text = i18n( "OK" );
+			break;
+	}
+	addRowItem( Column::RESULT, text );
 }
 
 void ReportRowViewHandler::addRowItem( int column, const QString& text, const QString& toolTip ) {
@@ -70,8 +82,19 @@ void ReportRowViewHandler::addRowItem( int column, const QString& text, const QS
 	item->setTextAlignment( Qt::AlignCenter );
 	item->setToolTip( toolTip );
 	table->setItem( rowIndex, column, item );
-	if( rowResult.infected ) {
-		QColor color( "red" );
-		item->setTextColor( color );
+		switch( resultItem.infected ) {
+		case InfectionType::YES: {
+			QColor color( "red" );
+			item->setTextColor( color );
+			break;
+		}
+		case InfectionType::UNKNOWN: {
+			QColor color( "darkOrange" );
+			item->setTextColor( color );
+			break;
+		}	
+		default:
+		case InfectionType::NO:
+			break; // Do nothing as the current color is right!
 	}
 }

@@ -25,11 +25,13 @@
 #include <QMovie>
 #include <QDesktopServices>
 #include <KStandardDirs>
+#include <QButtonGroup>
 #include <KDebug>
 
 #include "settings.h"
 #include "welcomepage.h"
 #include "constants.h"
+#include <api/apihttpconnector.h>
 
 static const QString TEST_SERVICE_KEY_SCAN_ID( "4feed2c2e352f105f6188efd1d5a558f24aee6971bdf96d5fdb19c197d6d3fad" );
 
@@ -39,6 +41,9 @@ WelcomePage::WelcomePage( WelcomeWizard* wizard ) : QWizardPage( wizard ) {
 	serviceKeyLineEdit = NULL; // Initialized in the createGetServiceKeyPage() method
 	validationStatus   = NULL; // Initialized in the createCheckServiceKeyPage() method
 	validationKeyOk    = NULL; // Initialized in the createCheckServiceKeyPage() method
+	connectorValidation    = NULL; // Initialized in the createConnectorSelectionPage() method
+	connectorType = HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE;
+	connectorChosen = false;
 }
 
 WelcomePage::~WelcomePage() { 
@@ -84,10 +89,108 @@ Please, click on the 'Next' button to set up the application.", General::APP_UI_
 	return page;
 }
 
+QWizardPage* WelcomePage::createConnectorSelectionPage( WelcomeWizard* wizard ) {
+
+	WelcomePage*const page = new WelcomePage( wizard );
+	page->setTitle( i18n( "%1Configuration wizard - Step 1/4%2" ).arg( "<h2>").arg( "</h2>" ) );
+	QLabel* subTitle = new QLabel( i18n( "%1Connector selection%2").arg( "<h3>").arg( "</h3>" ), page ) ;
+	subTitle->setMargin( 10 );
+
+	QHBoxLayout*const featureLabelLayout = new QHBoxLayout();
+	featureLabelLayout->setContentsMargins( 0, 0, 0, 10 );
+	featureLabelLayout->addWidget( new QLabel( i18n( "%1Features%2" ).arg( "<b>" ).arg( "</b>") ) );
+	
+	QVBoxLayout*const featureLayout = new QVBoxLayout();
+	featureLayout->addLayout( featureLabelLayout );
+	featureLayout->addWidget( new QLabel( i18n( "%1Service key:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	featureLayout->addWidget( new QLabel( i18n( "%1Instant reports:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	featureLayout->addWidget( new QLabel( i18n( "%1Connection limit:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	featureLayout->addWidget( new QLabel( i18n( "%1Priorized service:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	featureLayout->addWidget( new QLabel( i18n( "%1HTTP supported:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	featureLayout->addWidget( new QLabel( i18n( "%1HTTPs supported:%2" ).arg( "<b>" ).arg( "</b>") ) );
+	
+	QRadioButton*const apiRadio = new QRadioButton();
+	apiRadio->setFixedWidth( 25 );
+	QLabel*const apiCheckBoxLabel = new QLabel( i18n( "%1API connector%2" ).arg( "<b>" ).arg( "</b>") );
+	apiCheckBoxLabel->setBuddy( apiRadio );
+	QHBoxLayout*const apiCheckboxLayout = new QHBoxLayout();
+	apiCheckboxLayout->setContentsMargins( 0, 0, 0, 10 );
+	apiCheckboxLayout->addWidget( apiRadio );
+	apiCheckboxLayout->addWidget( apiCheckBoxLabel, 0, Qt::AlignLeft );
+	
+	QVBoxLayout*const apiLayout = new QVBoxLayout();
+	apiLayout->addLayout( apiCheckboxLayout );
+	apiLayout->addWidget( new QLabel( i18n( "Required (freely available)" ) ), 0, Qt::AlignCenter );
+	apiLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter );
+	apiLayout->addWidget( new QLabel( i18n( "20 every 5 minutes" ) ), 0, Qt::AlignCenter );
+	apiLayout->addWidget( new QLabel( i18n( "No" ) ), 0, Qt::AlignCenter );
+	apiLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter );
+	apiLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter );
+
+	QRadioButton*const webRadio = new QRadioButton();
+	webRadio->setFixedWidth( 25 );
+	QLabel*const webCheckBoxLabel = new QLabel( i18n( "%1Web connector%2" ).arg( "<b>" ).arg( "</b>") );
+	webCheckBoxLabel->setBuddy( webRadio );
+	QHBoxLayout*const webCheckboxLayout = new QHBoxLayout();
+	webCheckboxLayout->setContentsMargins( 0, 0, 0, 10 );
+	webCheckboxLayout->addWidget( webRadio );
+	webCheckboxLayout->addWidget( webCheckBoxLabel, 0, Qt::AlignLeft );
+	
+	QVBoxLayout*const webLayout = new QVBoxLayout();
+	webLayout->addLayout( webCheckboxLayout );
+	webLayout->addWidget( new QLabel( i18n( "Not used" ) ), 0, Qt::AlignCenter );
+	webLayout->addWidget( new QLabel( i18n( "No" ) ), 0, Qt::AlignCenter );
+	webLayout->addWidget( new QLabel( i18n( "Unlimited" ) ), 0, Qt::AlignCenter );
+	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter  );
+	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter  );
+	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter  );
+	
+	// We'll use a very light centinel object that will tell us when the 'Next' button must be enabled
+	page->connectorValidation = new QRadioButton( page );
+	page->connectorValidation->setHidden( true );
+	connect( apiRadio, SIGNAL( toggled( bool) ), page, SLOT( onApiConnectorChosen( bool ) ) );
+	connect( webRadio, SIGNAL( toggled( bool) ), page, SLOT( onWebConnectorChosen( bool ) ) );
+
+	QHBoxLayout*const tableLayout = new QHBoxLayout();
+	tableLayout->addLayout( featureLayout );
+	tableLayout->addLayout( apiLayout );
+	tableLayout->addLayout( webLayout );
+	tableLayout->addWidget( page->connectorValidation );
+	tableLayout->setContentsMargins( 0, 20, 0, 0 );
+
+	QVBoxLayout*const layout = new QVBoxLayout( page );
+	layout->addWidget( subTitle );
+	layout->addLayout( tableLayout );
+
+	QButtonGroup*const connectorCheckBox = new QButtonGroup();
+	connectorCheckBox->addButton( apiRadio );
+	connectorCheckBox->addButton( webRadio );
+	
+	//Fields ending in * are mandatory
+	page->setMandatoryField( "connectorChosen*", page->connectorValidation );
+	page->setLayout( layout );
+
+	// If not first run, restore the user's chosen connector
+	if( !Settings::self()->currentVersion().isEmpty() ) {
+		if( Settings::self()->httpConnectorEngine() == HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE ) {
+			page->onApiConnectorChosen( true );
+			apiRadio->setChecked( true );
+		}
+		else {
+			webRadio->setChecked( true );
+			page->onWebConnectorChosen( true );
+		}
+		page->connectorValidation->toggle();
+	}
+
+	return page;
+}
+
+
 QWizardPage* WelcomePage::createGetServiceKeyPage( WelcomeWizard* wizard ) {
 
 	WelcomePage* page = new WelcomePage( wizard );
-	page->setTitle( i18n( "%1Configuration wizard - Step 1/3%2" ).arg( "<h2>").arg( "</h2>" ) );
+	page->setTitle( i18n( "%1Configuration wizard - Step 2/4%2" ).arg( "<h2>").arg( "</h2>" ) );
 	QLabel* subTitle = new QLabel( i18n( "%1Enter your VirusTotal Community Key%2").arg( "<h3>").arg( "</h3>" ), page ) ;
 	subTitle->setMargin( 10 );
 
@@ -110,25 +213,26 @@ Now, just copy and paste it below:", General::APP_UI_NAME, VIRUSTOTAL_REGISTRATI
 	keyText->setFocus();
 	keyText->setClearButtonShown( true );
 
-	QVBoxLayout* layout = new QVBoxLayout( page ); // Must be created before keyLayout to work
-	QHBoxLayout* keyLayout = new QHBoxLayout( page );
+	QHBoxLayout* keyLayout = new QHBoxLayout();
 	keyLayout->setContentsMargins( 0, 40, 0, 0 );
 	keyLayout->addWidget( keyLabel );
 	keyLayout->addWidget( keyText );
+
+	QVBoxLayout* layout = new QVBoxLayout( page );
 	layout->addWidget( subTitle );
 	layout->addWidget( label );
 	layout->addLayout( keyLayout );
 	page->setLayout( layout );
 
-	// Set mandatory fields
+	// Set mandatory fields. Only the one ending in * are mandatory
 	page->setMandatoryField( "keyText*", keyText );
 
 	return page;
 }
 
 QWizardPage* WelcomePage::createCheckServiceKeyPage( WelcomeWizard* wizard ) {
-	WelcomePage* page = new WelcomePage( wizard );
-	page->setTitle( i18n( "%1Configuration wizard - Step 2/3%2" ).arg( "<h2>").arg( "</h2>" ) );
+	WelcomePage*const page = new WelcomePage( wizard );
+	page->setTitle( i18n( "%1Configuration wizard - Step 3/4%2" ).arg( "<h2>").arg( "</h2>" ) );
 	QLabel* subTitle = new QLabel( i18n( "%1Service key test%2").arg( "<h3>").arg( "</h3>" ), page ) ;
 	subTitle->setMargin( 10 );
 
@@ -176,7 +280,7 @@ QWizardPage* WelcomePage::createCheckServiceKeyPage( WelcomeWizard* wizard ) {
 
 QWizardPage* WelcomePage::createConclusionPage( WelcomeWizard* wizard ) {
 	WelcomePage* page = new WelcomePage( wizard );
-	page->setTitle( i18n( "%1Configuration wizard - Step 3/3%2" ).arg( "<h2>").arg( "</h2>" ) );
+	page->setTitle( i18n( "%1Configuration wizard - Step 4/4%2" ).arg( "<h2>").arg( "</h2>" ) );
 	QLabel* subTitle = new QLabel( i18n( "%1Configuration completed successfully%2").arg( "<h3>").arg( "</h3>" ), page ) ;
 	subTitle->setMargin( 10 );
 
@@ -198,12 +302,13 @@ void WelcomePage::startServiceKeyValidation() {
 	QString key = serviceKey();
 	kDebug() << "Validating the user-provided key " << key;
 	freeConnector(); // Should do nothing, but keep it just in case
-	connector = new HttpConnector( wizard->networkAccessManager(), key );
+	ApiHttpConnector::loadSettings();
+ 	connector = new ApiHttpConnector( wizard->networkAccessManager(), key );
 	
 	// Connect the connector needed signals
 	kDebug() << "WelcomePageId=" << wizard->currentId();
-	connect( connector, SIGNAL( reportReady( AbstractReport*const ) ),
-		     this, SLOT( testReportReceived( AbstractReport*const ) ) );
+	connect( connector, SIGNAL( reportReady( Report*const ) ),
+		     this, SLOT( testReportReceived( Report*const ) ) );
 	connect( connector, SIGNAL( invalidServiceKeyError() ),
 			 this, SLOT( testReportInvalidKey() ) );
 	connect( connector, SIGNAL( errorOccurred( QString ) ),
@@ -214,11 +319,9 @@ void WelcomePage::startServiceKeyValidation() {
 	connector->retrieveFileReport( TEST_SERVICE_KEY_SCAN_ID );
 }
 
-void WelcomePage::testReportReceived( AbstractReport*const report ) {
+void WelcomePage::testReportReceived( Report*const report ) {
 //kDebug() << "testReportReceived() FileReport* report=" << report;
-	if( report != NULL ) {
-		const ServiceReplyResult::ServiceReplyResultEnum result = report->getServiceReplyResult();
-		if( result != ServiceReplyResult::INVALID_SERVICE_KEY ) {
+		if( report != NULL && report->getReportDate().isValid() ) {
 			setValidationStatus( i18n( "Operation done successfully!" ) );
 			if( validationKeyOk != NULL ) {
 				validationKeyOk->setChecked( true ); // This will enable the "Next" button
@@ -233,13 +336,6 @@ void WelcomePage::testReportReceived( AbstractReport*const report ) {
 		
 		// Free the report memory as it won't be used anymore
 		delete report;
-	}
-	else {
-		testReportFailed( i18n( "Unknown error" ) );
-		if( validationKeyOk != NULL ) {
-			validationKeyOk->setChecked( false ); // This will disable the "Next" button
-		}
-	}
 }
 
 void WelcomePage::testReportInvalidKey() {
@@ -248,6 +344,21 @@ void WelcomePage::testReportInvalidKey() {
 
 void WelcomePage::testReportFailed( const QString& message ) {
 	setValidationStatus( i18n( "ERROR: \"%1\". Please, go back and try again.", message ) );
+}
+
+void WelcomePage::onApiConnectorChosen( bool chosen ) {
+kDebug() << "api chosen" << chosen;
+	onWebConnectorChosen( !chosen );
+}
+
+
+void WelcomePage::onWebConnectorChosen( bool chosen ) {
+kDebug() << "web chosen" << chosen;
+	connectorValidation->setChecked( true );
+// 	connectorValidation->toggle();
+	connectorChosen = true;
+	connectorType = chosen ? HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE : HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE;
+kDebug() << "connectorType=" << connectorType;
 }
 
 void WelcomePage::setValidationStatus( const QString& status ) {
@@ -275,28 +386,52 @@ QString WelcomePage::serviceKey() const {
 
 void WelcomePage::initializePage() {
     QWizardPage::initializePage();
-	if( wizard->currentId() == WelcomePageConst::GET_SERVICE_KEY_PAGE ) {
+	const int pageId = wizard->currentId();
+	if( pageId == WelcomePageConst::CONNECTOR_SELECTION_PAGE ) {
+		if( connectorValidation != NULL && connectorChosen ) {
+			connectorValidation->click();
+			onWebConnectorChosen( connectorValidation->isChecked() );
+		}
+	}
+	else if( pageId == WelcomePageConst::GET_SERVICE_KEY_PAGE ) {
 		// Set the current user's service key, if available
 		const QString serviceKey = Settings::self()->serviceKey();
 		if( !serviceKey.isEmpty() && this->serviceKeyLineEdit != NULL ) {
 			this->serviceKeyLineEdit->setText( serviceKey );
 		}
 	}
-	else if( wizard->currentId() == WelcomePageConst::CHECK_SERVICE_KEY_PAGE ) {
+	else if( pageId == WelcomePageConst::CHECK_SERVICE_KEY_PAGE ) {
 		startServiceKeyValidation();
+	}
+	else if( pageId == WelcomePageConst::CONCLUSION_PAGE ) {
+		connectorType = ( (WelcomePage*) wizard->page( WelcomePageConst::CONNECTOR_SELECTION_PAGE ) )->connectorType;
 	}
 }
 
 bool WelcomePage::validatePage() {
 	// If we are in the last page
-	kDebug() << wizard->currentId();
+	kDebug() << "pageId" << wizard->currentId();
 	const int pageId = wizard->currentId();
 	if( pageId == WelcomePageConst::CONCLUSION_PAGE ) {
-		QString key = serviceKey();
-		kDebug() << "Storing user service key " << key;
-		Settings::self()->setServiceKey( key );
+		kDebug() << "Storing user data...";
+		const QString key = serviceKey();
+		if( !key.isEmpty() ) {
+			kDebug() << "Storing user service key" << key;
+			Settings::self()->setServiceKey( key );
+		}
+			kDebug() << "Storing user connector engine" << connectorType;
+		Settings::self()->setHttpConnectorEngine( connectorType );
 		Settings::self()->writeConfig();
 	}
 	return true;
 }
+
+int WelcomePage::nextId() const {
+	const int pageId = wizard->currentId();
+	if( pageId == WelcomePageConst::CONNECTOR_SELECTION_PAGE && connectorType == HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE ) {
+		return WelcomePageConst::CONCLUSION_PAGE;
+	}
+    return QWizardPage::nextId();
+}
+
 #include "welcomepage.moc"

@@ -19,9 +19,9 @@
 #include <KDebug>
 
 #include "taskscheduler.h"
+#include <httpconnectorfactory.h>
 
 TaskScheduler*const TaskScheduler::INSTANCE = new TaskScheduler();
-const int RETRY_SUBMITTION_DELAY = ServiceRequestDelay::DELAY_LEVEL_4;
 
 TaskScheduler::TaskScheduler() {
 	manager = new QNetworkAccessManager( this );
@@ -54,8 +54,10 @@ uint TaskScheduler::enqueueJob( const QString& resourceName, JobType::JobTypeEnu
 void TaskScheduler::processNewJob( Job*const job ) {
 	QQueue<Job*>*const queue = queueByType( job->jobType() );
 	if( queue->isEmpty() ) {
-		kDebug() << "Setting head job" << job->jobId() << "retry submition delay to" << RETRY_SUBMITTION_DELAY << "seconds...";
-		job->retrySubmittionEvery( RETRY_SUBMITTION_DELAY );
+		const HttpConnectorCfg cfg = job->getJobHttpConnectorCfg(); 
+		const uint retrySubmittionDelay = cfg.levels[ cfg.defaultLevel ];
+		kDebug() << "Setting head job" << job->jobId() << "retry submition delay to" << retrySubmittionDelay << "seconds...";
+		job->retrySubmittionEvery( retrySubmittionDelay );
 	}
 	queue->enqueue( job );
 	job->submit();
@@ -89,10 +91,12 @@ void TaskScheduler::nextActiveJob( JobType::JobTypeEnum type ) {
 			reportNotReady( job );	
 		}
 		else {
+			const HttpConnectorCfg cfg = job->getJobHttpConnectorCfg();
+			const uint retrySubmittionDelay = cfg.levels[ cfg.defaultLevel ];
 			kDebug() << "Setting next active job" << job->jobId()
-					 << "retry submition delay to" << RETRY_SUBMITTION_DELAY
+					 << "retry submition delay to" << retrySubmittionDelay
 					 << "seconds and submitting...";
-			job->retrySubmittionEvery( RETRY_SUBMITTION_DELAY );
+			job->retrySubmittionEvery( retrySubmittionDelay );
 			job->submit();
 		}
 	}
@@ -197,64 +201,52 @@ void TaskScheduler::initDelayLevels( bool showKDebug ) {
 	if( showKDebug ) {
 		kDebug() << "Initializing delay levels...";	
 	}
-	fileDelayLevel = 3; // --> DELAY_LEVEL_4
-	urlDelayLevel  = 2; // --> DELAY_LEVEL_3
+	fileDelayLevel = HttpConnectorFactory::getFileHttpConnectorCfg().defaultLevel;
+	urlDelayLevel  = HttpConnectorFactory::getUrlHttpConnectorCfg().defaultLevel;
 }
 
-ServiceRequestDelay::ServiceRequestDelayEnum TaskScheduler::firstSuitableDelay( Job*const job ) {
-	return job->jobType() == JobType::FILE ?
-			ServiceRequestDelay::DELAY_LEVEL_5 :
-			ServiceRequestDelay::DELAY_LEVEL_3;
+int TaskScheduler::firstSuitableDelay( Job*const job ) {
+	const HttpConnectorCfg cfg = job->getJobHttpConnectorCfg();
+	return cfg.levels[ cfg.defaultLevel ];
 }
 
-ServiceRequestDelay::ServiceRequestDelayEnum TaskScheduler::getSuitableDelay( Job*const job, bool serviceLimitReached ) {
-	static const ServiceRequestDelay::ServiceRequestDelayEnum FILE_DELAYS[] = {
-		 ServiceRequestDelay::DELAY_LEVEL_1
-		,ServiceRequestDelay::DELAY_LEVEL_2
-		,ServiceRequestDelay::DELAY_LEVEL_3
-		,ServiceRequestDelay::DELAY_LEVEL_4
-		,ServiceRequestDelay::DELAY_LEVEL_5
-		,ServiceRequestDelay::DELAY_LEVEL_6
-		,ServiceRequestDelay::DELAY_LEVEL_7
-	};
-	static const ServiceRequestDelay::ServiceRequestDelayEnum URL_DELAYS[] = {
-		 ServiceRequestDelay::DELAY_LEVEL_1
-		,ServiceRequestDelay::DELAY_LEVEL_2
-		,ServiceRequestDelay::DELAY_LEVEL_3
-		,ServiceRequestDelay::DELAY_LEVEL_4
-		,ServiceRequestDelay::DELAY_LEVEL_5
-		,ServiceRequestDelay::DELAY_LEVEL_6
-		,ServiceRequestDelay::DELAY_LEVEL_7
-	};
-	static const int FILE_MAX_LEVEL = sizeof( FILE_DELAYS ) / sizeof( FILE_DELAYS[ 0 ] );
-	static const int URL_MAX_LEVEL  = sizeof( URL_DELAYS  ) / sizeof( URL_DELAYS[ 0 ] );
-	
-	bool singleQeuueRunning = false;
+int TaskScheduler::getSuitableDelay( Job*const job, bool serviceLimitReached ) {
+
+	// Get the right configuration object and apply the suitable delay
+	const HttpConnectorCfg cfg = job->getJobHttpConnectorCfg();
 	switch( job->jobType() ) {
-	case JobType::FILE:
-		singleQeuueRunning = queueByType( JobType::URL )->isEmpty();
-		if( !serviceLimitReached ) {
-			int minLevel = singleQeuueRunning ? 0 : 1;
-			fileDelayLevel = ( fileDelayLevel > minLevel ? fileDelayLevel - 1 : minLevel );
-		}
-		else if( fileDelayLevel < FILE_MAX_LEVEL ) {
-			fileDelayLevel++;
-		}
-		return FILE_DELAYS[ fileDelayLevel ];
-		
-	case JobType::URL:
-		singleQeuueRunning = queueByType( JobType::FILE )->isEmpty();
-		if( !serviceLimitReached ) {
-			int minLevel = singleQeuueRunning ? 0 : 1;
-			urlDelayLevel = ( urlDelayLevel > minLevel ? urlDelayLevel - 1 : minLevel );
-		}
-		else if( urlDelayLevel < URL_MAX_LEVEL ) {
-			urlDelayLevel++;
-		}
-		return URL_DELAYS[ urlDelayLevel ];
-
-	default:
-		kWarning() << "Type unknown" << job->jobType();
+		default:
+			kWarning() << "Type unknown" << job->jobType();
+		case JobType::FILE:
+			if( !serviceLimitReached ) {
+				int minLevel = 0;
+				if( cfg.numLevels > 1 ) {
+					const bool singleQeuueRunning = queueByType( job->jobType() )->isEmpty();
+					if( singleQeuueRunning ) {
+						minLevel = 1;
+					}
+				} 
+				fileDelayLevel = ( fileDelayLevel > minLevel ? fileDelayLevel - 1 : minLevel );
+			}
+			else if( fileDelayLevel < cfg.numLevels - 1 ) {
+				fileDelayLevel++;
+			}
+			return cfg.levels[ fileDelayLevel ];
+			
+		case JobType::URL:
+			if( !serviceLimitReached ) {
+				int minLevel = 0;
+				if( cfg.numLevels > 1 ) {
+					const bool singleQeuueRunning = queueByType( job->jobType() )->isEmpty();
+					if( singleQeuueRunning ) {
+						minLevel = 1;
+					}
+				} 
+				urlDelayLevel = ( urlDelayLevel > minLevel ? urlDelayLevel - 1 : minLevel );
+			}
+			else if( urlDelayLevel < cfg.numLevels - 1 ) {
+				urlDelayLevel++;
+			}
+			return cfg.levels[ urlDelayLevel ];
 	}
-	return ServiceRequestDelay::DELAY_LEVEL_3;
 }
