@@ -34,6 +34,7 @@
 #include <api/apihttpconnector.h>
 
 static const QString TEST_SERVICE_KEY_SCAN_ID( "4feed2c2e352f105f6188efd1d5a558f24aee6971bdf96d5fdb19c197d6d3fad" );
+static const QString VIRUSTOTAL_REGISTRATION_PAGE="http://www.virustotal.com/vt-community/register.html";
 
 WelcomePage::WelcomePage( WelcomeWizard* wizard ) : QWizardPage( wizard ) {
 	this->wizard = wizard;
@@ -194,13 +195,12 @@ QWizardPage* WelcomePage::createGetServiceKeyPage( WelcomeWizard* wizard ) {
 	QLabel* subTitle = new QLabel( i18n( "%1Enter your VirusTotal Community Key%2").arg( "<h3>").arg( "</h3>" ), page ) ;
 	subTitle->setMargin( 10 );
 
-static const QString VIRUSTOTAL_REGISTRATION_PAGE="http://www.virustotal.com/vt-community/register.html";
-	QString text = i18nc( "Application name",  "Since %1 relies on the services provided by \
-<a href='http://virustotal.com'>VirusTotal (c)</a>, a key is required to access its API. \
-If you still don't have one, you can get one free of charge by registering at <a href='%2'>%2</a>. \
+	QString text = i18nc( "Registration URL", "The API connector, previously chosen, requires a key to access the API \
+provided by <a href='http://virustotal.com'>VirusTotal (c)</a>. \
+If you still don't have one, you can get it free of charge by registering at <a href='%1'>%1</a>. \
 Once you have signed up to VT Community (using the sign in box at the top left hand side of the page), \
 you will find your personal API key in the inbox of your account (sign in and drop down the <i>My account</i> menu). \
-Now, just copy and paste it below:", General::APP_UI_NAME, VIRUSTOTAL_REGISTRATION_PAGE );
+Now, just copy and paste it below:", VIRUSTOTAL_REGISTRATION_PAGE );
 	QLabel* label = new QLabel( text, page );
 	label->setAlignment( Qt::AlignJustify | Qt::AlignVCenter );
 	label->setWordWrap( true );

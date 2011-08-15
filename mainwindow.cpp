@@ -505,7 +505,9 @@ void MainWindow::validateCurrentVersion() {
 	// Show the a message to warn the user that a new connector has been implemented
 	else if ( isPreviousVersionTo( (uchar)0, (uchar)20, (uchar)0 ) ) {
 		if( KMessageBox::questionYesNo( this, 
-									    i18n( "The new version of KVirusTotal has a new connector. Do you want the welcome wizard to be shown so you can change it?" ), 
+									    i18nc( "Application name", 
+											   "The new version of %1 has a new connector. Do you want the welcome wizard to be shown so you can change it?",
+											   General::APP_UI_NAME ), 
 										i18n( "Show welcome wizard" ) ) == KMessageBox::Yes ) {
 			// This connection will guarantee that the task table's columns adapt the size of the window
 			connect( this, SIGNAL( resizeWidth( int ) ), taskViewHandler, SLOT( tableWidthChanged( int ) ) );
