@@ -42,7 +42,7 @@ WelcomePage::WelcomePage( WelcomeWizard* wizard ) : QWizardPage( wizard ) {
 	validationStatus   = NULL; // Initialized in the createCheckServiceKeyPage() method
 	validationKeyOk    = NULL; // Initialized in the createCheckServiceKeyPage() method
 	connectorValidation    = NULL; // Initialized in the createConnectorSelectionPage() method
-	connectorType = HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE;
+	connectorType = HttpConnectorType::WEB_HTTPCONNECTOR;
 	connectorChosen = false;
 }
 
@@ -172,7 +172,7 @@ QWizardPage* WelcomePage::createConnectorSelectionPage( WelcomeWizard* wizard ) 
 
 	// If not first run, restore the user's chosen connector
 	if( !Settings::self()->currentVersion().isEmpty() ) {
-		if( Settings::self()->httpConnectorEngine() == HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE ) {
+		if( Settings::self()->httpConnectorType() == HttpConnectorType::API_HTTPCONNECTOR ) {
 			page->onApiConnectorChosen( true );
 			apiRadio->setChecked( true );
 		}
@@ -355,9 +355,8 @@ kDebug() << "api chosen" << chosen;
 void WelcomePage::onWebConnectorChosen( bool chosen ) {
 kDebug() << "web chosen" << chosen;
 	connectorValidation->setChecked( true );
-// 	connectorValidation->toggle();
 	connectorChosen = true;
-	connectorType = chosen ? HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE : HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE;
+	connectorType = chosen ? HttpConnectorType::WEB_HTTPCONNECTOR : HttpConnectorType::API_HTTPCONNECTOR;
 kDebug() << "connectorType=" << connectorType;
 }
 
@@ -419,8 +418,8 @@ bool WelcomePage::validatePage() {
 			kDebug() << "Storing user service key" << key;
 			Settings::self()->setServiceKey( key );
 		}
-			kDebug() << "Storing user connector engine" << connectorType;
-		Settings::self()->setHttpConnectorEngine( connectorType );
+			kDebug() << "Storing user connector type" << connectorType;
+		Settings::self()->setHttpConnectorType( connectorType );
 		Settings::self()->writeConfig();
 	}
 	return true;
@@ -428,7 +427,7 @@ bool WelcomePage::validatePage() {
 
 int WelcomePage::nextId() const {
 	const int pageId = wizard->currentId();
-	if( pageId == WelcomePageConst::CONNECTOR_SELECTION_PAGE && connectorType == HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE ) {
+	if( pageId == WelcomePageConst::CONNECTOR_SELECTION_PAGE && connectorType == HttpConnectorType::WEB_HTTPCONNECTOR ) {
 		return WelcomePageConst::CONCLUSION_PAGE;
 	}
     return QWizardPage::nextId();

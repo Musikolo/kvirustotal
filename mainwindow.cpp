@@ -513,7 +513,7 @@ void MainWindow::validateCurrentVersion() {
 		}
 		else {
 			// Leave the API connector
-			Settings::self()->setHttpConnectorEngine( HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE );
+			Settings::self()->setHttpConnectorType( HttpConnectorType::API_HTTPCONNECTOR );
 			Settings::self()->writeConfig();
 		}
 	} 

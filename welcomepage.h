@@ -42,7 +42,7 @@ private:
 	 QAbstractButton* validationKeyOk;
 	 QAbstractButton* connectorValidation;
 	 bool connectorChosen;
-	 HttpConnectorEngine::HttpConnectorEngineEnum connectorType;
+	 HttpConnectorType::HttpConnectorTypeEnum connectorType;
 
      void setMandatoryField( const QString& name, QWidget* widget, const char* property = 0, const char* changedSignal = 0 );
 	 void freeConnector();

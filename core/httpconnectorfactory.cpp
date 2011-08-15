@@ -32,49 +32,49 @@ HttpConnector* HttpConnectorFactory::getHttpConnector( QNetworkAccessManager*con
 }
 
 HttpConnector* HttpConnectorFactory::getHttpConnector( QNetworkAccessManager*const networkManager, const QString serviceKey ) {
-	switch( getHttpConnectorEngine() ) {
-		case HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE:
+	switch( getHttpConnectorType() ) {
+		case HttpConnectorType::API_HTTPCONNECTOR:
 			return new ApiHttpConnector( networkManager, serviceKey );
 		default:
-			kWarning() << "Unknown HttpConnectorEngine " << getHttpConnectorEngine() << ". Asumming WebHttpConnector...";
-		case HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE:
+			kWarning() << "Unknown HttpConnectorType " << getHttpConnectorType() << ". Asumming WEB_HTTPCONNECTOR...";
+		case HttpConnectorType::WEB_HTTPCONNECTOR:
 			return new WebHttpConnector( networkManager );
 	}
 }
 
 void HttpConnectorFactory::loadHttpConnectorSettings(){
-	switch( getHttpConnectorEngine() ) {
-		case HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE:
+	switch( getHttpConnectorType() ) {
+		case HttpConnectorType::API_HTTPCONNECTOR:
 			ApiHttpConnector::loadSettings();
 			break;
 		default:
-			kWarning() << "Unknown HttpConnectorEngine " << getHttpConnectorEngine() << ". Asumming WebHttpConnector::loadSettings()...";
-		case HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE:
+			kWarning() << "Unknown HttpConnectorType " << getHttpConnectorType() << ". Asumming WebHttpConnector::loadSettings()...";
+		case HttpConnectorType::WEB_HTTPCONNECTOR:
 			WebHttpConnector::loadSettings();
 			break;
 	}
 }
 
-HttpConnectorEngine::HttpConnectorEngineEnum HttpConnectorFactory::getHttpConnectorEngine() {
-	switch( Settings::self()->httpConnectorEngine() ) {
+HttpConnectorType::HttpConnectorTypeEnum HttpConnectorFactory::getHttpConnectorType() {
+	switch( Settings::self()->httpConnectorType() ) {
 		case 0:
-			return HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE;
+			return HttpConnectorType::API_HTTPCONNECTOR;
 		default:
-			kWarning() << "Unknown HttpConnectorEngine " << Settings::self()->httpConnectorEngine() << ". Asumming WEB_HTTPCONNECTOR_ENGINE...";
+			kWarning() << "Unknown HttpConnectorType " << Settings::self()->httpConnectorType() << ". Asumming WEB_HTTPCONNECTOR_ENGINE...";
 		case 1:
-			return HttpConnectorEngine::WEB_HTTPCONNECTOR_ENGINE;
+			return HttpConnectorType::WEB_HTTPCONNECTOR;
 	}
 }
 
 HttpConnectorCfg HttpConnectorFactory::getFileHttpConnectorCfg() {
-	if( HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE == getHttpConnectorEngine() ) {
+	if( HttpConnectorType::API_HTTPCONNECTOR == getHttpConnectorType() ) {
 		return apiHttpConnector.getFileHttpConnectorCfg();
 	}
 	return webhttpconnector.getFileHttpConnectorCfg();
 }
 
 HttpConnectorCfg HttpConnectorFactory::getUrlHttpConnectorCfg() {
-	if( HttpConnectorEngine::API_HTTPCONNECTOR_ENGINE == getHttpConnectorEngine() ) {
+	if( HttpConnectorType::API_HTTPCONNECTOR == getHttpConnectorType() ) {
 		return apiHttpConnector.getUrlHttpConnectorCfg();
 	}
 	return webhttpconnector.getUrlHttpConnectorCfg();

@@ -14,8 +14,8 @@
       <min>0</min>
       <max>999</max>
     </entry>
-    <entry name="HttpConnectorEngine" type="Int">
-      <label>HttpConnector implementation engine</label>
+    <entry name="HttpConnectorType" type="Int">
+      <label>HttpConnector implementation type</label>
       <default>1</default>
       <min>0</min>
     </entry>

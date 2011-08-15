@@ -19,8 +19,8 @@
 #define HTTPCONECTORFACTORY_H
 #include "httpconnector.h"
 
-namespace HttpConnectorEngine {
-	enum HttpConnectorEngineEnum { API_HTTPCONNECTOR_ENGINE = 0, WEB_HTTPCONNECTOR_ENGINE = 1 };
+namespace HttpConnectorType {
+	enum HttpConnectorTypeEnum { API_HTTPCONNECTOR = 0, WEB_HTTPCONNECTOR = 1 };
 }
 
 /** HttpConnector factory class that will return the currently active implementation */
@@ -28,7 +28,7 @@ class HttpConnectorFactory
 {
 private:
     HttpConnectorFactory();
-	static HttpConnectorEngine::HttpConnectorEngineEnum getHttpConnectorEngine();
+	static HttpConnectorType::HttpConnectorTypeEnum getHttpConnectorType();
 	
 public:
     virtual ~HttpConnectorFactory();
