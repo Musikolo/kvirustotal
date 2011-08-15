@@ -14,11 +14,13 @@ set(kvt_base_SRCS
 		basehttpconnector.cpp )
 
 set(kvt_base_LIBS
-# 		kvt_core
+		qjson
+		qca
 		${KDE4_KDECORE_LIBS})
 # 		${KDE4_KDEUI_LIBS}
 # 		${KDE4_KUTILS_LIBS})
 
+kde4_add_kcfg_files(kvt_base_SRCS ${CMAKE_SOURCE_DIR}/settings.kcfgc)
 kde4_add_library(kvt_base STATIC ${kvt_base_SRCS})
 # qt4_automoc(${kvt_base_SRCS})
 target_link_libraries(kvt_base ${kvt_base_LIBS})

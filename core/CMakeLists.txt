@@ -11,7 +11,8 @@ set(kvt_core_SRCS
 		filehasher.cpp )
 
 set(kvt_core_LIBS
-# 		kvt_api
+		qjson
+		qca
 		${KDE4_KDECORE_LIBS})
 # 		${KDE4_KDEUI_LIBS}
 # 		${KDE4_KUTILS_LIBS})

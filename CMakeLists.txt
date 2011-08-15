@@ -2,7 +2,7 @@ project(KVirusTotal)
 cmake_minimum_required(VERSION 2.6)
 
 #if you don't want the full compiler output, remove the following line
-SET(CMAKE_VERBOSE_MAKEFILE ON)
+# SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 find_package(KDE4 REQUIRED)
 find_package(QCA2 REQUIRED)
@@ -29,15 +29,10 @@ set(kvirustotal_SRCS
 		welcomepage.cpp 
 		welcomewizard.cpp
 		reportrowviewhandler.cpp 
-# 		urlreport.cpp 
-# 		servicebasicreply.cpp 
-# 		abstractreport.cpp 
 		taskviewhandler.cpp 
 		taskrowviewhandler.cpp 
 		reportviewhandler.cpp 
 		reportviewhandler.cpp 
-# 		httpconnector.cpp 
-# 		filereport.cpp 
 		mainwindow.cpp 
 		main.cpp)
 
@@ -48,15 +43,15 @@ qt4_automoc(${kvirustotal_SRCS})
 kde4_add_executable(kvirustotal ${kvirustotal_SRCS})
 
 set( kvirustotal_LIBS
+		qjson
+		qca
 		kvt_core
 		kvt_base
 		kvt_api
 		kvt_web
 		${KDE4_KDEUI_LIBS} 
 		${KDE4_LIBS} 
-		${KDE4_KFILE_LIBRARY} 
-		qjson 
-		qca )
+		${KDE4_KFILE_LIBRARY} )
 
 target_link_libraries(kvirustotal ${kvirustotal_LIBS})
 install( TARGETS kvirustotal  ${INSTALL_TARGETS_DEFAULT_ARGS} )
