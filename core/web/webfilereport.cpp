@@ -69,7 +69,7 @@ void WebFileReport::setPermanentLink( const QUrl& permanentLink ) {
 	BaseReport::setPermanentLink( permanentLink );
 }
 
-QString WebFileReport::getSha256Sum() const {
+QString WebFileReport::getMd5Sum() const {
   return hasher->getMd5Sum();
 }
 
@@ -77,6 +77,7 @@ QString WebFileReport::getSha1Sum() const {
   return hasher->getSha1Sum();
 }
 
-QString WebFileReport::getMd5Sum() const {
+
+QString WebFileReport::getSha256Sum() const {
   return hasher->getSha256Sum();
 }
