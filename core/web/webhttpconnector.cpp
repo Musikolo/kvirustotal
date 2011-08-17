@@ -43,6 +43,7 @@ namespace ServiceUrl {
 	static QString GET_FILE_ID;
 	static QString GET_FILE_REPORT;
 	static QString GET_URL_REPORT;
+	static QString FORCE_FILE_SCAN;
 	static QString SEND_FILE_SCAN;
 	static QString SEND_URL_SCAN;
 // 	static QString MAKE_COMMENT;
@@ -56,6 +57,7 @@ void WebHttpConnector::loadSettings() {
 	static const QString GET_FILE_ID_PATTERN	 = "%1://www.virustotal.com/file-scan/get_identifier.json";
 	static const QString GET_FILE_REPORT_PATTERN = "%1://www.virustotal.com/file-scan/get_scan.json";
 	static const QString GET_URL_REPORT_PATTERN  = "%1://www.virustotal.com/url-scan/get_url_analysis.json";
+	static const QString FORCE_FILE_SCAN_PATTERN = "%1://www.virustotal.com/file-scan/reanalysis.html";
 	static const QString SEND_FILE_SCAN_PATTERN  = "%1://www.virustotal.com/file-upload/file_upload";
 	static const QString SEND_URL_SCAN_PATTERN   = "%1://www.virustotal.com/url-scan/was_url_analysed.json";
 // 	static const QString MAKE_COMMENT_PATTERN    = "%1://www.virustotal.com/api/make_comment.json";
@@ -65,6 +67,7 @@ void WebHttpConnector::loadSettings() {
 	ServiceUrl::GET_FILE_ID 	= GET_FILE_ID_PATTERN.arg( protocol );
 	ServiceUrl::GET_FILE_REPORT = GET_FILE_REPORT_PATTERN.arg( protocol );
 	ServiceUrl::GET_URL_REPORT  = GET_URL_REPORT_PATTERN.arg( protocol );
+	ServiceUrl::FORCE_FILE_SCAN = FORCE_FILE_SCAN_PATTERN.arg( protocol );
 	ServiceUrl::SEND_FILE_SCAN  = SEND_FILE_SCAN_PATTERN.arg( protocol );
 	ServiceUrl::SEND_URL_SCAN   = SEND_URL_SCAN_PATTERN.arg( protocol );
 // 	ServiceUrl::MAKE_COMMENT    = MAKE_COMMENT_PATTERN.arg( protocol );
@@ -225,8 +228,9 @@ void WebHttpConnector::onSubmissionReply() {
 }
 
 void WebHttpConnector::forceScanReport() {
-//http://www.virustotal.com/file-scan/reanalysis.html?id=1a4fd4af5aa4dbb1c57ab7453c70632d928a2789e484df69647f412209b8a0a5-1312649440&force=1
-	QUrl url( QString( "http://www.virustotal.com/file-scan/reanalysis.html?id=%1&force=1" ).arg( this->scanId ) );
+	QUrl url( ServiceUrl::FORCE_FILE_SCAN );
+	url.addQueryItem( "id", this->scanId );
+	url.addQueryItem( "force", "1" );
 	QNetworkRequest request( url );
 	QNetworkReply*const reply = createNetworkReply( request, "", false ); // false = use GET method
 	connect( reply, SIGNAL( finished() ), this, SLOT( onScanForcedComplete() ) );
@@ -237,14 +241,22 @@ void WebHttpConnector::forceScanReport() {
 
 void WebHttpConnector::onScanForcedComplete() {
 	kDebug() << "Forced scan report request completed!";
-	scanReportForced = true; // Update flag
-	freeNetworkReply();
-	if( !scanId.isEmpty() ){
-		kDebug() << "Received scan Id " << scanId;
-		emit( scanIdReady( scanId ) );
+	QNetworkReply*const reply = getNetworkReply();
+	if( !isAbortRequested() && reply->error() == QNetworkReply::NoError ) {
+		scanReportForced = true; // Update flag
+		freeNetworkReply();
+		if( !scanId.isEmpty() ){
+			kDebug() << "Received scan Id " << scanId;
+			emit( scanIdReady( scanId ) );
+		}
+		else {
+			kError() << "ERROR: No scanId ready. Cannot continue!";
+		}
 	}
 	else {
-		kError() << "ERROR: No scanId ready. Cannot continue!";
+		// This situation should have been managed by the submissionReplyError() method
+		kError() << "ERROR: " << reply->errorString();
+		freeNetworkReply();// The reply as it's no longer needed
 	}
 }
 
