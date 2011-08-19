@@ -2,16 +2,16 @@
 # German messages for kvirustotal.
 # Copyright (C) 2011 THE kvirustotal'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the kvirustotal package.
-# Sascha Manns <saigkill@opensuse.org>, 2011.
 #
+# Sascha Manns <saigkill@opensuse.org>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kvirustotal 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-12 11:20+0100\n"
-"PO-Revision-Date: 2011-03-03 21:28+0100\n"
-"Last-Translator: Sascha Manns <saigkill@opensuse.org>\n"
-"Language-Team: German\n"
+"POT-Creation-Date: 2011-08-15 10:30+0200\n"
+"PO-Revision-Date: 2011-08-18 23:20+0200\n"
+"Last-Translator: \n"
+"Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,10 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
+"X-Generator: Lokalize 1.2\n"
 
 #. i18n: file: mainwindow.ui:181
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
-#: build/ui_mainwindow.h:283 mainwindow.cpp:141 translations/rc.cpp:36 rc.cpp:36
+#: build/ui_mainwindow.h:283 mainwindow.cpp:130 translations/rc.cpp:39
+#: rc.cpp:39
 msgid "Scan analysis date:"
 msgstr "Scan Analysedatum:"
 
@@ -44,62 +46,66 @@ msgstr "Scan Analysedatum:"
 #. i18n: ectx: property (text), widget (KUrlLabel, permanentLinkValue)
 #: build/ui_mainwindow.h:284 build/ui_mainwindow.h:288
 #: build/ui_mainwindow.h:290 build/ui_mainwindow.h:292
-#: reportrowviewhandler.cpp:43 reportviewhandler.cpp:67
-#: taskrowviewhandler.cpp:78 translations/rc.cpp:39 translations/rc.cpp:51
-#: translations/rc.cpp:57 translations/rc.cpp:63 rc.cpp:39 rc.cpp:51 rc.cpp:57
-#: rc.cpp:63
+#: core/api/apifilereport.cpp:54 core/api/apiurlreport.cpp:56
+#: core/web/weburlreport.cpp:62 reportrowviewhandler.cpp:68
+#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:79 translations/rc.cpp:42
+#: translations/rc.cpp:54 translations/rc.cpp:60 translations/rc.cpp:66
+#: rc.cpp:42 rc.cpp:54 rc.cpp:60 rc.cpp:66
 msgid "N/A"
 msgstr "N/A"
 
 #. i18n: file: mainwindow.ui:229
 #. i18n: ectx: property (text), widget (QLabel, md5Label)
-#: build/ui_mainwindow.h:285 translations/rc.cpp:42 rc.cpp:42
+#: build/ui_mainwindow.h:285 translations/rc.cpp:45 rc.cpp:45
 msgid "MD5:"
 msgstr "MD5:"
 
 #. i18n: file: mainwindow.ui:242
 #. i18n: ectx: property (text), widget (QLabel, md5Value)
-#: build/ui_mainwindow.h:286 translations/rc.cpp:45 rc.cpp:45
+#: build/ui_mainwindow.h:286 translations/rc.cpp:48 rc.cpp:48
 msgid " N/A"
 msgstr "N/A"
 
 #. i18n: file: mainwindow.ui:271
 #. i18n: ectx: property (text), widget (QLabel, sha1Label)
-#: build/ui_mainwindow.h:287 translations/rc.cpp:48 rc.cpp:48
+#: build/ui_mainwindow.h:287 translations/rc.cpp:51 rc.cpp:51
 msgid "SHA1:"
 msgstr "SHA1:"
 
 #. i18n: file: mainwindow.ui:319
 #. i18n: ectx: property (text), widget (QLabel, sha256Label)
-#: build/ui_mainwindow.h:289 translations/rc.cpp:54 rc.cpp:54
+#: build/ui_mainwindow.h:289 translations/rc.cpp:57 rc.cpp:57
 msgid "SHA256:"
 msgstr "SHA256:"
 
 #. i18n: file: mainwindow.ui:361
 #. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
-#: build/ui_mainwindow.h:291 mainwindow.cpp:142 translations/rc.cpp:60 rc.cpp:60
+#: build/ui_mainwindow.h:291 mainwindow.cpp:131 translations/rc.cpp:63
+#: rc.cpp:63
 msgid "Permanent link:"
 msgstr "Permanentlink:"
 
-#: httpconnector.cpp:149
-#, qt-format
+#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:157
 msgid "An error has ocurred while submitting the file %1..."
 msgstr "Ein Fehler ist aufgetreten beim übermitteln der Datei %1..."
 
-#: httpconnector.cpp:237
-#, qt-format
+#: core/api/apihttpconnector.cpp:167
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr "FEHLER: Unerwarteter Serviceresult: %1"
 
-#: httpconnector.cpp:250
-#, qt-format
-msgid "ERROR: %1"
-msgstr "FEHLER: %1"
+#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:120
+#: core/web/webhttpconnector.cpp:202 core/web/webhttpconnector.cpp:214
+#: core/web/webhttpconnector.cpp:380 core/web/webhttpconnector.cpp:416
+msgid "ERROR: No valid response received!"
+msgstr "ERROR: Keine valide Antwort erhalten!"
 
-#: httpconnector.cpp:288
-#, qt-format
+#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:283
 msgid "Invalid URL: %1"
 msgstr "Invalide URL: %1"
+
+#: core/web/webhttpconnector.cpp:372 core/web/webhttpconnector.cpp:408
+msgid "ERROR: No valid status response received!"
+msgstr "ERROR: Keine valide Statusantwort erhalten!"
 
 #: main.cpp:27
 msgid "Online antivirus and anti-phishing tool"
@@ -113,7 +119,7 @@ msgstr "Copyright (c) 2011 - Carlos López Sánchez"
 msgid "Main developer"
 msgstr "Hauptentwickler"
 
-#: main.cpp:33 main.cpp:35
+#: main.cpp:33 main.cpp:35 main.cpp:37
 msgid "Translator"
 msgstr "Übersetzer"
 
@@ -121,23 +127,26 @@ msgstr "Übersetzer"
 msgid "Sascha Manns"
 msgstr "Sascha Manns"
 
-#: main.cpp:36
+#: main.cpp:37
+msgid "Gianluca Boiano"
+msgstr "Gianluca Boiano"
+
+#: main.cpp:38
 msgid ""
 "KVirusTotal is based on the service provided by VirusTotal which is owned by "
 "Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember "
 "that <b>it is not intended as a replacement of a full-fledged antivirus "
 "program.</b><br><br>VirusTotal and the logo are trademarks of Hispasec "
-"Sistemas S.L. Please, visit <a "
-"href='http://www.virustotal.com/terms.html'>http://www.virustotal.com/terms.html</a> "
-"for more details."
+"Sistemas S.L. Please, visit <a href='http://www.virustotal.com/terms."
+"html'>http://www.virustotal.com/terms.html</a> for more details."
 msgstr ""
 "KVirusTotal basiert auf dem von VirusTotal angebotenen Service, die zur "
 "Hispasec Sistemas S.L. gehört. Auch wenn KVirusTotal ein mächtiges Werkzeug "
 "ist, behalten Sie bitte im Sinn, dass <b>es kein Ersatz für ein vollwertiges "
 "Antivirusprogramm ist</b>.<br><br>VirusTotal und das Logo sind Warenzeichen "
-"der Hispasec Sistemas S.L. Bitte besuchen Sie <a "
-"href='http://www.virustotal.com/terms.html'>http://www.virustotal.com/terms.html</a> "
-"für weitergehende Informationen."
+"der Hispasec Sistemas S.L. Bitte besuchen Sie <a href='http://www.virustotal."
+"com/terms.html'>http://www.virustotal.com/terms.html</a> für weitergehende "
+"Informationen."
 
 #: mainwindow.cpp:61
 msgid "File..."
@@ -179,66 +188,64 @@ msgstr "Abbrechen..."
 msgid "Abort the selected tasks"
 msgstr "Ausgewählte Aufgaben abbrechen"
 
-#: mainwindow.cpp:100
-#, qt-format
+#: mainwindow.cpp:89
 msgid "Quit %1"
 msgstr "Abbruch %1"
 
-#: mainwindow.cpp:105
+#: mainwindow.cpp:94
 msgctxt "Menu name"
 msgid "File"
 msgstr "Datei"
 
-#: mainwindow.cpp:111
+#: mainwindow.cpp:100
 msgid "Edit"
 msgstr "Edit"
 
-#: mainwindow.cpp:112
+#: mainwindow.cpp:101
 msgid "Select All"
 msgstr "Alles auswählen"
 
-#: mainwindow.cpp:113
+#: mainwindow.cpp:102
 msgid "Select all tasks"
 msgstr "Alle Aufgaben auswählen"
 
-#: mainwindow.cpp:117
+#: mainwindow.cpp:106
 msgid "Invert Selection"
 msgstr "Auswahl invertieren"
 
-#: mainwindow.cpp:118
+#: mainwindow.cpp:107
 msgid "Inverts the selection of tasks"
 msgstr "Ausgwählte Aufgaben invertieren"
 
-#: mainwindow.cpp:122
+#: mainwindow.cpp:111
 msgid "Settings..."
 msgstr "Einstellungen..."
 
-#: mainwindow.cpp:123
+#: mainwindow.cpp:112
 msgid "Show the settings dialog"
 msgstr "Einstellungsdialog anzeigen"
 
-#: mainwindow.cpp:129
+#: mainwindow.cpp:118
 msgid "Action"
 msgstr "Action"
 
-#: mainwindow.cpp:137
+#: mainwindow.cpp:126
 msgid "Welcome wizard..."
 msgstr "Willkommensassistent..."
 
-#: mainwindow.cpp:154
+#: mainwindow.cpp:143
 msgid "Click to view detailed report"
 msgstr "Klicken um detailierten Report zu sehen"
 
-#: mainwindow.cpp:160
+#: mainwindow.cpp:149
 msgid "Ready..."
 msgstr "Fertig..."
 
-#: mainwindow.cpp:162
-#, qt-format
+#: mainwindow.cpp:150
 msgid "Online antivirus and anti-phishing tool - %1"
 msgstr "Online Antivirus und Anti Pishing Werkzeug --- %1"
 
-#: mainwindow.cpp:244
+#: mainwindow.cpp:230
 msgid ""
 "There is one or more tasks in course and will be aborted. Do you really want "
 "to quit?"
@@ -246,87 +253,121 @@ msgstr ""
 "Eine oder mehrere Aufgaben laufen noch, und werden abgebrochen. Möchten Sie "
 "wirklich fortfahren?"
 
-#: mainwindow.cpp:245
+#: mainwindow.cpp:231
 msgid "Tasks in course"
 msgstr "Laufende Aufgaben"
 
-#: mainwindow.cpp:299
+#: mainwindow.cpp:284
 msgid "URL inputbox"
 msgstr "URL Eingabebox"
 
-#: mainwindow.cpp:299
+#: mainwindow.cpp:284
 msgid "Please, enter a URL:"
 msgstr "Bitte geben Sie eine URL ein:"
 
-#: mainwindow.cpp:347
+#: mainwindow.cpp:327
 msgid "No service key found! Thus, the application must be closed."
 msgstr ""
 "Kein Service Key wurde gefunden. Daher muss diese Applikation geschlossen "
 "werden."
 
-#: mainwindow.cpp:361
+#: mainwindow.cpp:342
 msgid "General"
 msgstr "General"
 
-#: mainwindow.cpp:406
+#: mainwindow.cpp:388
 msgid "Antivirus service workload"
 msgstr "Antivirus Service Workload"
 
-#: mainwindow.cpp:407
-#, qt-format
+#: mainwindow.cpp:389
 msgid "Antivirus %1"
 msgstr "Antivirus %1"
 
-#: mainwindow.cpp:417
+#: mainwindow.cpp:399
 msgid "Anti-phising service workload"
 msgstr "Anti-Pishing Service Workload"
 
-#: mainwindow.cpp:418
-#, qt-format
+#: mainwindow.cpp:400
 msgid "Anti-phising %1"
 msgstr "Anti-Pishing %1"
 
-#: mainwindow.cpp:458
-#, qt-format
+#: mainwindow.cpp:422
+msgid "HTTPs is enabled, so data is being transmitted securely!"
+msgstr "HTTPs ist aktiviert, so können nun die Daten sicher übertragen werden."
+
+#: mainwindow.cpp:426
+msgid ""
+"HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
+"highly recommended to enable it!"
+msgstr ""
+"HTTPs ist deaktiviert, so werden die Daten im unsicheren HTTP Protokoll "
+"versandt. Daher empfehlen wir HTTPs einzuschalten!"
+
+#: mainwindow.cpp:465
 msgctxt "Application name"
 msgid "%1 information"
 msgstr "%1 Information"
 
-#: mainwindow.cpp:464
-#, qt-format
+#: mainwindow.cpp:471
 msgctxt "Application name"
 msgid "%1 - Task completed"
 msgstr "%1 - Aufgabe beendet"
 
-#: mainwindow.cpp:470
-#, qt-format
+#: mainwindow.cpp:477
 msgctxt "Application name"
 msgid "%1 warning"
 msgstr "%1 Warnung"
 
-#: mainwindow.cpp:476
-#, qt-format
+#: mainwindow.cpp:483
 msgctxt "Application name"
 msgid "%1 error"
 msgstr "%1 Fehler"
 
-#: reportrowviewhandler.cpp:64
+#: mainwindow.cpp:499
+msgid ""
+"The current connector requires a service key, but none has been found. Thus, "
+"the welcome wizard will be shown so you can now either set it up or change "
+"the connector to be used."
+msgstr ""
+"Der momentane connector benötigt einen Service-Key, leider wurde keiner "
+"gefunden. Starten Sie den Willkommens Wizard, der ihnen dabei helden wird. "
+"Anschließend kann der connector  benutzt werden können."
+
+#: mainwindow.cpp:500
+msgid "Service key required"
+msgstr "Service key wird benötigt."
+
+#: mainwindow.cpp:509
+msgctxt "Application name"
+msgid ""
+"The new version of %1 has a new connector. Do you want the welcome wizard to "
+"be shown so you can change it?"
+msgstr ""
+"Die neue Version von %1 hat einen neuen connector. Möchten Sie den Welcome "
+"Wizard benutzen um Änderungen vorzunehmen?"
+
+#: mainwindow.cpp:511
+#, fuzzy
+msgid "Show welcome wizard"
+msgstr "Willkommensassistent..."
+
+#: reportrowviewhandler.cpp:73
 msgid "OK"
 msgstr "OK"
 
-#: reportviewhandler.cpp:46
+#: reportviewhandler.cpp:48
 msgid "Antivirus"
 msgstr "Antivirus"
 
-#: reportviewhandler.cpp:46
+#: reportviewhandler.cpp:48
 msgid "Version"
 msgstr "Version"
 
-#: reportviewhandler.cpp:46
+#: reportviewhandler.cpp:48
 msgid "Last update"
 msgstr "Letztes Update"
 
-#: reportviewhandler.cpp:46
+#: reportviewhandler.cpp:48
 msgid "Result"
 msgstr "Resultat"
 
@@ -345,9 +386,9 @@ msgid "Time tasks must take to show a notification (0=disabled)"
 msgstr ""
 "Zeitabhängige Aufgaben müssen eine Benachrichtigung senden (0=ausgeschaltet)"
 
-#. i18n: file: kvirustotal.kcfg:18
+#. i18n: file: kvirustotal.kcfg:23
 #. i18n: ectx: label, entry (InfectedTaskNotification), group (general)
-#: settingsdialog.cpp:44 translations/rc.cpp:9 rc.cpp:9
+#: settingsdialog.cpp:44 translations/rc.cpp:12 rc.cpp:12
 msgid "Show always notifications for infected tasks"
 msgstr "Immer Benachrichtigungen anzeigen bei infizierten Aufgaben"
 
@@ -360,61 +401,55 @@ msgstr "Datei"
 msgid "URL"
 msgstr "URL"
 
-#: taskrowviewhandler.cpp:176
+#: taskrowviewhandler.cpp:177
 msgid "Aborting..."
 msgstr "Abbrechen..."
 
-#: taskrowviewhandler.cpp:214
+#: taskrowviewhandler.cpp:215
 msgid "Queued"
 msgstr "Geplant"
 
-#: taskrowviewhandler.cpp:218
+#: taskrowviewhandler.cpp:220
 msgid "Submitting..."
 msgstr "Übermitteln..."
 
-#: taskrowviewhandler.cpp:224
+#: taskrowviewhandler.cpp:226
 msgid "Error"
 msgstr "Fehler"
 
-#: taskrowviewhandler.cpp:225
-#, qt-format
+#: taskrowviewhandler.cpp:227
 msgid "The next error ocurred while processing the task %1: %2 "
 msgstr "Der nächste Fehler ist aufgetreten beim übermitteln der Aufgabe %1: %2"
 
-#: taskrowviewhandler.cpp:232
-#, qt-format
+#: taskrowviewhandler.cpp:240
 msgid "Uploading (%L1%/%2 KiB/s)..."
 msgstr "Hochladen (%L1%/%2 KiB/s)..."
 
-#: taskrowviewhandler.cpp:237
+#: taskrowviewhandler.cpp:245
 msgid "Retrieving report..."
 msgstr "Report wiederherstellen..."
 
-#: taskrowviewhandler.cpp:241
-#, qt-format
+#: taskrowviewhandler.cpp:249
 msgid "Waiting for %1 seconds..."
 msgstr "Warte %1 Sekunden..."
 
-#: taskrowviewhandler.cpp:241
+#: taskrowviewhandler.cpp:249
 msgid "Waiting..."
 msgstr "Warten..."
 
-#: taskrowviewhandler.cpp:245
-#, qt-format
+#: taskrowviewhandler.cpp:253
 msgid "Service limit reached! (wait %1)"
 msgstr "Service Limit erreicht! (warte %1)"
 
-#: taskrowviewhandler.cpp:252
+#: taskrowviewhandler.cpp:260
 msgid "Aborted"
 msgstr "Abgebrochen"
 
-#: taskrowviewhandler.cpp:260
-#, qt-format
+#: taskrowviewhandler.cpp:268
 msgid "Finished (%1/%2)"
 msgstr "Beendet (%1/%2)"
 
-#: taskrowviewhandler.cpp:267
-#, qt-format
+#: taskrowviewhandler.cpp:275
 msgid "Task %1 finished"
 msgstr "Aufgabe %1 beendet"
 
@@ -439,7 +474,6 @@ msgid "Elapsed Time"
 msgstr "Vergangene Zeit"
 
 #: taskviewhandler.cpp:111
-#, qt-format
 msgid ""
 "The given file is too big. The service does not accept files greater than %1 "
 "MiB (%2 MB)."
@@ -472,7 +506,6 @@ msgstr ""
 "Aufgabe zum neuen Scan anlegen?"
 
 #: taskviewhandler.cpp:247
-#, qt-format
 msgid ""
 "The task number %1 is still in course. Please, either wait for it to "
 "finished or abort it."
@@ -524,88 +557,96 @@ msgstr "Neu-Scan Operationsfehler"
 msgid "The current version. Used for upgrading operations only"
 msgstr "Die aktuelle Version. Nur für upgrading Operationen"
 
-#. i18n: file: kvirustotal.kcfg:24
+#. i18n: file: kvirustotal.kcfg:18
+#. i18n: ectx: label, entry (HttpConnectorType), group (general)
+#: translations/rc.cpp:9 rc.cpp:9
+msgid "HttpConnector implementation type"
+msgstr "HttpConnector implementation type"
+
+#. i18n: file: kvirustotal.kcfg:29
 #. i18n: ectx: label, entry (MainWindowPos), group (mainwindow)
-#: translations/rc.cpp:12 rc.cpp:12
+#: translations/rc.cpp:15 rc.cpp:15
 msgid "Coordinates of the main window"
 msgstr "Koordinaten des Main Window"
 
-#. i18n: file: kvirustotal.kcfg:28
+#. i18n: file: kvirustotal.kcfg:33
 #. i18n: ectx: label, entry (MainWindowSize), group (mainwindow)
-#: translations/rc.cpp:15 rc.cpp:15
+#: translations/rc.cpp:18 rc.cpp:18
 msgid "Size of the main window"
 msgstr "Größe des Main Window"
 
-#. i18n: file: kvirustotal.kcfg:32
+#. i18n: file: kvirustotal.kcfg:37
 #. i18n: ectx: label, entry (SplitterState), group (mainwindow)
-#: translations/rc.cpp:18 rc.cpp:18
+#: translations/rc.cpp:21 rc.cpp:21
 msgid "State of the the main window's splitter"
 msgstr "Status des Main Window's splitters"
 
-#. i18n: file: kvirustotal.kcfg:35
+#. i18n: file: kvirustotal.kcfg:40
 #. i18n: ectx: label, entry (TaskTableCols), group (mainwindow)
-#: translations/rc.cpp:21 rc.cpp:21
+#: translations/rc.cpp:24 rc.cpp:24
 msgid "Width of the columns of the task table"
 msgstr "Spaltenbreite der Aufgabentabelle"
 
-#. i18n: file: kvirustotal.kcfg:38
+#. i18n: file: kvirustotal.kcfg:43
 #. i18n: ectx: label, entry (ReportTableCols), group (mainwindow)
-#: translations/rc.cpp:24 rc.cpp:24
+#: translations/rc.cpp:27 rc.cpp:27
 msgid "Width of the columns of the report table"
 msgstr "Spaltenbreite der Report Tabelle"
 
-#. i18n: file: kvirustotal.kcfg:43
+#. i18n: file: kvirustotal.kcfg:48
 #. i18n: ectx: label, entry (ServiceKey), group (network)
-#: translations/rc.cpp:27 rc.cpp:27
+#: translations/rc.cpp:30 rc.cpp:30
 msgid "API key required to access the online services provided by VirusTotal"
 msgstr ""
 "API Key notwendig um Zugriff auf die Onlinedienste von VirusTotal zu erhalten"
 
-#. i18n: file: kvirustotal.kcfg:46
+#. i18n: file: kvirustotal.kcfg:51
 #. i18n: ectx: label, entry (SecureProtocol), group (network)
-#: translations/rc.cpp:30 rc.cpp:30
+#: translations/rc.cpp:33 rc.cpp:33
 msgid "Whether to use HTTPS protocol rather than unsecured HTTP"
 msgstr "Besser HTTPS nutzen als das unsichere HTTP"
 
-#. i18n: file: kvirustotal.kcfg:50
+#. i18n: file: kvirustotal.kcfg:55
 #. i18n: ectx: label, entry (ReuseLastReport), group (network)
-#: translations/rc.cpp:33 rc.cpp:33
+#: translations/rc.cpp:36 rc.cpp:36
 msgid "Whether to use existant reports first, if available"
 msgstr "Besser bereits existierende Reports nutzen, sofern Verfügbar"
 
-#: translations/rc.cpp:64 rc.cpp:64
+#: translations/rc.cpp:67 rc.cpp:67
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Sascha Manns"
 
-#: translations/rc.cpp:65 rc.cpp:65
+#: translations/rc.cpp:68 rc.cpp:68
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "saigkill@opensuse.org"
 
-#: welcomepage.cpp:63
-#, qt-format
+#: translations/rc.cpp:69 rc.cpp:69
+#, fuzzy
+msgctxt "HOMEPAGE OF TRANSLATORS"
+msgid "Your homepages"
+msgstr "Sascha Manns"
+
+#: welcomepage.cpp:69
 msgctxt "Application name"
 msgid "<h2>Welcome to %1!</h2>"
 msgstr "<h2>Willkommen zu %1!</h2>"
 
-#: welcomepage.cpp:65
-#, qt-format
+#: welcomepage.cpp:71
 msgctxt "Application name"
 msgid "<h3>What's %1?</h3>"
 msgstr "<h3>Was ist %1?</h3>"
 
-#: welcomepage.cpp:68
-#, qt-format
+#: welcomepage.cpp:74
 msgctxt "Application name"
 msgid ""
 "%1 is an online-based antivirus and anti-phising tool. It allows you to "
 "submit files that will be analysed by more than 40 up-to-dated antivirus. "
-"Besides, it will accept URLs that will be tested against the main "
-"anti-phising sytems.<br><br>Although %1 is a powerful tool, remember that "
-"<b>it is not intended as a replacement of a full-fledged antivirus "
-"program.</b><br><br>Please, click on the 'Next' button to set up the "
-"application."
+"Besides, it will accept URLs that will be tested against the main anti-"
+"phising sytems.<br><br>Although %1 is a powerful tool, remember that <b>it "
+"is not intended as a replacement of a full-fledged antivirus program.</"
+"b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
 "%1 ist ein online basierendes Antivirus und Anti Pishing Werkzeug. Es "
 "erlaubt Ihnen Dateien zu übermitteln, die von über 40 gepflegten Antivirus "
@@ -615,27 +656,95 @@ msgstr ""
 "herkömmliches vollfunktionales Antivirusprogramm ersetzt.</b><br><br>.Bitte "
 "klicken Sie auf den \"Weiter\" Knopf um fortzufahren."
 
-#: welcomepage.cpp:90
-#, qt-format
-msgid "%1Configuration wizard - Step 1/3%2"
-msgstr "%1Konfigurationsassistent -- Schritt 1/3%2"
+#: welcomepage.cpp:96
+msgid "%1Configuration wizard - Step 1/4%2"
+msgstr "%1Konfigurationsassistent -- Schritt 1/4%2"
 
-#: welcomepage.cpp:91
-#, qt-format
+#: welcomepage.cpp:97
+#, fuzzy
+msgid "%1Connector selection%2"
+msgstr "Auswahl invertieren"
+
+#: welcomepage.cpp:102
+msgid "%1Features%2"
+msgstr "%1Features%2"
+
+#: welcomepage.cpp:106
+msgid "%1Service key:%2"
+msgstr "%1Service Key:%2"
+
+#: welcomepage.cpp:107
+msgid "%1Instant reports:%2"
+msgstr "%1Instant reporte:%2"
+
+#: welcomepage.cpp:108
+msgid "%1Connection limit:%2"
+msgstr "%1Connection Limit:%2"
+
+#: welcomepage.cpp:109
+msgid "%1Priorized service:%2"
+msgstr "%1Priorisierter service:%2"
+
+#: welcomepage.cpp:110
+msgid "%1HTTP supported:%2"
+msgstr "%1HTTP unterstützt:%2"
+
+#: welcomepage.cpp:111
+msgid "%1HTTPs supported:%2"
+msgstr "%1HTTPs unterstützt:%2"
+
+#: welcomepage.cpp:115
+msgid "%1API connector%2"
+msgstr "%1API connector%2"
+
+#: welcomepage.cpp:124
+msgid "Required (freely available)"
+msgstr "Benötigt (frei verfügbar)"
+
+#: welcomepage.cpp:125 welcomepage.cpp:128 welcomepage.cpp:129
+#: welcomepage.cpp:145 welcomepage.cpp:146 welcomepage.cpp:147
+msgid "Yes"
+msgstr "Ja"
+
+#: welcomepage.cpp:126
+msgid "20 every 5 minutes"
+msgstr "20 alle 5 Minuten"
+
+#: welcomepage.cpp:127 welcomepage.cpp:143
+msgid "No"
+msgstr "Nein"
+
+#: welcomepage.cpp:133
+msgid "%1Web connector%2"
+msgstr "%1Web connector%2"
+
+#: welcomepage.cpp:142
+msgid "Not used"
+msgstr "Nicht benutzt"
+
+#: welcomepage.cpp:144
+msgid "Unlimited"
+msgstr "Ohne Limit"
+
+#: welcomepage.cpp:194
+msgid "%1Configuration wizard - Step 2/4%2"
+msgstr "%1Konfigurationsassistent - Schritt 2/4%2"
+
+#: welcomepage.cpp:195
 msgid "%1Enter your VirusTotal Community Key%2"
 msgstr "%1Tragen Sie hier Ihren VirusTotal Community Key ein%2"
 
-#: welcomepage.cpp:95
-#, qt-format
-msgctxt "Application name"
+#: welcomepage.cpp:198
+#, fuzzy
+msgctxt "Registration URL"
 msgid ""
-"Since %1 relies on the services provided by <a "
-"href='http://virustotal.com'>VirusTotal (c)</a>, a key is required to access "
-"its API. If you still don't have one, you can get one free of charge by "
-"registering at <a href='%2'>%2</a>. Once you have signed up to VT Community "
-"(using the sign in box at the top left hand side of the page), you will find "
-"your personal API key in the inbox of your account (sign in and drop down "
-"the <i>My account</i> menu). Now, just copy and paste it below:"
+"The API connector, previously chosen, requires a key to access the API "
+"provided by <a href='http://virustotal.com'>VirusTotal (c)</a>. If you still "
+"don't have one, you can get it free of charge by registering at <a href='%1'>"
+"%1</a>. Once you have signed up to VT Community (using the sign in box at "
+"the top left hand side of the page), you will find your personal API key in "
+"the inbox of your account (sign in and drop down the <i>My account</i> "
+"menu). Now, just copy and paste it below:"
 msgstr ""
 "Seit %1 seine Dienste auf <a href='http://virustotal.com'>VirusTotal (c)</a> "
 "anbietet, ist ein Schlüssel (Key) nötig, um die API zu nutzen. Wenn Sie noch "
@@ -645,22 +754,19 @@ msgstr ""
 "Ihrer Inbox des Accountes. <i>My Account</i>Menü. Nun brauchen Sie ihn sich "
 "nur noch zu kopieren und unten einzufügen:"
 
-#: welcomepage.cpp:107
+#: welcomepage.cpp:210
 msgid "Service &key:"
 msgstr "Service &key:"
 
-#: welcomepage.cpp:131
-#, qt-format
-msgid "%1Configuration wizard - Step 2/3%2"
-msgstr "%1Konfigurationsassistent - Schritt 2/3%2"
+#: welcomepage.cpp:235
+msgid "%1Configuration wizard - Step 3/4%2"
+msgstr "%1Konfigurationsassistent - Schritt 3/4%2"
 
-#: welcomepage.cpp:132
-#, qt-format
+#: welcomepage.cpp:236
 msgid "%1Service key test%2"
 msgstr "%1Service Key test%2"
 
-#: welcomepage.cpp:135
-#, qt-format
+#: welcomepage.cpp:239
 msgid ""
 "<br><br>%1 is verifying that the key you entered is valid. Please, wait for "
 "a few seconds..."
@@ -668,26 +774,23 @@ msgstr ""
 "<br><br>%1 möchte gerne die Validität des Schlüssels prüfen. Bitte warten "
 "Sie ein paar Sekunden..."
 
-#: welcomepage.cpp:151
+#: welcomepage.cpp:255
 msgid "<b>Status:</b>"
 msgstr "<b>Status:</b>"
 
-#: welcomepage.cpp:152
+#: welcomepage.cpp:256
 msgid "Connecting..."
 msgstr "Verbinden..."
 
-#: welcomepage.cpp:179
-#, qt-format
-msgid "%1Configuration wizard - Step 3/3%2"
-msgstr "%1Konfigurationsassistent - Schritt 3/3%2"
+#: welcomepage.cpp:283
+msgid "%1Configuration wizard - Step 4/4%2"
+msgstr "%1Konfigurationsassistent -- Schritt 1/4%2"
 
-#: welcomepage.cpp:180
-#, qt-format
+#: welcomepage.cpp:284
 msgid "%1Configuration completed successfully%2"
 msgstr "%1Konfigurationsassistent erfolgreich abgeschlossen%2"
 
-#: welcomepage.cpp:183
-#, qt-format
+#: welcomepage.cpp:287
 msgid ""
 "<br><br>%1 is ready to work! Please, click on the 'Finish' button to close "
 "this wizard."
@@ -695,34 +798,33 @@ msgstr ""
 "<br><br>%1 ist bereit zum arbeiten. Bitte klicken Sie auf den Fertigstelllen "
 "Knopf um den Assistenten zu schließen."
 
-#: welcomepage.cpp:213
+#: welcomepage.cpp:318
 msgid "Validating your key..."
 msgstr "Überprüfe den Key..."
 
-#: welcomepage.cpp:222
+#: welcomepage.cpp:325
 msgid "Operation done successfully!"
 msgstr "Operation erfolgreich beendet!"
 
-#: welcomepage.cpp:238
-msgid "Unknown error"
-msgstr "Unbekannter Fehler"
-
-#: welcomepage.cpp:246
+#: welcomepage.cpp:342
 msgid "Your key is invalid!"
 msgstr "Ihr Schlüssel ist gültig!"
 
-#: welcomepage.cpp:250
-#, qt-format
+#: welcomepage.cpp:346
 msgid "ERROR: \"%1\". Please, go back and try again."
 msgstr ""
 "FEHLER: \"%1\". Bitte gehen Sie nochmals zurück, und versuchen Sie es erneut."
 
-#: welcomewizard.cpp:49
-#, qt-format
+#: welcomewizard.cpp:50
 msgid "Welcome wizard - %1"
 msgstr "Willkommensassistent - %1"
 
-#, qt-format
+#~ msgid "ERROR: %1"
+#~ msgstr "FEHLER: %1"
+
+#~ msgid "Unknown error"
+#~ msgstr "Unbekannter Fehler"
+
 #~ msgid "An invalid report mode is active: %1. Aborting..."
 #~ msgstr "Ein invalider Reportmodus ist aktiv: %1. Breche ab..."
 
