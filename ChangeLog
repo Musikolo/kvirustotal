@@ -1,7 +1,7 @@
 ---------------------
-2011-08-XX - v.0.20.0
+2011-08-20 - v.0.20.0
 ---------------------
-- New web-based connector (WebHttpConnector)
+- New web-based connector (WebHttpConnector) for quicker reports
 - Deep internal recode for better extensibility and flexibility
 - Added permanent link for URL scans too (ApiHttpConnector)
 - Show green or red padlock when HTTPs is enabled or disabled, respectively
