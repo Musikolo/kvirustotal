@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kvirustotal 0.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-15 10:30+0200\n"
-"PO-Revision-Date: 2011-08-18 23:20+0200\n"
+"PO-Revision-Date: 2011-08-20 00:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
@@ -347,9 +347,8 @@ msgstr ""
 "Wizard benutzen um Änderungen vorzunehmen?"
 
 #: mainwindow.cpp:511
-#, fuzzy
 msgid "Show welcome wizard"
-msgstr "Willkommensassistent..."
+msgstr "Willkommensassistent"
 
 #: reportrowviewhandler.cpp:73
 msgid "OK"
@@ -623,7 +622,6 @@ msgid "Your emails"
 msgstr "saigkill@opensuse.org"
 
 #: translations/rc.cpp:69 rc.cpp:69
-#, fuzzy
 msgctxt "HOMEPAGE OF TRANSLATORS"
 msgid "Your homepages"
 msgstr "Sascha Manns"
@@ -661,9 +659,8 @@ msgid "%1Configuration wizard - Step 1/4%2"
 msgstr "%1Konfigurationsassistent -- Schritt 1/4%2"
 
 #: welcomepage.cpp:97
-#, fuzzy
 msgid "%1Connector selection%2"
-msgstr "Auswahl invertieren"
+msgstr "%1Auswahl connector%2"
 
 #: welcomepage.cpp:102
 msgid "%1Features%2"
@@ -735,7 +732,6 @@ msgid "%1Enter your VirusTotal Community Key%2"
 msgstr "%1Tragen Sie hier Ihren VirusTotal Community Key ein%2"
 
 #: welcomepage.cpp:198
-#, fuzzy
 msgctxt "Registration URL"
 msgid ""
 "The API connector, previously chosen, requires a key to access the API "
@@ -746,10 +742,12 @@ msgid ""
 "the inbox of your account (sign in and drop down the <i>My account</i> "
 "menu). Now, just copy and paste it below:"
 msgstr ""
-"Seit %1 seine Dienste auf <a href='http://virustotal.com'>VirusTotal (c)</a> "
-"anbietet, ist ein Schlüssel (Key) nötig, um die API zu nutzen. Wenn Sie noch "
-"keinen API Key haben, können Sie einen durch die kostenlose Registrierung "
-"auf <a href='%2'>%2</a> erhalten. Wenn Sie sich eingeloggt haben (durch die "
+"Das API connector, die zuvor ausgewählt wurde, ist ein Schlüssel für den "
+"Zugriff "
+"auf die API des <a href='http://virustotal.com'>VirusTotal (c)</a>. Wenn sie "
+"noch "
+"keins haben, können Sie einen durch die kostenlose Registrierung auf "
+"<a href='%2'>%1</a> erhalten. Wenn Sie sich eingeloggt haben (durch die "
 "Box am oberen linken Rand), dann finden Sie Ihren persönlichen API Key in "
 "Ihrer Inbox des Accountes. <i>My Account</i>Menü. Nun brauchen Sie ihn sich "
 "nur noch zu kopieren und unten einzufügen:"
