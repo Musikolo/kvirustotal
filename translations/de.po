@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kvirustotal 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 10:30+0200\n"
-"PO-Revision-Date: 2011-08-20 00:31+0200\n"
+"POT-Creation-Date: 2011-08-20 02:20+0200\n"
+"PO-Revision-Date: 2011-08-20 02:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
@@ -85,7 +85,7 @@ msgstr "SHA256:"
 msgid "Permanent link:"
 msgstr "Permanentlink:"
 
-#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:157
+#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:160
 msgid "An error has ocurred while submitting the file %1..."
 msgstr "Ein Fehler ist aufgetreten beim übermitteln der Datei %1..."
 
@@ -93,17 +93,17 @@ msgstr "Ein Fehler ist aufgetreten beim übermitteln der Datei %1..."
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr "FEHLER: Unerwarteter Serviceresult: %1"
 
-#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:120
-#: core/web/webhttpconnector.cpp:202 core/web/webhttpconnector.cpp:214
-#: core/web/webhttpconnector.cpp:380 core/web/webhttpconnector.cpp:416
+#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:123
+#: core/web/webhttpconnector.cpp:205 core/web/webhttpconnector.cpp:217
+#: core/web/webhttpconnector.cpp:392 core/web/webhttpconnector.cpp:428
 msgid "ERROR: No valid response received!"
 msgstr "ERROR: Keine valide Antwort erhalten!"
 
-#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:283
+#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:295
 msgid "Invalid URL: %1"
 msgstr "Invalide URL: %1"
 
-#: core/web/webhttpconnector.cpp:372 core/web/webhttpconnector.cpp:408
+#: core/web/webhttpconnector.cpp:384 core/web/webhttpconnector.cpp:420
 msgid "ERROR: No valid status response received!"
 msgstr "ERROR: Keine valide Statusantwort erhalten!"
 
@@ -642,7 +642,7 @@ msgid ""
 "%1 is an online-based antivirus and anti-phising tool. It allows you to "
 "submit files that will be analysed by more than 40 up-to-dated antivirus. "
 "Besides, it will accept URLs that will be tested against the main anti-"
-"phising sytems.<br><br>Although %1 is a powerful tool, remember that <b>it "
+"phising systems.<br><br>Although %1 is a powerful tool, remember that <b>it "
 "is not intended as a replacement of a full-fledged antivirus program.</"
 "b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
@@ -743,14 +743,12 @@ msgid ""
 "menu). Now, just copy and paste it below:"
 msgstr ""
 "Das API connector, die zuvor ausgewählt wurde, ist ein Schlüssel für den "
-"Zugriff "
-"auf die API des <a href='http://virustotal.com'>VirusTotal (c)</a>. Wenn sie "
-"noch "
-"keins haben, können Sie einen durch die kostenlose Registrierung auf "
-"<a href='%2'>%1</a> erhalten. Wenn Sie sich eingeloggt haben (durch die "
-"Box am oberen linken Rand), dann finden Sie Ihren persönlichen API Key in "
-"Ihrer Inbox des Accountes. <i>My Account</i>Menü. Nun brauchen Sie ihn sich "
-"nur noch zu kopieren und unten einzufügen:"
+"Zugriff auf die API des <a href='http://virustotal.com'>VirusTotal (c)</a>. "
+"Wenn sie noch keins haben, können Sie einen durch die kostenlose "
+"Registrierung auf <a href='%2'>%1</a> erhalten. Wenn Sie sich eingeloggt "
+"haben (durch die Box am oberen linken Rand), dann finden Sie Ihren "
+"persönlichen API Key in Ihrer Inbox des Accountes. <i>My Account</i>Menü. "
+"Nun brauchen Sie ihn sich nur noch zu kopieren und unten einzufügen:"
 
 #: welcomepage.cpp:210
 msgid "Service &key:"

@@ -74,7 +74,7 @@ QWizardPage* WelcomePage::createIntroPage( WelcomeWizard* wizard ) {
 	QString text = i18nc( "Application name", "%1 is an online-based antivirus and anti-phising tool. \
 It allows you to submit files that will be analysed by more \
 than 40 up-to-dated antivirus. Besides, it will accept URLs \
-that will be tested against the main anti-phising sytems.<br><br>\
+that will be tested against the main anti-phising systems.<br><br>\
 Although %1 is a powerful tool, remember that <b>it is not \
 intended as a replacement of a full-fledged antivirus program.</b><br><br>\
 Please, click on the 'Next' button to set up the application.", General::APP_UI_NAME );

@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 10:30+0200\n"
-"PO-Revision-Date: 2011-08-19 14:20+0200\n"
-"Last-Translator: M0Rf30 <morf3089@gmail.com>\n"
-"Language-Team: American English <kde-i18n-it@kde.org>\n"
+"POT-Creation-Date: 2011-08-20 02:20+0200\n"
+"PO-Revision-Date: 2011-08-20 02:23+0200\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -81,7 +81,7 @@ msgstr "SHA256:"
 msgid "Permanent link:"
 msgstr "Link permanente:"
 
-#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:157
+#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:160
 msgid "An error has ocurred while submitting the file %1..."
 msgstr "Si è verificato un errore nell'invio del file %1..."
 
@@ -89,17 +89,17 @@ msgstr "Si è verificato un errore nell'invio del file %1..."
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr "ERRORE: Risposta inaspettata del servizio: %1"
 
-#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:120
-#: core/web/webhttpconnector.cpp:202 core/web/webhttpconnector.cpp:214
-#: core/web/webhttpconnector.cpp:380 core/web/webhttpconnector.cpp:416
+#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:123
+#: core/web/webhttpconnector.cpp:205 core/web/webhttpconnector.cpp:217
+#: core/web/webhttpconnector.cpp:392 core/web/webhttpconnector.cpp:428
 msgid "ERROR: No valid response received!"
 msgstr "ERRORE: Nessuna risposta valida ricevuta!"
 
-#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:283
+#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:295
 msgid "Invalid URL: %1"
 msgstr "URL non valido: %1"
 
-#: core/web/webhttpconnector.cpp:372 core/web/webhttpconnector.cpp:408
+#: core/web/webhttpconnector.cpp:384 core/web/webhttpconnector.cpp:420
 msgid "ERROR: No valid status response received!"
 msgstr "ERRORE: Nessuno stato valido ricevuto!"
 
@@ -293,8 +293,8 @@ msgid ""
 "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
 "highly recommended to enable it!"
 msgstr ""
-"HTTPs è inattivo, in tal modo la trasmissione dati è insicura."
-"Si raccomanda di attivare questa opzione!"
+"HTTPs è inattivo, in tal modo la trasmissione dati è insicura.Si raccomanda "
+"di attivare questa opzione!"
 
 #: mainwindow.cpp:465
 msgctxt "Application name"
@@ -322,11 +322,9 @@ msgid ""
 "the welcome wizard will be shown so you can now either set it up or change "
 "the connector to be used."
 msgstr ""
-"Il tipo di connessione richiede una chiave di servizio, ma non ve ne è alcuna."
-" Verrà, "
-"perciò, mostrata la procedura guidata grazie alla quale sarà possibile "
-"impostare una "
-"chiave o cambiare il tipo di connessione."
+"Il tipo di connessione richiede una chiave di servizio, ma non ve ne è "
+"alcuna. Verrà, perciò, mostrata la procedura guidata grazie alla quale sarà "
+"possibile impostare una chiave o cambiare il tipo di connessione."
 
 #: mainwindow.cpp:500
 msgid "Service key required"
@@ -339,8 +337,7 @@ msgid ""
 "be shown so you can change it?"
 msgstr ""
 "La nuova versione di %1 ha un nuovo tipo di connessione. Vuoi darci "
-"un'occhiata "
-"tramite procedura guidata?"
+"un'occhiata tramite procedura guidata?"
 
 #: mainwindow.cpp:511
 msgid "Show welcome wizard"
@@ -636,7 +633,7 @@ msgid ""
 "%1 is an online-based antivirus and anti-phising tool. It allows you to "
 "submit files that will be analysed by more than 40 up-to-dated antivirus. "
 "Besides, it will accept URLs that will be tested against the main anti-"
-"phising sytems.<br><br>Although %1 is a powerful tool, remember that <b>it "
+"phising systems.<br><br>Although %1 is a powerful tool, remember that <b>it "
 "is not intended as a replacement of a full-fledged antivirus program.</"
 "b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
@@ -737,13 +734,12 @@ msgid ""
 "menu). Now, just copy and paste it below:"
 msgstr ""
 "L'interfaccia API, prima scelta, richiede una chiave per accedere alle "
-"funzionalità "
-"offerte da <a href='http://virustotal.com'>VirusTotal (c)</a>."
-"Puoi ottenerne una gratuitamente registrandoti su <a href='%1'>%1</a>. "
-"Una volta effettuato l'accesso a VT Community (usando la "
-"casella 'sign in' in alto a sinistra della pagina web), troverai la tua "
-"chiave API nella 'inbox' del tuo account (vai sul menu a tendina di <i>My "
-"account</i>). Infine copia e incolla la chiave qui sotto:"
+"funzionalità offerte da <a href='http://virustotal.com'>VirusTotal (c)</a>."
+"Puoi ottenerne una gratuitamente registrandoti su <a href='%1'>%1</a>. Una "
+"volta effettuato l'accesso a VT Community (usando la casella 'sign in' in "
+"alto a sinistra della pagina web), troverai la tua chiave API nella 'inbox' "
+"del tuo account (vai sul menu a tendina di <i>My account</i>). Infine copia "
+"e incolla la chiave qui sotto:"
 
 #: welcomepage.cpp:210
 msgid "Service &key:"

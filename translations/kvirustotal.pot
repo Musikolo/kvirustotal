@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 10:30+0200\n"
+"POT-Creation-Date: 2011-08-20 02:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Permanent link:"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:157
+#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:160
 msgid "An error has ocurred while submitting the file %1..."
 msgstr ""
 
@@ -90,17 +90,17 @@ msgstr ""
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:120
-#: core/web/webhttpconnector.cpp:202 core/web/webhttpconnector.cpp:214
-#: core/web/webhttpconnector.cpp:380 core/web/webhttpconnector.cpp:416
+#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:123
+#: core/web/webhttpconnector.cpp:205 core/web/webhttpconnector.cpp:217
+#: core/web/webhttpconnector.cpp:392 core/web/webhttpconnector.cpp:428
 msgid "ERROR: No valid response received!"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:283
+#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:295
 msgid "Invalid URL: %1"
 msgstr ""
 
-#: core/web/webhttpconnector.cpp:372 core/web/webhttpconnector.cpp:408
+#: core/web/webhttpconnector.cpp:384 core/web/webhttpconnector.cpp:420
 msgid "ERROR: No valid status response received!"
 msgstr ""
 
@@ -611,7 +611,7 @@ msgid ""
 "%1 is an online-based antivirus and anti-phising tool. It allows you to "
 "submit files that will be analysed by more than 40 up-to-dated antivirus. "
 "Besides, it will accept URLs that will be tested against the main anti-"
-"phising sytems.<br><br>Although %1 is a powerful tool, remember that <b>it "
+"phising systems.<br><br>Although %1 is a powerful tool, remember that <b>it "
 "is not intended as a replacement of a full-fledged antivirus program.</"
 "b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
