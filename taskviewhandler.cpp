@@ -28,7 +28,6 @@
 
 static const int DEFAULT_ROW_COUNT = 10;
 static const int DEFAULT_COL_COUNT = 5;
-static const long SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000;; // 20 MB
 
 TaskViewHandler::TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget ) {
 	this->mainwindow 	 = mainwindow;
@@ -98,23 +97,20 @@ void TaskViewHandler::tableWidthChanged( int width ) {
 	reportViewHandler->widthChanged( width );
 }
 
-void TaskViewHandler::submitFile( const QString& fileName ) {
-	kDebug() << "Submitting file" << fileName << "...";
-	if( fileName.isEmpty() ) {
-		kDebug() << "Nothing will be done as the file name is empty!";
+void TaskViewHandler::submitFile( const QFile& file ) {
+	kDebug() << "Submitting file" << file.fileName() << "...";
+	if( !file.exists() ) {
+		kDebug() << "Nothing will be done as the file doesn't exist!";
 		return;
 	}
 	// Check for the file size not being exceeded
-	QFile file( fileName );
 	if( file.size() > SERVICE_MAX_FILE_SIZE ) {
-		KMessageBox::sorry( mainwindow->centralWidget(),
-							i18n( "The given file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
-								  SERVICE_MAX_FILE_SIZE / ( 1024.0 * 1024 ), SERVICE_MAX_FILE_SIZE / ( 1000 * 1000 ) ),
-							i18n( "File size exceeded!" ) );
+		showFileTooBigMsg( i18n( "The given file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
+								  SERVICE_MAX_FILE_SIZE / ( 1024.0 * 1024 ), SERVICE_MAX_FILE_SIZE / ( 1000 * 1000 ) ) );
 		return;
 	}
 	// Check for duplicated submitted files
-	if( hasDuplicateUnfinished( fileName ) &&
+	if( hasDuplicateUnfinished( file.fileName() ) &&
 		KMessageBox::warningContinueCancel( mainwindow->centralWidget(),
 											i18n( "The selected file is already being scanned. Do you really want to add another task to scan it again?" ),
 										    i18n( "Duplicated scan detected" ),
@@ -126,22 +122,22 @@ void TaskViewHandler::submitFile( const QString& fileName ) {
 	}
 	// Create a new entry
 	prepareTable();
-	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), file );
+	TaskRowViewHandler*const rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size() );
+	rowViewHandler->submitFile( file );
 	connect( rowViewHandler, SIGNAL( reportCompleted( int ) ), this, SLOT( reportCompleted( int ) ) );
 	addRow2Timer( rowViewHandler );
 	rowViewHandlers.append( rowViewHandler );
 }
 
-
-void TaskViewHandler::submitUrl( const QString& urlAddress ) {
-	kDebug() << "Submitting URL " << urlAddress << "...";
-	if( urlAddress.isEmpty() ) {
-		kDebug() << "Nothing will be done as the URL address is empty!";
+void TaskViewHandler::submitRemoteFile( QNetworkAccessManager*const networkManager, const QUrl& url ) {
+	kDebug() << "Submitting remote file " << url << "...";
+	if( url.isEmpty() ) {
+		kDebug() << "Nothing will be done as the remote file's URL address is empty!";
 		return;
 	}
-	if( hasDuplicateUnfinished( urlAddress ) &&
+	if( hasDuplicateUnfinished( url.toString() ) &&
 		KMessageBox::warningContinueCancel( mainwindow->centralWidget(),
-											i18n( "The given URL is already being scanned. Do you really want to add another task to scan it again?" ),
+											i18n( "The selected remote file is already being scanned. Do you really want to add another task to scan it again?" ),
 										    i18n( "Duplicated scan detected" ),
 											KStandardGuiItem::cont(),
 											KStandardGuiItem::cancel(),
@@ -150,8 +146,33 @@ void TaskViewHandler::submitUrl( const QString& urlAddress ) {
 		return;
 	}
 	prepareTable();
-	QUrl url( urlAddress );
-	TaskRowViewHandler* rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size(), url );
+	TaskRowViewHandler*const rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size() );
+	rowViewHandler->submitRemoteFile( networkManager, url );
+	connect( rowViewHandler, SIGNAL( reportCompleted( int ) ), this, SLOT( reportCompleted( int ) ) );
+	connect( rowViewHandler, SIGNAL( maximunSizeExceeded( int ) ), this, SLOT( removeRow( int ) ) );
+	addRow2Timer( rowViewHandler );
+	rowViewHandlers.append( rowViewHandler );
+}
+
+void TaskViewHandler::submitUrl( const QUrl& url ) {
+	kDebug() << "Submitting URL " << url << "...";
+	if( url.isEmpty() ) {
+		kDebug() << "Nothing will be done as the URL address is empty!";
+		return;
+	}
+	if( hasDuplicateUnfinished( url.toString() ) &&
+		KMessageBox::warningContinueCancel( mainwindow->centralWidget(),
+											i18n( "The selected URL is already being scanned. Do you really want to add another task to scan it again?" ),
+										    i18n( "Duplicated scan detected" ),
+											KStandardGuiItem::cont(),
+											KStandardGuiItem::cancel(),
+											QString::null,
+											KMessageBox::Dangerous ) != KMessageBox::Continue ) {
+		return;
+	}
+	prepareTable();
+	TaskRowViewHandler*const rowViewHandler = new TaskRowViewHandler( this, rowViewHandlers.size() );
+	rowViewHandler->submitUrl( url );
 	connect( rowViewHandler, SIGNAL( reportCompleted( int ) ), this, SLOT( reportCompleted( int ) ) );
 	addRow2Timer( rowViewHandler );
 	rowViewHandlers.append( rowViewHandler );
@@ -423,7 +444,7 @@ void TaskViewHandler::addRow2Timer( TaskRowViewHandler * rowViewHandler ) {
 	if ( !timer->isActive() ) {
 		timer->start();
 	}
-	connect( timer, SIGNAL( timeout() ), rowViewHandler, SLOT( nextSecond() ) );
+	connect( timer, SIGNAL( timeout() ), rowViewHandler, SLOT( onNextSecond() ) );
 	connect( rowViewHandler, SIGNAL( unsubscribeNextSecond( TaskRowViewHandler* ) ),
 			 this, SLOT( removeRow2Timer( TaskRowViewHandler * ) ) );
 }
@@ -439,6 +460,10 @@ bool TaskViewHandler::isUnfinishedTasks() {
 		}
 	}
 	return false;
+}
+
+void TaskViewHandler::showFileTooBigMsg( const QString& msg ) {
+	KMessageBox::sorry( mainwindow->centralWidget(), msg, i18n( "File size exceeded!" ) );
 }
 
 #include "taskviewhandler.moc"

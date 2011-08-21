@@ -63,6 +63,11 @@ MainWindow::MainWindow() {
 	fileAction->setShortcut( Qt::CTRL + Qt::Key_F );
 	toolbar->addAction( fileAction );
 
+	KAction* remoteFileAction = new KAction( KIcon( "download" ), i18n( "Remote file..." ), this );
+	remoteFileAction->setHelpText( i18n( "Add a remote file" ) );
+	remoteFileAction->setShortcut( Qt::CTRL + Qt::Key_R );
+	toolbar->addAction( remoteFileAction );
+
 	KAction* urlAction = new KAction( KIcon( "document-open-remote" ), i18n( "URL..." ), this );
 	urlAction->setHelpText( i18n( "Add a URL" ) );
 	urlAction->setShortcut( Qt::CTRL + Qt::Key_U );
@@ -70,7 +75,7 @@ MainWindow::MainWindow() {
 
 	KAction* rescanAction = new KAction( KIcon( "view-refresh" ), i18n( "Re-scan" ), this );
 	rescanAction->setHelpText( i18n( "Re-scan the selected finished task(s)" ) );
-	rescanAction->setShortcut( Qt::CTRL + Qt::Key_R );
+	rescanAction->setShortcut( Qt::CTRL + Qt::Key_S );
 	toolbar->addSeparator();
 	toolbar->addAction( rescanAction );
 
@@ -93,6 +98,7 @@ MainWindow::MainWindow() {
 	KMenuBar* menubar = menuBar();
 	QMenu* fileMenu = menubar->addMenu( i18nc( "Menu name", "File" ) );
 	fileMenu->addAction( fileAction );
+	fileMenu->addAction( remoteFileAction );
 	fileMenu->addAction( urlAction );
 	fileMenu->addAction( quitAction );
 
@@ -179,6 +185,7 @@ MainWindow::MainWindow() {
 
 	// Set up connections
 	connect( fileAction, SIGNAL( triggered( bool ) ), this, SLOT( openFile() ) );
+	connect( remoteFileAction, SIGNAL( triggered( bool ) ), this, SLOT( openRemoteFile() ) );
 	connect( urlAction, SIGNAL( triggered( bool ) ), this, SLOT( openUrl() ) );
 	connect( abortAction, SIGNAL( triggered( bool ) ), taskViewHandler, SLOT( abortSelectedTask() ) );
 	connect( permanentLinkValue, SIGNAL( leftClickedUrl() ), this, SLOT( openPermanentLink() ) );
@@ -258,10 +265,10 @@ bool MainWindow::closeRequested() {
 }
 
 void MainWindow::openFile() {
-
-  QString fileName = KFileDialog::getOpenFileName( START_DIR_URL );
-  taskViewHandler->submitFile( fileName );
-//  QFile( fileName ).p
+	// Get the file name and submit it
+	QString fileName = KFileDialog::getOpenFileName( START_DIR_URL );
+	taskViewHandler->submitFile( QFile( fileName ) );
+  
 //TODO: It might be interesting to be able to get files from a network location
 /*  QString tmpFile;
   if(KIO::NetAccess::download( fileName, tmpFile, this)) {
@@ -274,20 +281,36 @@ void MainWindow::openFile() {
     KMessageBox::error( this, KIO::NetAccess::lastErrorString() );
   }
 */
+}
 
+void MainWindow::openRemoteFile() {
+	// Get the remote file's URL and submit it
+	const QUrl url = promptUrl( i18n( "Remote file inputbox" ), i18n( "Please, enter a remote file's URL:" ) );
+	if( !url.isEmpty() ) {
+		taskViewHandler->submitRemoteFile( networkManager, url );
+	}
 }
 
 void MainWindow::openUrl() {
-	bool ok;
-	const QRegExp regex( "^((http)|(ftp))[s]?://[^..]+(\\.[^..]+)+$", Qt::CaseInsensitive );
-	QRegExpValidator*const validator = new QRegExpValidator( regex, this );
-	QString url = KInputDialog::getText( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ), "http://", &ok, this, validator );
-	if( ok && !url.isEmpty() ) {
-		kDebug() << "Entered URL is" << url;
+	// Get the URL and submit it
+	const QUrl url = promptUrl( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ) );
+	if( !url.isEmpty() ) {
 		taskViewHandler->submitUrl( url );
 	}
-	validator->deleteLater();
 }
+
+QUrl MainWindow::promptUrl( const QString& title, const QString& message ) {
+	bool ok;
+	const QRegExp regex( "^((http)|(ftp))[s]?://[^..]+(\\.[^..]+)+$", Qt::CaseInsensitive );
+	QRegExpValidator validator( regex, this );
+	QString url = KInputDialog::getText( title, message, "http://", &ok, this, &validator );
+	if( ok && !url.isEmpty() ) {
+		kDebug() << "Entered URL is" << url;
+		return QUrl( url );
+	}
+	return QUrl();
+}
+
 
 void MainWindow::setResultIcon( const QString& iconName, bool enabled ) {
 	KIcon icon( iconName ); // Expected values are: security-high, security-medium, security-low
@@ -369,11 +392,17 @@ void MainWindow::dropEvent( QDropEvent* event ) {
 	if( scheme == "file" ) {
 		QFile file( url.path() );
 		if( file.exists() ) {
-			taskViewHandler->submitFile( url.path() );
+			taskViewHandler->submitFile( file );
 		}
 	}
 	else {
-		taskViewHandler->submitUrl( url.toString() );
+		static const QChar dot( '.' );
+		if( url.path().contains( dot ) ) {
+			taskViewHandler->submitRemoteFile( networkManager, url );
+		}
+		else {
+			taskViewHandler->submitUrl( url );
+		}
 	}
 }
 

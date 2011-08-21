@@ -26,40 +26,84 @@
 #include "mainwindow.h"
 #include "taskscheduler.h"
 #include <settings.h>
+#include <KMessageBox>
 
-//TODO: Better use QIODevice than QFile
-TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QFile& file ) {
-	setupObject( viewHandler, rowIndex, i18nc( "Type of task", "File" ), file.fileName(), file.size(), JobType::FILE );
-}
-
-TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QUrl& url ) {
-	setupObject( viewHandler, rowIndex, i18n( "URL" ), url.toString(), 0, JobType::URL );
+TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex ) {
+	this->viewHandler = viewHandler;
+	this->rowIndex = rowIndex;
+	this->downloader = NULL;
+	this->report = NULL;
+	this->remoteTmpFile = NULL;
+	this->seconds = 0;
+	this->transmissionSeconds = 0;
+	this->finished = true;
+	this->jobId = -1;
 }
 
 TaskRowViewHandler::~TaskRowViewHandler() {
-	setReport( NULL ); // Free the report
+	// Free the report, remote file and dowloader, as needed
+	setReport( NULL );
+	if( remoteTmpFile != NULL ) {
+		remoteTmpFile->deleteLater();
+		remoteTmpFile = NULL;
+	}
+	if( downloader != NULL ) {
+		downloader->deleteLater();
+		downloader = NULL;
+	}
 }
 
-void TaskRowViewHandler::setupObject( TaskViewHandler* viewHandler, int rowIndex, const QString& type, const QString& name, int size, JobType::JobTypeEnum jobType ) {
-	// Assing inner objects
-	this->viewHandler = viewHandler;
-	this->setRowIndex( rowIndex );
-	this->report = NULL;
-	this->finished = false;
-	this->jobId = TaskScheduler::self()->enqueueJob( name, jobType, this, Settings::reuseLastReport() );
-	this->startUploadSeconds = 0;
-
+void TaskRowViewHandler::setupObject( const QString& type, const QString& name, int size ) {
 	// Show the item in the table view
 	setType( type );
 	setName( name );
 	setSize( size );
-//	setStatus( i18n( "Queued" ) ); // The "Submitting" message is already shown due to the enqueueJob() call above
-	setTime( this->seconds = 0 );
+//	setStatus( i18n( "Queued" ) ); // The proper message will be set when invoking a submit*() method
+	setTime( this->seconds );
+}
+
+void TaskRowViewHandler::submitFile( const QFile& file ) {
+	// Enque the file and setup the table row fields
+	this->finished = false;
+	this->jobId = TaskScheduler::self()->enqueueJob( file.fileName(), JobType::FILE, this, Settings::reuseLastReport() );
+	this->setupObject( i18nc( "Type of task", "File" ), file.fileName(), file.size() );
+}
+
+void TaskRowViewHandler::submitRemoteFile( QNetworkAccessManager*const networkManager, const QUrl& url ) {
+	// Free th downloader and remote file, if exists any
+	this->finished = false;
+	if( downloader != NULL ) {
+		downloader->deleteLater();
+	}
+	if( remoteTmpFile != NULL ) {
+		remoteTmpFile->deleteLater();
+		remoteTmpFile = NULL;
+	}
+	
+	// Set the table row fields
+	this->setupObject( i18nc( "Type of task", "Remote file" ), url.toString() );	
+	setStatus( i18n( "Dowloading..." ) );
+
+	// Create a new dowloader, connect it and start downloading
+	this->downloader = new FileDownloader( networkManager );
+	connect( downloader, SIGNAL( downloadProgress( qint64, qint64 ) ), this, SLOT( onDownloadProgressRate( qint64, qint64 ) ) );
+	connect( downloader, SIGNAL( downloadReady( QFile* ) ), this, SLOT( onDownloadReady( QFile* ) ) );
+	connect( downloader, SIGNAL( maximunSizeExceeded( qint64, qint64 ) ), this, SLOT( onMaximunSizeExceeded( qint64, qint64 ) ) );
+	connect( downloader, SIGNAL( errorOccured( QString ) ), this, SLOT( onErrorOccured( QString ) ) );
+	connect( downloader, SIGNAL( aborted() ), this, SLOT( onAborted() ) );
+	downloader->download( url, TaskViewHandler::SERVICE_MAX_FILE_SIZE );
+}
+
+void TaskRowViewHandler::submitUrl( const QUrl& url ) {
+	// Enque the file and setup the table row fields
+	this->finished = false;
+	this->jobId = TaskScheduler::self()->enqueueJob( url.toString(), JobType::URL, this, Settings::reuseLastReport() );
+	this->setupObject( i18n( "URL" ), url.toString() );
 }
 
 void TaskRowViewHandler::setRowIndex( int index ){
-		kDebug() << "Using table index" << index;
-		this->rowIndex = index;
+	kDebug() << "Using table index" << index;
+	this->rowIndex = index;
 }
 
 void TaskRowViewHandler::setType( const QString& type ){
@@ -115,7 +159,7 @@ void TaskRowViewHandler::setTime( int seconds ) {
 	addRowItem( Column::TIME, text );
 }
 
-void TaskRowViewHandler::nextSecond() {
+void TaskRowViewHandler::onNextSecond() {
 	setTime( ++seconds );
 }
 
@@ -175,6 +219,9 @@ int TaskRowViewHandler::getHintColumnSize(int column, int availableWidth ) {
 bool TaskRowViewHandler::abort() {
 	if( !isFinished() ) {
 		setStatus( i18n( "Aborting..." ) );
+		if( downloader != NULL && downloader->abort() ) {
+			return true;
+		}
 		return TaskScheduler::self()->abort( this->jobId );
 	}
 	return false;
@@ -183,21 +230,27 @@ bool TaskRowViewHandler::abort() {
 bool TaskRowViewHandler::rescan() {
 	bool actionDone = false;
 	if( isFinished() ) {
-		QString itemName = getName();
-		QFile file( itemName );
-		if( file.exists() ) {
+		if( downloader != NULL && remoteTmpFile == NULL ) {
 			this->finished = false;
-			this->seconds = 0;
-			this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::FILE, this, false );
-			actionDone = true;
+			downloader->download( QUrl( getName() ), TaskViewHandler::SERVICE_MAX_FILE_SIZE );
 		}
 		else {
-			QUrl url( itemName );
-			if( url.isValid() ) {
+			QString itemName = remoteTmpFile != NULL ? remoteTmpFile->fileName() : getName();
+			QFile file( itemName );
+			if( file.exists() ) {
 				this->finished = false;
 				this->seconds = 0;
-				this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::URL, this, true );
+				this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::FILE, this, false );
 				actionDone = true;
+			}
+			else {
+				QUrl url( itemName );
+				if( url.isValid() ) {
+					this->finished = false;
+					this->seconds = 0;
+					this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::URL, this, true );
+					actionDone = true;
+				}
 			}
 		}
 		
@@ -216,25 +269,38 @@ void TaskRowViewHandler::onQueued() {
 }
 
 void TaskRowViewHandler::onScanningStarted() {
-	this-> startUploadSeconds = seconds;
 	setStatus( i18n( "Submitting..." ) );
 }
 
-void TaskRowViewHandler::onErrorOccurred( const QString& message ) {
+void TaskRowViewHandler::onErrorOccured( const QString& message ) {
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Error" ), message );
-	MainWindow::showErrorNotificaton( i18n( "The next error ocurred while processing the task %1: %2 ", rowIndex, message ) );
+	MainWindow::showErrorNotificaton( i18n( "The next error occured while processing the task %1: %2 ", rowIndex, message ) );
 	emit( unsubscribeNextSecond( this ) );
 }
 
+void TaskRowViewHandler::onDownloadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
+	// The task will be finished when an error has occured. In such a case, do nothing...
+	if( finished ) {
+		kWarning() << "The task is finished. Thus, the downloadProgressRate() event will be ignored!";
+		return;
+	}
+	int seconds = this->seconds - this->transmissionSeconds; // Current time - start time
+	double rate = 100.0 * bytesSent / bytesTotal;
+	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
+	QString text( i18n( "Downloading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'g', 3 ).arg( speed ) );
+	setSize( bytesTotal );
+	setStatus( text );
+}
+
 void TaskRowViewHandler::onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
-	// The task will be finished when an error has ocurred. In such a case, do nothing...
+	// The task will be finished when an error has occured. In such a case, do nothing...
 	if( finished ) {
 		kWarning() << "The task is finished. Thus, the uploadProgressRate() event will be ignored!";
 		return;
 	}
-	int seconds = this->seconds - this->startUploadSeconds; // Current time - start time
+	int seconds = this->seconds - this->transmissionSeconds; // Current time - start time
 	double rate = 100.0 * bytesSent / bytesTotal;
 	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
 	QString text( i18n( "Uploading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'g', 3 ).arg( speed ) );
@@ -277,6 +343,23 @@ void TaskRowViewHandler::onReportReady( Report*const report ) {
 	}
 	emit( unsubscribeNextSecond( this ) );
 	emit( reportCompleted( rowIndex ) );
+}
+
+void TaskRowViewHandler::onDownloadReady( QFile* file ) {
+	setSize( file->size() );
+	this->remoteTmpFile = file;
+	this->transmissionSeconds = 0; // Reset the counter
+	this->jobId = TaskScheduler::self()->enqueueJob( file->fileName(), JobType::FILE, this, Settings::reuseLastReport() );
+}
+
+void TaskRowViewHandler::onMaximunSizeExceeded( qint64 sizeAllowed, qint64 sizeTotal ) {
+		setSize( sizeTotal );
+	viewHandler->showFileTooBigMsg( i18n( "The remote file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
+									TaskViewHandler::SERVICE_MAX_FILE_SIZE / ( 1024.0 * 1024 ), 
+									TaskViewHandler::SERVICE_MAX_FILE_SIZE / ( 1000 * 1000 ) ) );
+	this->finished = true;
+	emit( unsubscribeNextSecond( this ) );
+	emit( maximunSizeExceeded( rowIndex ) );
 }
 
 #include "taskrowviewhandler.moc"

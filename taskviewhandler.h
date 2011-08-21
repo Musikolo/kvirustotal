@@ -49,26 +49,30 @@ private:
 	bool hasDuplicateUnfinished( const QString& item );
 	void prepareTable();
 	void addRow2Timer( TaskRowViewHandler * rowViewHandler );
-	void removeRow( int rowIndex );
 	void writeSelectedRowIndexes( QSet< int >& rowIds, RowSelection::RowSelectionEnum selection = RowSelection::ALL );
 
 public:
     TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget );
     virtual ~TaskViewHandler();
+	
+	static const qint64 SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000; // 20 MB
 	inline QTableWidget* getTableWidget(){ return this->tableWidget; }
 	bool isUnfinishedTasks() ;
+	void showFileTooBigMsg( const QString& msg );
 
 private slots:
 	void removeSelectedRows();
 	void selectedRowChanged();
+	void removeRow( int rowIndex );
 	void selectRow( int rowIndex );
 	void reportCompleted( int rowIndex );
 	void showContextMenu( const QPoint& point );
 
 public slots:
 	void removeRow2Timer( TaskRowViewHandler * rowViewHandler );
-	void submitFile( const QString& fileName );
-	void submitUrl( const QString& url );
+	void submitFile( const QFile& file );
+	void submitRemoteFile( QNetworkAccessManager*const networkManager, const QUrl& url );
+	void submitUrl( const QUrl& url );
 	void abortSelectedTask();
 	void clearFinishedRows();
 	void rescanTasks();

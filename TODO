@@ -1,4 +1,4 @@
-* Implement the ability to download and submit a file for scanning
+* Add maxServiceFileSize to HttpConnectoCfg
 * Make service menu integration
 * Warn the user when a new version is available
 * Tray icon integration
@@ -6,6 +6,7 @@
 * Find out a way to set the antivirus version and real version update (when available in API)
 * Base workload progress bars on the API rather than on the Web (when available in API)
 
+* DONE - Implement the ability to download and submit a file for scanning
 * DONE - Update the welcome wizard to support the new WebHttpConnector connector
 * DONE - Implement a migration method for previous version: keep HttpConnectorEngine=0 in settings
 * DONE - Add option to set the minimum time to show notification messages

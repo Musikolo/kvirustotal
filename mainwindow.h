@@ -45,12 +45,13 @@ private:
 	void validateCurrentVersion();
 	bool isPreviousVersion();
 	bool isPreviousVersionTo( uchar major, uchar minor, uchar bugfix );
+	QUrl promptUrl(  const QString& title, const QString& message  );
 	
 private slots:
 	bool closeRequested();
 	void openFile();
+	void openRemoteFile();
 	void openUrl();
-//	void submit();
 	void openPermanentLink();
 	void resizeEvent ( QResizeEvent* event );
 	void showWelcomeWizard();

@@ -24,6 +24,7 @@
 #include "httpconnector.h"
 #include "httpconnectorlistener.h"
 #include "taskschedulerjob.h"
+#include <filedownloader.h>
 
 class TaskViewHandler;
 
@@ -36,10 +37,12 @@ class TaskRowViewHandler : public HttpConnectorListener
 Q_OBJECT
 private:
     TaskViewHandler* viewHandler;
+	FileDownloader* downloader;
 	Report* report;
+	QFile* remoteTmpFile;
     int rowIndex;
     int seconds;
-	int startUploadSeconds;
+	int transmissionSeconds;
 	bool finished;
 	uint jobId;
 
@@ -50,32 +53,38 @@ private:
     void setTime( int seconds );
 	void setReport( Report*const report );
     void addRowItem(int column, const QString& text, const QString& toolTip = QString() );
-    void setupObject( TaskViewHandler* viewHandler, int rowIndex, const QString& type, const QString& name, int size, JobType::JobTypeEnum jobType );
+    void setupObject( const QString& type, const QString& name, int size = 0 );
+    QString getItemText( Column::ColumnEnum column ) const;
 
 protected slots:
 	void onQueued();
-    void onScanningStarted();
-    void onErrorOccurred( const QString& message );
+	void onScanningStarted();
+	void onErrorOccured( const QString& message );
 	void onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal );
 	void onRetrievingReport();
 	void onWaitingForReport( int seconds );
 	void onServiceLimitReached( int seconds );
 	void onAborted();
 	void onReportReady( Report*const report );
-    QString getItemText( Column::ColumnEnum column ) const;
+	void onDownloadProgressRate( qint64 bytesSent, qint64 bytesTotal );
+	void onDownloadReady( QFile* resouce );
+	void onMaximunSizeExceeded( qint64 sizeAllowed, qint64 sizeTotal );
 
 public slots:
-	void nextSecond();
+	void onNextSecond();
 
 signals:
 	void reportCompleted( int rowIndex );
 	void unsubscribeNextSecond( TaskRowViewHandler* );
 	void rowRemoved( int rowIndex );
+	void maximunSizeExceeded( int rowIndex );
 
 public:
-	TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QFile& file );
-	TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex, const QUrl& url );
+	TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex );
 	virtual ~TaskRowViewHandler();
+	void submitFile( const QFile& file );
+	void submitRemoteFile( QNetworkAccessManager*const networkManager, const QUrl& url );
+	void submitUrl( const QUrl& url );
 	void setRowIndex( int index );
 	QString getName() const;
 	bool isFinished() { return finished; }
