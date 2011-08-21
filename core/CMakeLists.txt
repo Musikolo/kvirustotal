@@ -7,6 +7,8 @@ include_directories(
 		${CMAKE_CURRENT_BINARY_DIR})
 
 set(kvt_core_SRCS
+		taskschedulerjob.cpp 
+		taskscheduler.cpp 
 		httpconnectorfactory.cpp 
 		filehasher.cpp )
 

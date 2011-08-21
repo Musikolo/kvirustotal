@@ -23,8 +23,6 @@ add_subdirectory(resources)
 add_subdirectory(translations)
 
 set(kvirustotal_SRCS 
-		taskschedulerjob.cpp 
-		taskscheduler.cpp 
 		settingsdialog.cpp 
 		welcomepage.cpp 
 		welcomewizard.cpp
