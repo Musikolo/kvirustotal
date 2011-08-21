@@ -178,7 +178,7 @@ void BaseHttpConnector::onServiceWorkloadComplete() {
 			emit( serviceWorkloadReady( workload ) );
 		} 
 		else {
-			kError() << "ERROR: An unknown error ocurred while processing the data";
+			kError() << "ERROR: An unknown error occured while processing the data";
 		}
 	}
 	else {
@@ -202,7 +202,7 @@ void BaseHttpConnector::onSubmissionReplyError( QNetworkReply::NetworkError erro
 	if( error != QNetworkReply::OperationCanceledError ){
 		QString errorMsg( reply->errorString().append( " - (Error code: %1) " ).arg( error ) );
 		kError() << "ERROR:" << errorMsg;
-		emit( errorOccurred( errorMsg ) );
+		emit( errorOccured( errorMsg ) );
 	}
 	reportMode = ReportMode::NONE;
 }
