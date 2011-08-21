@@ -454,7 +454,7 @@ void WebHttpConnector::onReportComplete() {
 
 HttpConnectorCfg WebHttpConnector::getFileHttpConnectorCfg() {
 	static const int levels[] = { 5 };
-	HttpConnectorCfg cfg = { (uchar)1, (uchar)0, levels, false };
+	HttpConnectorCfg cfg = { (uchar)1, (uchar)0, levels, false, 20 * 1000 * 1000 }; // 20MB
 	return cfg;
 }
 

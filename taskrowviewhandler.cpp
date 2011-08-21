@@ -15,18 +15,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QTableWidget>
 #include <KLocalizedString>
-#include <KAction>
-#include <qcoreevent.h>
+#include <KMessageBox>
 #include <KDebug>
 
 #include "taskviewhandler.h"
 #include "taskrowviewhandler.h"
 #include "mainwindow.h"
 #include "taskscheduler.h"
+#include "httpconnectorfactory.h"
 #include <settings.h>
-#include <KMessageBox>
 
 TaskRowViewHandler::TaskRowViewHandler( TaskViewHandler* viewHandler, int rowIndex ) {
 	this->viewHandler = viewHandler;
@@ -91,7 +89,7 @@ void TaskRowViewHandler::submitRemoteFile( QNetworkAccessManager*const networkMa
 	connect( downloader, SIGNAL( maximunSizeExceeded( qint64, qint64 ) ), this, SLOT( onMaximunSizeExceeded( qint64, qint64 ) ) );
 	connect( downloader, SIGNAL( errorOccured( QString ) ), this, SLOT( onErrorOccured( QString ) ) );
 	connect( downloader, SIGNAL( aborted() ), this, SLOT( onAborted() ) );
-	downloader->download( url, TaskViewHandler::SERVICE_MAX_FILE_SIZE );
+	downloader->download( url, HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize );
 }
 
 void TaskRowViewHandler::submitUrl( const QUrl& url ) {
@@ -232,7 +230,7 @@ bool TaskRowViewHandler::rescan() {
 	if( isFinished() ) {
 		if( downloader != NULL && remoteTmpFile == NULL ) {
 			this->finished = false;
-			downloader->download( QUrl( getName() ), TaskViewHandler::SERVICE_MAX_FILE_SIZE );
+			downloader->download( QUrl( getName() ), HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize );
 		}
 		else {
 			QString itemName = remoteTmpFile != NULL ? remoteTmpFile->fileName() : getName();
@@ -353,10 +351,10 @@ void TaskRowViewHandler::onDownloadReady( QFile* file ) {
 }
 
 void TaskRowViewHandler::onMaximunSizeExceeded( qint64 sizeAllowed, qint64 sizeTotal ) {
-		setSize( sizeTotal );
+	setSize( sizeTotal );
+	const qint64 maxSize = HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize;
 	viewHandler->showFileTooBigMsg( i18n( "The remote file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
-									TaskViewHandler::SERVICE_MAX_FILE_SIZE / ( 1024.0 * 1024 ), 
-									TaskViewHandler::SERVICE_MAX_FILE_SIZE / ( 1000 * 1000 ) ) );
+									maxSize / ( 1024.0 * 1024 ), maxSize/ ( 1000 * 1000 ) ) );
 	this->finished = true;
 	emit( unsubscribeNextSecond( this ) );
 	emit( maximunSizeExceeded( rowIndex ) );

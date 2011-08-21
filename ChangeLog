@@ -1,8 +1,8 @@
 ---------------------
 2011-08-XX - v.0.21.0
 ---------------------
-- [NEW] - Implement the ability to download and submit a file for scanning
-- Fixed compilation error for Qt versions earlier to 4.7 (WebHttpConnector)
+- [NEW] - Implemented the ability to download and submit a file for scanning
+- Fixed compilation error for Qt versions previous to 4.7 (WebHttpConnector)
 - Fixed typo in the Welcome Wizard
 
 ---------------------

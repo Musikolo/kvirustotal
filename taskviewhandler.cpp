@@ -20,9 +20,9 @@
 #include <KDebug>
 
 #include "httpconnector.h"
+#include <httpconnectorfactory.h>
 #include "taskrowviewhandler.h"
 #include "taskviewhandler.h"
-#include <QHeaderView>
 #include "mainwindow.h"
 #include <settings.h>
 
@@ -104,9 +104,10 @@ void TaskViewHandler::submitFile( const QFile& file ) {
 		return;
 	}
 	// Check for the file size not being exceeded
-	if( file.size() > SERVICE_MAX_FILE_SIZE ) {
+	const qint64 maxSize = HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize;
+	if( file.size() > maxSize ) {
 		showFileTooBigMsg( i18n( "The given file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
-								  SERVICE_MAX_FILE_SIZE / ( 1024.0 * 1024 ), SERVICE_MAX_FILE_SIZE / ( 1000 * 1000 ) ) );
+								  maxSize / ( 1024.0 * 1024 ), maxSize / ( 1000 * 1000 ) ) );
 		return;
 	}
 	// Check for duplicated submitted files

@@ -24,7 +24,7 @@
 #include "httpconnector.h"
 #include "httpconnectorlistener.h"
 #include "taskschedulerjob.h"
-#include <filedownloader.h>
+#include "filedownloader.h"
 
 class TaskViewHandler;
 

@@ -29,6 +29,7 @@ struct HttpConnectorCfg {
 	const uchar defaultLevel;
 	const int* levels;
 	const bool serviceKeyRequired;
+	const qint64 maxServiceFileSize;
 };
 
 /** HttpConnector interface */

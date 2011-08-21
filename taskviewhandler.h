@@ -55,7 +55,6 @@ public:
     TaskViewHandler( MainWindow* mainwindow, QTableWidget* taskTableWidget, QTableWidget* reportTableWidget );
     virtual ~TaskViewHandler();
 	
-	static const qint64 SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000; // 20 MB
 	inline QTableWidget* getTableWidget(){ return this->tableWidget; }
 	bool isUnfinishedTasks() ;
 	void showFileTooBigMsg( const QString& msg );

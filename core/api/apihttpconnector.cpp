@@ -30,6 +30,7 @@
 #include "api/apiurlreport.h"
 
 static const int DELAY_LEVELS[] = { 15, 30, 45, 60, 90, 150, 300 };
+static const qint64 SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000; // 20 MB
 static QString PERMANENT_LINK_URL_PATTERN  = "http://www.virustotal.com/url-scan/report.html?id=%1";
 
 /** Tags used to manage JSON objects. Extends ServiceBasicReply namespace. */
@@ -325,12 +326,12 @@ void ApiHttpConnector::onReportComplete() {
 
 
 HttpConnectorCfg ApiHttpConnector::getFileHttpConnectorCfg() {
-	const HttpConnectorCfg cfg = { (uchar)7, (uchar)4, DELAY_LEVELS, true };
+	const HttpConnectorCfg cfg = { (uchar)7, (uchar)4, DELAY_LEVELS, true, SERVICE_MAX_FILE_SIZE };
 	return cfg;
 }
 
 HttpConnectorCfg ApiHttpConnector::getUrlHttpConnectorCfg() {
-	const HttpConnectorCfg cfg = { (uchar)7, (uchar)2, DELAY_LEVELS, true };
+	const HttpConnectorCfg cfg = { (uchar)7, (uchar)2, DELAY_LEVELS, true, SERVICE_MAX_FILE_SIZE };
 	return cfg;
 }
 
