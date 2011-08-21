@@ -45,7 +45,7 @@ TaskSchedulerJob::TaskSchedulerJob( const QString& resourceName, JobType::JobTyp
 	connect( connector, SIGNAL( serviceLimitReached() ), this, SLOT( onServiceLimitReached() ) );
 	connect( connector, SIGNAL( invalidServiceKeyError()), this, SLOT( onInvalidServiceKeyError() ) );
 	connect( connector, SIGNAL( aborted() ), this, SLOT( onAbort() ) );
-	connect( connector, SIGNAL( errorOccured( QString ) ), this, SLOT( onErrorOccured( QString ) ) );
+	connect( connector, SIGNAL( errorOccurred( QString ) ), this, SLOT( onErrorOccurred( QString ) ) );
 
 	// Set up all connections between this job and the listener
 	connect( this, SIGNAL( queued() ), listener, SLOT( onQueued() ) );
@@ -59,7 +59,7 @@ TaskSchedulerJob::TaskSchedulerJob( const QString& resourceName, JobType::JobTyp
 	connect( connector, SIGNAL( retrievingReport() ), listener, SLOT( onRetrievingReport() ) );
 	connect( connector, SIGNAL( reportReady( Report*const ) ), listener, SLOT( onReportReady( Report*const) ) );
 	connect( connector, SIGNAL( aborted() ), listener, SLOT( onAborted() ) );
-	connect( connector, SIGNAL( errorOccured( QString ) ), listener, SLOT( onErrorOccured( QString ) ) );
+	connect( connector, SIGNAL( errorOccurred( QString ) ), listener, SLOT( onErrorOccurred( QString ) ) );
 }
 
 TaskSchedulerJob::~TaskSchedulerJob() {
@@ -190,7 +190,7 @@ void TaskSchedulerJob::onAbort() {
 	emit( finished( this ) ); // Signal to the scheduler
 }
 
-void TaskSchedulerJob::onErrorOccured( const QString& message ) {
+void TaskSchedulerJob::onErrorOccurred( const QString& message ) {
 	Q_UNUSED( message );
 	this->submitting = false;
 	emit( finished( this ) ); // Signal to the scheduler

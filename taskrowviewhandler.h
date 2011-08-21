@@ -59,7 +59,7 @@ private:
 protected slots:
 	void onQueued();
 	void onScanningStarted();
-	void onErrorOccured( const QString& message );
+	void onErrorOccurred( const QString& message );
 	void onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal );
 	void onRetrievingReport();
 	void onWaitingForReport( int seconds );

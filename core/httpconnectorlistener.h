@@ -30,7 +30,7 @@ public:
 	virtual ~HttpConnectorListener(){ }
 	virtual void onQueued()=0;
 	virtual void onScanningStarted()=0;
-	virtual void onErrorOccured( const QString& message )=0;
+	virtual void onErrorOccurred( const QString& message )=0;
 	virtual void onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal )=0;
 	virtual void onRetrievingReport()=0;
 	virtual void onWaitingForReport( int seconds )=0;

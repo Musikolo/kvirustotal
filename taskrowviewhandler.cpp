@@ -87,7 +87,7 @@ void TaskRowViewHandler::submitRemoteFile( QNetworkAccessManager*const networkMa
 	connect( downloader, SIGNAL( downloadProgress( qint64, qint64 ) ), this, SLOT( onDownloadProgressRate( qint64, qint64 ) ) );
 	connect( downloader, SIGNAL( downloadReady( QFile* ) ), this, SLOT( onDownloadReady( QFile* ) ) );
 	connect( downloader, SIGNAL( maximunSizeExceeded( qint64, qint64 ) ), this, SLOT( onMaximunSizeExceeded( qint64, qint64 ) ) );
-	connect( downloader, SIGNAL( errorOccured( QString ) ), this, SLOT( onErrorOccured( QString ) ) );
+	connect( downloader, SIGNAL( errorOccurred( QString ) ), this, SLOT( onErrorOccurred( QString ) ) );
 	connect( downloader, SIGNAL( aborted() ), this, SLOT( onAborted() ) );
 	downloader->download( url, HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize );
 }
@@ -270,16 +270,16 @@ void TaskRowViewHandler::onScanningStarted() {
 	setStatus( i18n( "Submitting..." ) );
 }
 
-void TaskRowViewHandler::onErrorOccured( const QString& message ) {
+void TaskRowViewHandler::onErrorOccurred( const QString& message ) {
 	this->finished = true;
 	this->jobId = TaskScheduler::INVALID_JOB_ID;
 	setStatus( i18n( "Error" ), message );
-	MainWindow::showErrorNotificaton( i18n( "The next error occured while processing the task %1: %2 ", rowIndex, message ) );
+	MainWindow::showErrorNotificaton( i18n( "The next error occurred while processing the task %1: %2 ", rowIndex, message ) );
 	emit( unsubscribeNextSecond( this ) );
 }
 
 void TaskRowViewHandler::onDownloadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
-	// The task will be finished when an error has occured. In such a case, do nothing...
+	// The task will be finished when an error has occurred. In such a case, do nothing...
 	if( finished ) {
 		kWarning() << "The task is finished. Thus, the downloadProgressRate() event will be ignored!";
 		return;
@@ -293,7 +293,7 @@ void TaskRowViewHandler::onDownloadProgressRate( qint64 bytesSent, qint64 bytesT
 }
 
 void TaskRowViewHandler::onUploadProgressRate( qint64 bytesSent, qint64 bytesTotal ) {
-	// The task will be finished when an error has occured. In such a case, do nothing...
+	// The task will be finished when an error has occurred. In such a case, do nothing...
 	if( finished ) {
 		kWarning() << "The task is finished. Thus, the uploadProgressRate() event will be ignored!";
 		return;

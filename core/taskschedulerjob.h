@@ -53,7 +53,7 @@ private slots:
 	void onServiceLimitReached();
 	void onInvalidServiceKeyError();
 	void onAbort();
-	void onErrorOccured( const QString& message );
+	void onErrorOccurred( const QString& message );
 	void submitJob();
 	
 public:

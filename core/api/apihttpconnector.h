@@ -79,7 +79,7 @@ public:
 
 signals:
 	void uploadingProgressRate( qint64 bytesSent, qint64 bytesTotal );
-	void errorOccured( const QString& message );
+	void errorOccurred( const QString& message );
 	void scanIdReady( const QString& scanId );
 	void serviceWorkloadReady( ServiceWorkload workload );
 	void retrievingReport();

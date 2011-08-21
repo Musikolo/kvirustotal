@@ -40,7 +40,7 @@ void FileDownloader::download( const QUrl& url, qint64 maxSizeAllowed ) {
 	// Validate that only one file at the same time can be downloaded
 	if( running ) {
 		kError() << "A file is already being downloaded. Please, try later!";
-		emit( errorOccured( "Error" ) );
+		emit( errorOccurred( "Error" ) );
 		return;
 	}
 	
@@ -53,7 +53,7 @@ void FileDownloader::download( const QUrl& url, qint64 maxSizeAllowed ) {
 	// Set up all connections
 	connect( reply, SIGNAL( downloadProgress( qint64, qint64 ) ), this, SLOT( onDownloadProgress( qint64, qint64 ) ) );
 	connect( reply, SIGNAL( finished() ), this, SLOT( onDownloadReady()) );
-	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( onErrorOccured( QNetworkReply::NetworkError ) ) );
+	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( onErrorOccurred( QNetworkReply::NetworkError ) ) );
 }
 
 void FileDownloader::onDownloadProgress( qint64 bytesDownloaded, qint64 bytesTotal ) {
@@ -91,12 +91,12 @@ void FileDownloader::onDownloadReady() {
 	reply = NULL;
 }
 
-void FileDownloader::onErrorOccured( QNetworkReply::NetworkError error ) {
+void FileDownloader::onErrorOccurred( QNetworkReply::NetworkError error ) {
 	// Unless the download has been aborted, inform about the error
 	if( error != QNetworkReply::OperationCanceledError ){
 		QString errorMsg( reply->errorString().append( " - (Error code: %1) " ).arg( error ) );
 		kError() << "ERROR: " << errorMsg;
-		emit( errorOccured( errorMsg ) );
+		emit( errorOccurred( errorMsg ) );
 	}
 }
 

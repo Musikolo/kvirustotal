@@ -113,9 +113,9 @@ void ApiHttpConnector::uploadFile( const QString& fileName ) {
 	// Prepare the multipart form
 	QByteArray multipartform;
 	if( !setupMultipartRequest( request, multipartform, fileName ) ) {
-		QString msg( i18n( "An error has occured while submitting the file %1...", fileName ) );
+		QString msg( i18n( "An error has occurred while submitting the file %1...", fileName ) );
 		kDebug() << msg;
-		emit( errorOccured( msg ) );
+		emit( errorOccurred( msg ) );
 		return;
 	}
 
@@ -167,13 +167,13 @@ void ApiHttpConnector::onSubmissionReply() {
 				QString msg;
 				msg.append( i18n( "ERROR: Unexpected service result reply: %1", jsonReply.getStatus() ) );
 				kError() << msg;
-				emit( errorOccured( msg ) );
+				emit( errorOccurred( msg ) );
 			}
 		}
 		else {
 			QString msg( i18n( "ERROR: No valid response received!" ) );
 			kError() << msg;
-			emit( errorOccured( msg ) );
+			emit( errorOccurred( msg ) );
 		}
 	}
 	else {
@@ -210,7 +210,7 @@ void ApiHttpConnector::submitUrl( const QUrl& url2Scan ) {
 		QString msg;
 		msg.append( i18n( "Invalid URL: %1", url2Scan.toString() ) );
 		kDebug() << msg;
-		emit( errorOccured( msg ) );
+		emit( errorOccurred( msg ) );
 		return;
 	}
 

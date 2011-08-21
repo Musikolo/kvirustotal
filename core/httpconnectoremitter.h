@@ -36,7 +36,7 @@ public:
 	virtual ~HttpConnectorEmitter(){ }
 
 	virtual void uploadingProgressRate( qint64 bytesSent, qint64 bytesTotal )=0;
-	virtual void errorOccured( const QString& message )=0;
+	virtual void errorOccurred( const QString& message )=0;
 	virtual void scanIdReady( const QString& scanId )=0;
 	virtual void serviceWorkloadReady( ServiceWorkload workload )=0;
 	virtual void retrievingReport()=0;

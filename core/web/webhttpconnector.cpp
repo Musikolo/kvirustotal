@@ -126,7 +126,7 @@ bool reuseLastReport = false;
 		else {
 			QString msg( i18n( "ERROR: No valid response received!" ) );
 			kError() << msg;
-			emit( errorOccured( msg ) );
+			emit( errorOccurred( msg ) );
 			freeNetworkReply();
 		}
 	}
@@ -161,9 +161,9 @@ void WebHttpConnector::uploadFile( const QString& fileName ) {
 	// Prepare the multipart form
 	QByteArray multipartform;
 	if( !setupMultipartRequest( request, multipartform, fileName ) ) {
-		QString msg( i18n( "An error has occured while submitting the file %1...", fileName ) );
+		QString msg( i18n( "An error has occurred while submitting the file %1...", fileName ) );
 		kDebug() << msg;
-		emit( errorOccured( msg ) );
+		emit( errorOccurred( msg ) );
 		return;
 	}
 
@@ -208,7 +208,7 @@ void WebHttpConnector::onSubmissionReply() {
 			else {
 				QString msg( i18n( "ERROR: No valid response received!" ) );
 				kError() << msg;
-				emit( errorOccured( msg ) );
+				emit( errorOccurred( msg ) );
 			}
 		}
 		else if( reportMode == ReportMode::URL_MODE ) {
@@ -220,7 +220,7 @@ void WebHttpConnector::onSubmissionReply() {
 			else {
 				QString msg( i18n( "ERROR: No valid response received!" ) );
 				kError() << msg;
-				emit( errorOccured( msg ) );
+				emit( errorOccurred( msg ) );
 			}
 		}
 	}
@@ -302,7 +302,7 @@ void WebHttpConnector::submitUrl( const QUrl& url2Scan ) {
 		QString msg;
 		msg.append( i18n( "Invalid URL: %1", url2Scan.toString() ) );
 		kDebug() << msg;
-		emit( errorOccured( msg ) );
+		emit( errorOccurred( msg ) );
 		return;
 	}
 
@@ -395,7 +395,7 @@ void WebHttpConnector::onReportComplete() {
 					case WebServiceReplyResult::SCAN_ERROR: {
 						QString msg( i18n( "ERROR: No valid status response received!" ) );
 						kError() << msg;
-						emit( errorOccured( msg ) );
+						emit( errorOccurred( msg ) );
 						break;
 					}
 				}
@@ -403,7 +403,7 @@ void WebHttpConnector::onReportComplete() {
 			else {
 				QString msg( i18n( "ERROR: No valid response received!" ) );
 				kError() << msg;
-				emit( errorOccured( msg ) );
+				emit( errorOccurred( msg ) );
 			}
 		}
 		else {
@@ -431,7 +431,7 @@ void WebHttpConnector::onReportComplete() {
 						kError() << "Unexpected service reply. Please, check this situation!";
 						QString msg( i18n( "ERROR: No valid status response received!" ) );
 						kError() << msg;
-						emit( errorOccured( msg ) );
+						emit( errorOccurred( msg ) );
 						break;
 					}
 				}
@@ -439,7 +439,7 @@ void WebHttpConnector::onReportComplete() {
 			else {
 				QString msg( i18n( "ERROR: No valid response received!" ) );
 				kError() << msg;
-				emit( errorOccured( msg ) );
+				emit( errorOccurred( msg ) );
 			}
 		}
 	}

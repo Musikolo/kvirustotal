@@ -35,7 +35,7 @@ private:
 private slots:
 	void onDownloadProgress( qint64 bytesDownloaded, qint64 bytesTotal );
 	void onDownloadReady();
-	void onErrorOccured( QNetworkReply::NetworkError );
+	void onErrorOccurred( QNetworkReply::NetworkError );
 	
 public:
 	FileDownloader( QNetworkAccessManager*const networkManager );
@@ -48,7 +48,7 @@ signals:
 	void downloadProgress( qint64 bytesDownloaded, qint64 bytesTotal );
 	void downloadReady( QFile* file ); // The given file should be deleted by the receiver
 	void maximunSizeExceeded( qint64 sizeAllowed, qint64 sizeTotal );
-	void errorOccured( const QString& errorMsg );
+	void errorOccurred( const QString& errorMsg );
 	void aborted();
 };
 

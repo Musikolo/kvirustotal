@@ -311,7 +311,7 @@ void WelcomePage::startServiceKeyValidation() {
 		     this, SLOT( testReportReceived( Report*const ) ) );
 	connect( connector, SIGNAL( invalidServiceKeyError() ),
 			 this, SLOT( testReportInvalidKey() ) );
-	connect( connector, SIGNAL( errorOccured( QString ) ),
+	connect( connector, SIGNAL( errorOccurred( QString ) ),
 			 this, SLOT( testReportFailed( QString ) ) );
 	
 	// Try to connect the to API
