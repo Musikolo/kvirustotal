@@ -31,6 +31,8 @@ int main( int argc, char** argv ) {
 	const QString email( QString( General::APP_AUTHOR ).append( "<musikolo" ).append( "@" ).append( "hotmail" ).append( ".com>" ) );
 	about.addAuthor( ki18n( General::APP_AUTHOR ), ki18n( "Main developer" ), email.toLatin1(), General::APP_HOMEPAGE );
 	about.addCredit( ki18n( General::APP_AUTHOR ), ki18n( "Translator" ), email.toLatin1(), General::APP_HOMEPAGE );
+	const QString csEmail( QString( "Pavel Fric" ).append( "<pavelfric" ).append( "@" ).append( "seznam" ).append( ".cz>" ) );
+	about.addCredit( ki18n( "Pavel Fric" ), ki18n( "Translator" ), csEmail.toLatin1(), "fripohled.blogspot.com" );
 	const QString deEmail( QString( "Sascha Manns" ).append( "<saigkill" ).append( "@" ).append( "opensuse" ).append( ".org>" ) );
 	about.addCredit( ki18n( "Sascha Manns" ), ki18n( "Translator" ), deEmail.toLatin1(), "http://saigkill.homelinux.net" );
 	const QString itEmail( QString( "Gianluca Boiano" ).append( "<morf3089" ).append( "@" ).append( "gmail" ).append( ".com>" ) );

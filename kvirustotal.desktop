@@ -5,6 +5,7 @@ Type=Application
 Terminal=false
 Icon=kvirustotal
 GenericName=Online antivirus and anti-phishing tool
+GenericName[cs]=Internetový antivirový a anti-pishingový nástroj
 GenericName[de]=Online Antivirus und Anti-Pishing Werkzeug
 GenericName[es]=Herramienta online de antivirus y anti-phising
 GenericName[it]=Antivirus in linea e protezione anti-phishing
