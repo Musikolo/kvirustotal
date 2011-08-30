@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 02:20+0200\n"
-"PO-Revision-Date: 2011-08-20 02:21+0200\n"
+"POT-Creation-Date: 2011-08-22 20:28+0200\n"
+"PO-Revision-Date: 2011-08-21 21:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -17,13 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.2\n"
 
-#. i18n: file: mainwindow.ui:181
-#. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
-#: build/ui_mainwindow.h:283 mainwindow.cpp:130 translations/rc.cpp:39
-#: rc.cpp:39
-msgid "Scan analysis date:"
-msgstr "Fecha del análisis:"
-
 #. i18n: file: mainwindow.ui:200
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateValue)
 #. i18n: file: mainwindow.ui:290
@@ -40,66 +33,33 @@ msgstr "Fecha del análisis:"
 #. i18n: ectx: property (text), widget (QLabel, sha256Value)
 #. i18n: file: mainwindow.ui:377
 #. i18n: ectx: property (text), widget (KUrlLabel, permanentLinkValue)
-#: build/ui_mainwindow.h:284 build/ui_mainwindow.h:288
-#: build/ui_mainwindow.h:290 build/ui_mainwindow.h:292
 #: core/api/apifilereport.cpp:54 core/api/apiurlreport.cpp:56
 #: core/web/weburlreport.cpp:62 reportrowviewhandler.cpp:68
-#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:79 translations/rc.cpp:42
+#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:121 translations/rc.cpp:42
 #: translations/rc.cpp:54 translations/rc.cpp:60 translations/rc.cpp:66
 #: rc.cpp:42 rc.cpp:54 rc.cpp:60 rc.cpp:66
 msgid "N/A"
 msgstr "N/D"
 
-#. i18n: file: mainwindow.ui:229
-#. i18n: ectx: property (text), widget (QLabel, md5Label)
-#: build/ui_mainwindow.h:285 translations/rc.cpp:45 rc.cpp:45
-msgid "MD5:"
-msgstr "MD5:"
+#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:164
+msgid "An error has occurred while submitting the file %1..."
+msgstr "Ha ocurrido un error mientras se enviaba el fichero %1..."
 
-#. i18n: file: mainwindow.ui:242
-#. i18n: ectx: property (text), widget (QLabel, md5Value)
-#: build/ui_mainwindow.h:286 translations/rc.cpp:48 rc.cpp:48
-msgid " N/A"
-msgstr "N/D"
-
-#. i18n: file: mainwindow.ui:271
-#. i18n: ectx: property (text), widget (QLabel, sha1Label)
-#: build/ui_mainwindow.h:287 translations/rc.cpp:51 rc.cpp:51
-msgid "SHA1:"
-msgstr "SHA1:"
-
-#. i18n: file: mainwindow.ui:319
-#. i18n: ectx: property (text), widget (QLabel, sha256Label)
-#: build/ui_mainwindow.h:289 translations/rc.cpp:57 rc.cpp:57
-msgid "SHA256:"
-msgstr "SHA256:"
-
-#. i18n: file: mainwindow.ui:361
-#. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
-#: build/ui_mainwindow.h:291 mainwindow.cpp:131 translations/rc.cpp:63
-#: rc.cpp:63
-msgid "Permanent link:"
-msgstr "Enlace permanente:"
-
-#: core/api/apihttpconnector.cpp:115 core/web/webhttpconnector.cpp:160
-msgid "An error has ocurred while submitting the file %1..."
-msgstr "Ha ocurrido un error mientras se envíaba el fichero %1..."
-
-#: core/api/apihttpconnector.cpp:167
+#: core/api/apihttpconnector.cpp:168
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr "ERROR: Respuesta inesperada del servicio: %1"
 
-#: core/api/apihttpconnector.cpp:173 core/web/webhttpconnector.cpp:123
-#: core/web/webhttpconnector.cpp:205 core/web/webhttpconnector.cpp:217
-#: core/web/webhttpconnector.cpp:392 core/web/webhttpconnector.cpp:428
+#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:127
+#: core/web/webhttpconnector.cpp:209 core/web/webhttpconnector.cpp:221
+#: core/web/webhttpconnector.cpp:404 core/web/webhttpconnector.cpp:440
 msgid "ERROR: No valid response received!"
 msgstr "ERROR: ¡Se ha recibido una respuesta inválida!"
 
-#: core/api/apihttpconnector.cpp:210 core/web/webhttpconnector.cpp:295
+#: core/api/apihttpconnector.cpp:211 core/web/webhttpconnector.cpp:303
 msgid "Invalid URL: %1"
 msgstr "URL inválida: %1"
 
-#: core/web/webhttpconnector.cpp:384 core/web/webhttpconnector.cpp:420
+#: core/web/webhttpconnector.cpp:396 core/web/webhttpconnector.cpp:432
 msgid "ERROR: No valid status response received!"
 msgstr "ERROR: ¡Se ha recibido un estado de respuesta invalido!"
 
@@ -152,95 +112,115 @@ msgid "Add a file"
 msgstr "Añade un fichero"
 
 #: mainwindow.cpp:66
+msgid "Remote file..."
+msgstr "Archivo remoto..."
+
+#: mainwindow.cpp:67
+msgid "Add a remote file"
+msgstr "Añade un fichero remoto"
+
+#: mainwindow.cpp:71
 msgid "URL..."
 msgstr "URL..."
 
-#: mainwindow.cpp:67
+#: mainwindow.cpp:72
 msgid "Add a URL"
 msgstr "Añade una URL"
 
-#: mainwindow.cpp:71 taskviewhandler.cpp:373
+#: mainwindow.cpp:76 taskviewhandler.cpp:395
 msgid "Re-scan"
-msgstr "Rescanear"
+msgstr "Reescanear"
 
-#: mainwindow.cpp:72
+#: mainwindow.cpp:77
 msgid "Re-scan the selected finished task(s)"
 msgstr "Reescanear las tareas seleccionadas finalizadas"
 
-#: mainwindow.cpp:78
+#: mainwindow.cpp:83
 msgid "Clean"
 msgstr "Limpiar"
 
-#: mainwindow.cpp:79
+#: mainwindow.cpp:84
 msgid "Clean all finished tasks"
 msgstr "Limpiar todas las tareas finalizadas"
 
-#: mainwindow.cpp:83
+#: mainwindow.cpp:88
 msgid "Abort..."
 msgstr "Abortar..."
 
-#: mainwindow.cpp:84
-msgid "Abort the selected tasks"
-msgstr "Abortar las tareas selecionadas"
-
 #: mainwindow.cpp:89
+msgid "Abort the selected tasks"
+msgstr "Abortar las tareas seleccionadas"
+
+#: mainwindow.cpp:94
 msgid "Quit %1"
 msgstr "Salir %1"
 
-#: mainwindow.cpp:94
+#: mainwindow.cpp:99
 msgctxt "Menu name"
 msgid "File"
 msgstr "Archivo"
 
-#: mainwindow.cpp:100
+#: mainwindow.cpp:106
 msgid "Edit"
 msgstr "Editar"
 
-#: mainwindow.cpp:101
+#: mainwindow.cpp:107
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: mainwindow.cpp:102
+#: mainwindow.cpp:108
 msgid "Select all tasks"
 msgstr "Seleccionar todas las tareas"
 
-#: mainwindow.cpp:106
+#: mainwindow.cpp:112
 msgid "Invert Selection"
 msgstr "Invertir Selección"
 
-#: mainwindow.cpp:107
+#: mainwindow.cpp:113
 msgid "Inverts the selection of tasks"
 msgstr "Invierte la selección de tareas"
 
-#: mainwindow.cpp:111
+#: mainwindow.cpp:117
 msgid "Settings..."
 msgstr "Configuración..."
 
-#: mainwindow.cpp:112
+#: mainwindow.cpp:118
 msgid "Show the settings dialog"
 msgstr "Mostrar la ventana de configuración"
 
-#: mainwindow.cpp:118
+#: mainwindow.cpp:124
 msgid "Action"
 msgstr "Acción"
 
-#: mainwindow.cpp:126
+#: mainwindow.cpp:132
 msgid "Welcome wizard..."
 msgstr "Asistente de bienvenida..."
 
-#: mainwindow.cpp:143
+#. i18n: file: mainwindow.ui:181
+#. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
+#: mainwindow.cpp:136 translations/rc.cpp:39 rc.cpp:39
+msgid "Scan analysis date:"
+msgstr "Fecha del análisis:"
+
+#. i18n: file: mainwindow.ui:361
+#. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
+#: mainwindow.cpp:137 translations/rc.cpp:63 rc.cpp:63
+msgid "Permanent link:"
+msgstr "Enlace permanente:"
+
+#: mainwindow.cpp:149
 msgid "Click to view detailed report"
 msgstr "Haga clic para ver un informe detallado"
 
-#: mainwindow.cpp:149
+#: mainwindow.cpp:155
 msgid "Ready..."
 msgstr "Preparado..."
 
-#: mainwindow.cpp:150
+#: mainwindow.cpp:156
 msgid "Online antivirus and anti-phishing tool - %1"
 msgstr "Herramienta online de antivirus y anti-phising - %1"
 
-#: mainwindow.cpp:230
+#: mainwindow.cpp:237
 msgid ""
 "There is one or more tasks in course and will be aborted. Do you really want "
 "to quit?"
@@ -248,50 +228,58 @@ msgstr ""
 "Hay una o más tareas en curso y serán abortadas. ¿Está seguro que desea "
 "continuar?"
 
-#: mainwindow.cpp:231
+#: mainwindow.cpp:238
 msgid "Tasks in course"
 msgstr "Tareas en curso"
 
-#: mainwindow.cpp:284
+#: mainwindow.cpp:288
+msgid "Remote file inputbox"
+msgstr "Entrada de fichero remoto"
+
+#: mainwindow.cpp:288
+msgid "Please, enter a remote file's URL:"
+msgstr "Por favor, introduzca la URL de un fichero remoto:"
+
+#: mainwindow.cpp:296
 msgid "URL inputbox"
 msgstr "Entrada de URLs"
 
-#: mainwindow.cpp:284
+#: mainwindow.cpp:296
 msgid "Please, enter a URL:"
 msgstr "Por favor, introduzca una URL:"
 
-#: mainwindow.cpp:327
+#: mainwindow.cpp:350
 msgid "No service key found! Thus, the application must be closed."
 msgstr ""
 "¡No se ha encontrado la clave de servicio! Por lo tanto, la aplicación "
-"cerrrará."
+"cerrará."
 
-#: mainwindow.cpp:342
+#: mainwindow.cpp:365
 msgid "General"
 msgstr "General"
 
-#: mainwindow.cpp:388
+#: mainwindow.cpp:417
 msgid "Antivirus service workload"
 msgstr "Carga del servicio de antivirus"
 
-#: mainwindow.cpp:389
+#: mainwindow.cpp:418
 msgid "Antivirus %1"
 msgstr "Antivirus %1"
 
-#: mainwindow.cpp:399
+#: mainwindow.cpp:428
 msgid "Anti-phising service workload"
 msgstr "Carga del servicio anti-phising"
 
-#: mainwindow.cpp:400
+#: mainwindow.cpp:429
 msgid "Anti-phising %1"
 msgstr "Anti-phising %1"
 
-#: mainwindow.cpp:422
+#: mainwindow.cpp:451
 msgid "HTTPs is enabled, so data is being transmitted securely!"
 msgstr ""
 "¡HTTPs está activado, por lo que la información se transmite de forma segura!"
 
-#: mainwindow.cpp:426
+#: mainwindow.cpp:455
 msgid ""
 "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
 "highly recommended to enable it!"
@@ -299,27 +287,27 @@ msgstr ""
 "HTTPs está desactivado, por lo que la información se transmite de forma "
 "insegura. ¡Se recomienda encarecidamente activarlo!"
 
-#: mainwindow.cpp:465
+#: mainwindow.cpp:494
 msgctxt "Application name"
 msgid "%1 information"
 msgstr "Información de %1"
 
-#: mainwindow.cpp:471
+#: mainwindow.cpp:500
 msgctxt "Application name"
 msgid "%1 - Task completed"
 msgstr "%1 - Tarea completada"
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:506
 msgctxt "Application name"
 msgid "%1 warning"
 msgstr "Aviso de %1"
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:512
 msgctxt "Application name"
 msgid "%1 error"
 msgstr "Error de %1"
 
-#: mainwindow.cpp:499
+#: mainwindow.cpp:528
 msgid ""
 "The current connector requires a service key, but none has been found. Thus, "
 "the welcome wizard will be shown so you can now either set it up or change "
@@ -329,11 +317,11 @@ msgstr ""
 "ninguna. Así pues, se va a mostrar el asistente de bienvenida de forma que "
 "pueda configurarlo o seleccionar otro conector."
 
-#: mainwindow.cpp:500
+#: mainwindow.cpp:529
 msgid "Service key required"
 msgstr "Se necesita una clave de servicio"
 
-#: mainwindow.cpp:509
+#: mainwindow.cpp:538
 msgctxt "Application name"
 msgid ""
 "The new version of %1 has a new connector. Do you want the welcome wizard to "
@@ -342,7 +330,7 @@ msgstr ""
 "La nueva versión de %1 incorpora un nuevo conector. ¿Quiere que se muestre "
 "el asistente de bienvenida para que pueda cambiarlo?"
 
-#: mainwindow.cpp:511
+#: mainwindow.cpp:540
 msgid "Show welcome wizard"
 msgstr "Mostrar el asistente de bienvenida"
 
@@ -379,7 +367,7 @@ msgstr "Mostrar primero los informes existentes, si es posible"
 #: settingsdialog.cpp:38 translations/rc.cpp:6 rc.cpp:6
 msgid "Time tasks must take to show a notification (0=disabled)"
 msgstr ""
-"Tiempo transcurido de las tareas para mostrar notificaciones (0=desactivado)"
+"Tiempo transcurrido de las tareas para mostrar notificaciones (0=desactivado)"
 
 #. i18n: file: kvirustotal.kcfg:23
 #. i18n: ectx: label, entry (InfectedTaskNotification), group (general)
@@ -387,88 +375,109 @@ msgstr ""
 msgid "Show always notifications for infected tasks"
 msgstr "Mostrar siempre notificaciones para tareas infectadas"
 
-#: taskrowviewhandler.cpp:32
+#: taskrowviewhandler.cpp:67
 msgctxt "Type of task"
 msgid "File"
 msgstr "Fichero"
 
-#: taskrowviewhandler.cpp:36
+#: taskrowviewhandler.cpp:82
+msgctxt "Type of task"
+msgid "Remote file"
+msgstr "Fichero remoto"
+
+#: taskrowviewhandler.cpp:83
+msgid "Dowloading..."
+msgstr "Descargando..."
+
+#: taskrowviewhandler.cpp:99
 msgid "URL"
 msgstr "URL"
 
-#: taskrowviewhandler.cpp:177
+#: taskrowviewhandler.cpp:219
 msgid "Aborting..."
 msgstr "Abortando..."
 
-#: taskrowviewhandler.cpp:215
+#: taskrowviewhandler.cpp:266
 msgid "Queued"
 msgstr "Encolado"
 
-#: taskrowviewhandler.cpp:220
+#: taskrowviewhandler.cpp:270
 msgid "Submitting..."
 msgstr "Enviando..."
 
-#: taskrowviewhandler.cpp:226
+#: taskrowviewhandler.cpp:276
 msgid "Error"
 msgstr "Error"
 
-#: taskrowviewhandler.cpp:227
-msgid "The next error ocurred while processing the task %1: %2 "
+#: taskrowviewhandler.cpp:277
+msgid "The next error occurred while processing the task %1: %2 "
 msgstr "Se ha producido el siguiente error al procesar la tarea %1: %2"
 
-#: taskrowviewhandler.cpp:240
+#: taskrowviewhandler.cpp:290
+msgid "Downloading (%L1%/%2 KiB/s)..."
+msgstr "Descargando (%L1%/%2 KiB/s)..."
+
+#: taskrowviewhandler.cpp:304
 msgid "Uploading (%L1%/%2 KiB/s)..."
 msgstr "Subiendo (%L1%/%2 KiB/s)..."
 
-#: taskrowviewhandler.cpp:245
+#: taskrowviewhandler.cpp:309
 msgid "Retrieving report..."
 msgstr "Recuperando informe..."
 
-#: taskrowviewhandler.cpp:249
+#: taskrowviewhandler.cpp:313
 msgid "Waiting for %1 seconds..."
 msgstr "Esperando %1 segundos..."
 
-#: taskrowviewhandler.cpp:249
+#: taskrowviewhandler.cpp:313
 msgid "Waiting..."
 msgstr "En espera..."
 
-#: taskrowviewhandler.cpp:253
+#: taskrowviewhandler.cpp:317
 msgid "Service limit reached! (wait %1)"
 msgstr "¡Límite de servicio! (esperar %1)"
 
-#: taskrowviewhandler.cpp:260
+#: taskrowviewhandler.cpp:324
 msgid "Aborted"
 msgstr "Abortado"
 
-#: taskrowviewhandler.cpp:268
+#: taskrowviewhandler.cpp:332
 msgid "Finished (%1/%2)"
 msgstr "Finalizado (%1/%2)"
 
-#: taskrowviewhandler.cpp:275
+#: taskrowviewhandler.cpp:339
 msgid "Task %1 finished"
 msgstr "Tarea %1 finalizada"
 
-#: taskviewhandler.cpp:55
+#: taskrowviewhandler.cpp:356
+msgid ""
+"The remote file is too big. The service does not accept files greater than "
+"%1 MiB (%2 MB)."
+msgstr ""
+"El fichero remoto dado es demasiado grande. El servicio no acepta ficheros "
+"cuyo tamaño supere %1 MiB (%2 MB)."
+
+#: taskviewhandler.cpp:54
 msgid "Type"
 msgstr "Tipo"
 
-#: taskviewhandler.cpp:55
+#: taskviewhandler.cpp:54
 msgid "Name"
 msgstr "Nombre"
 
-#: taskviewhandler.cpp:55
+#: taskviewhandler.cpp:54
 msgid "Size"
 msgstr "Tamaño"
 
-#: taskviewhandler.cpp:55
+#: taskviewhandler.cpp:54
 msgid "Status"
 msgstr "Estado"
 
-#: taskviewhandler.cpp:55
+#: taskviewhandler.cpp:54
 msgid "Elapsed Time"
 msgstr "Tiempo transcurrido"
 
-#: taskviewhandler.cpp:111
+#: taskviewhandler.cpp:109
 msgid ""
 "The given file is too big. The service does not accept files greater than %1 "
 "MiB (%2 MB)."
@@ -476,11 +485,7 @@ msgstr ""
 "El fichero dado es demasiado grande. El servicio no acepta ficheros cuyo "
 "tamaño supere %1 MiB (%2 MB)."
 
-#: taskviewhandler.cpp:113
-msgid "File size exceeded!"
-msgstr "¡Tamaño de fichero excedido!"
-
-#: taskviewhandler.cpp:119
+#: taskviewhandler.cpp:116
 msgid ""
 "The selected file is already being scanned. Do you really want to add "
 "another task to scan it again?"
@@ -488,62 +493,74 @@ msgstr ""
 "El fichero seleccionado ya está siendo escaneado. ¿Desea realmente añadir "
 "otra tarea para escanearlo de nuevo?"
 
-#: taskviewhandler.cpp:120 taskviewhandler.cpp:145
+#: taskviewhandler.cpp:117 taskviewhandler.cpp:142 taskviewhandler.cpp:167
 msgid "Duplicated scan detected"
 msgstr "Escaneo duplicado detectado"
 
-#: taskviewhandler.cpp:144
+#: taskviewhandler.cpp:141
 msgid ""
-"The given URL is already being scanned. Do you really want to add another "
+"The selected remote file is already being scanned. Do you really want to add "
+"another task to scan it again?"
+msgstr ""
+"El remoto fichero seleccionado ya está siendo escaneado. ¿Desea realmente "
+"añadir otra tarea para escanearlo de nuevo?"
+
+#: taskviewhandler.cpp:166
+msgid ""
+"The selected URL is already being scanned. Do you really want to add another "
 "task to scan it again?"
 msgstr ""
-"La URL dada ya está siendo escaneada. ¿Desea realmente añadir otra tarea "
-"para escanearla de nuevo?"
+"La URL seleccionada ya está siendo escaneada. ¿Desea realmente añadir otra "
+"tarea para escanearla de nuevo?"
 
-#: taskviewhandler.cpp:247
+#: taskviewhandler.cpp:269
 msgid ""
 "The task number %1 is still in course. Please, either wait for it to "
 "finished or abort it."
 msgstr ""
 "La tarea %1 ya está en curso. Por favor, espere a que finalice o abórtela."
 
-#: taskviewhandler.cpp:249
+#: taskviewhandler.cpp:271
 msgid "Remove selected row"
 msgstr "Borrar la fila seleccionada"
 
-#: taskviewhandler.cpp:290 taskviewhandler.cpp:309
+#: taskviewhandler.cpp:312 taskviewhandler.cpp:331
 msgid "There are no task that can be selected!"
 msgstr "¡No hay tareas a seleccionar!"
 
-#: taskviewhandler.cpp:291 taskviewhandler.cpp:310
+#: taskviewhandler.cpp:313 taskviewhandler.cpp:332
 msgid "Action aborted"
 msgstr "Acción abortada"
 
-#: taskviewhandler.cpp:338
+#: taskviewhandler.cpp:360
 msgid "Do you really want to abort the selected task?"
 msgid_plural "Do you really want to abort the %1 selected tasks?"
 msgstr[0] "¿Desea realmente abortar la tarea seleccionada?"
 msgstr[1] "¿Desea realmente abortar las tareas seleccionadas?"
 
-#: taskviewhandler.cpp:340 taskviewhandler.cpp:355
+#: taskviewhandler.cpp:362 taskviewhandler.cpp:377
 msgid "Abort selected tasks"
 msgstr "Abortar las tareas seleccionadas"
 
-#: taskviewhandler.cpp:355
+#: taskviewhandler.cpp:377
 msgid "There is no selected task in course that can be aborted!"
 msgstr "¡No hay ninguna tarea seleccionada que pueda ser abortada!"
 
-#: taskviewhandler.cpp:377
+#: taskviewhandler.cpp:399
 msgid "Clean finished tasks"
 msgstr "Limpiar las tareas finalizadas"
 
-#: taskviewhandler.cpp:412
+#: taskviewhandler.cpp:434
 msgid "There are no selected tasks that can be re-scanned."
 msgstr "¡No hay ninguna tarea seleccionada que pueda ser reescaneada"
 
-#: taskviewhandler.cpp:412
+#: taskviewhandler.cpp:434
 msgid "Re-scan operation error"
 msgstr "Operación de reescaneo errónea"
+
+#: taskviewhandler.cpp:467
+msgid "File size exceeded!"
+msgstr "¡Tamaño de fichero excedido!"
 
 #. i18n: file: kvirustotal.kcfg:9
 #. i18n: ectx: label, entry (CurrentVersion), group (general)
@@ -606,6 +623,30 @@ msgstr "Si usar el protocolo HTTPS en lugar del inseguro HTTP"
 msgid "Whether to use existant reports first, if available"
 msgstr "Si usar primero los informes existentes, si los hay"
 
+#. i18n: file: mainwindow.ui:229
+#. i18n: ectx: property (text), widget (QLabel, md5Label)
+#: translations/rc.cpp:45 rc.cpp:45
+msgid "MD5:"
+msgstr "MD5:"
+
+#. i18n: file: mainwindow.ui:242
+#. i18n: ectx: property (text), widget (QLabel, md5Value)
+#: translations/rc.cpp:48 rc.cpp:48
+msgid " N/A"
+msgstr "N/D"
+
+#. i18n: file: mainwindow.ui:271
+#. i18n: ectx: property (text), widget (QLabel, sha1Label)
+#: translations/rc.cpp:51 rc.cpp:51
+msgid "SHA1:"
+msgstr "SHA1:"
+
+#. i18n: file: mainwindow.ui:319
+#. i18n: ectx: property (text), widget (QLabel, sha256Label)
+#: translations/rc.cpp:57 rc.cpp:57
+msgid "SHA256:"
+msgstr "SHA256:"
+
 #: translations/rc.cpp:67 rc.cpp:67
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -644,8 +685,8 @@ msgstr ""
 "%1 es una herramienta online de antivirus y anti-phising.  Permite enviar "
 "ficheros que serán analizados por más de 40 antivirus actualizados. Además, "
 "también acepta URLs que serán analizadas con los principales sistemas anti-"
-"phising.<br><br>Aunque %1 es una potentente herramienta, recuerde que <b>no "
-"ha sido concebida con la intención de reemplazar a ningún programa antivirus "
+"phising.<br><br>Aunque %1 es una potente herramienta, recuerde que <b>no ha "
+"sido concebida con la intención de reemplazar a ningún programa antivirus "
 "propiamente dicho.</b><br><br>Por favor, haga clic en el botón «Siguiente» "
 "para configurar la aplicación."
 
@@ -809,6 +850,13 @@ msgstr "ERROR: \"%1\". Por favor, retroceda y vuelva a intentarlo."
 #: welcomewizard.cpp:50
 msgid "Welcome wizard - %1"
 msgstr "Asistente de bienvenida - %1"
+
+#~ msgid ""
+#~ "The given URL is already being scanned. Do you really want to add another "
+#~ "task to scan it again?"
+#~ msgstr ""
+#~ "La URL dada ya está siendo escaneada. ¿Desea realmente añadir otra tarea "
+#~ "para escanearla de nuevo?"
 
 #~ msgid "ERROR: %1"
 #~ msgstr "ERROR: %1"
