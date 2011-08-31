@@ -1,9 +1,10 @@
 ---------------------
-2011-08-XX - v.0.21.0
+2011-09-01 - v.0.21.0
 ---------------------
-- [NEW] - Implemented the ability to download and submit a file for scanning
+- Implemented the ability to download and submit files for scanning
+- Added Czech translation (thanks to Pavel Fric)
 - Fixed compilation error for Qt versions previous to 4.7 (WebHttpConnector)
-- Fixed typo in the Welcome Wizard
+- Fixed some translation typos
 
 ---------------------
 2011-08-20 - v.0.20.0
