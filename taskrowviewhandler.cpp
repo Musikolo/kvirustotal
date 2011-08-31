@@ -230,6 +230,7 @@ bool TaskRowViewHandler::rescan() {
 	if( isFinished() ) {
 		if( downloader != NULL && remoteTmpFile == NULL ) {
 			this->finished = false;
+			setStatus( i18n( "Dowloading..." ) );
 			downloader->download( QUrl( getName() ), HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize );
 		}
 		else {
