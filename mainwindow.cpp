@@ -54,8 +54,11 @@ MainWindow::MainWindow() {
 	kDebug() << QString( "Starting up %1..." ).arg( General::APP_UI_NAME );
 	networkManager = NULL;
 	workloadConnector = NULL;
+	downloader = NULL;
 	wizard = NULL;
+	manualVersionCheckRequested = false;
 	setupUi( this );
+
 	// Setup the toolbar
 	KToolBar* toolbar = this->toolBar();
 	KAction* fileAction = new KAction( KIcon( "document-open" ), i18n( "File..." ), this );
@@ -129,7 +132,8 @@ MainWindow::MainWindow() {
 	// Help menu
 	QMenu* helpMenu = ( new KHelpMenu( this, KCmdLineArgs::aboutData(), false ) )->menu();
 	helpMenu->addSeparator();
- 	helpMenu->addAction( i18n( "Welcome wizard..." ), this, SLOT( showWelcomeWizard() ) );
+	helpMenu->addAction( KIcon( "rating" ), i18n( "Check for updates..." ), this, SLOT( checkForUpdates() ) );
+ 	helpMenu->addAction( KIcon( "tools-wizard" ), i18n( "Show welcome wizard..." ), this, SLOT( showWelcomeWizard() ) );
 	menubar->addMenu( helpMenu );
 	
 	// Set the frame literals
@@ -211,6 +215,11 @@ MainWindow::MainWindow() {
 	// Call the delayed connections and accept drops
 	QTimer::singleShot( 1000, this, SLOT( delayedConnections() ) );
 	setAcceptDrops( true );
+	
+	// Check for new versions
+	if( Settings::self()->checkVersionAtStartup() ) {
+		downloadVersionFile();
+	}
 }
 
 MainWindow::~MainWindow() {
@@ -580,6 +589,53 @@ bool MainWindow::isPreviousVersionTo( uchar major, uchar minor, uchar bugfix ) {
 	}
 	kDebug() << "Previous version detected!";
 	return true;
+}
+
+void MainWindow::checkForUpdates() {
+	manualVersionCheckRequested = true;
+	downloadVersionFile();
+}
+
+void MainWindow::downloadVersionFile() {
+	// Create a new dowloander and connect it, if not already done
+	if( downloader == NULL ) {
+		downloader = new FileDownloader( networkManager );
+		connect( downloader, SIGNAL( downloadReady( QFile* ) ), this, SLOT( onVersionFileReady(QFile*) ) );
+	}
+
+	// Download the latest VERSION file
+//FIXME: Set the right URL
+	const QUrl url( "http://gitorious.org/kvirustotal/kvirustotal/blobs/raw/master/VERSION" );
+	kDebug() << QString( "Checking for new version at %1..." ).arg( url.toString() );
+	downloader->download( url );
+}
+
+void MainWindow::onVersionFileReady( QFile* file ) {
+	// Open the file having the latest version in read-only mode
+	if( !file->open( QIODevice::ReadOnly ) ) {
+		kError() << "ERROR: Could not open the file" << file->fileName() << "in read-only mode!. Thus, new versions cannot be checked out!";
+	}
+
+	// Read all data and compare with the current version
+	const QString version( file->readAll() );
+	kDebug() << "Latest version is" << version;
+	if( !version.isEmpty() && version != General::APP_VERSION ) {
+		if( KMessageBox::questionYesNo( centralwidget, 
+									i18nc( "Application name", "New version %1 has been released. Do you want to open %2 homepage to find out what's new?", 
+											version, General::APP_UI_NAME ),
+									i18n( "Vesion check" ) ) == KMessageBox::Yes ) {
+			QDesktopServices::openUrl( QUrl( General::APP_HOMEPAGE ) );
+		}
+	}
+	else if( manualVersionCheckRequested ) {
+		KMessageBox::information( centralwidget, i18nc( "Application name", "You are currently using the latest version of %1", General::APP_UI_NAME ),
+								  i18n( "Vesion check" ) );
+		manualVersionCheckRequested = false; // Reset the flag
+	}
+	
+	// Close and free the file
+	file->close();
+	file->deleteLater();
 }
 
 #include "mainwindow.moc"

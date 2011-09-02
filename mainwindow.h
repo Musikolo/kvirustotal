@@ -36,6 +36,8 @@ private:
     TaskViewHandler* taskViewHandler;
 	QLabel* resultIconLabel;
 	WelcomeWizard* wizard;
+	FileDownloader* downloader;
+	bool manualVersionCheckRequested;
 
 	void dragEnterEvent( QDragEnterEvent* event );
 	void dropEvent( QDropEvent* event );
@@ -46,6 +48,7 @@ private:
 	bool isPreviousVersion();
 	bool isPreviousVersionTo( uchar major, uchar minor, uchar bugfix );
 	QUrl promptUrl(  const QString& title, const QString& message  );
+	void downloadVersionFile();
 	
 private slots:
 	bool closeRequested();
@@ -60,6 +63,8 @@ private slots:
 	void settingsChanged();
 	void delayedConnections();
 	void onWorkloadReady( ServiceWorkload workload );
+	void checkForUpdates();
+	void onVersionFileReady( QFile* file );
 	
 public:
     MainWindow( );

@@ -43,12 +43,16 @@ SettingsDialog::SettingsDialog( QWidget * parent, Qt::WindowFlags flags ) : QWid
 	
 	QCheckBox*const infectedTaskNotification = new QCheckBox( i18n( "Show always notifications for infected tasks" ) );
 	infectedTaskNotification->setObjectName( "kcfg_InfectedTaskNotification" );
+
+	QCheckBox*const checkNewVersion = new QCheckBox( i18n( "Check for new versions at startup" ) );
+	checkNewVersion->setObjectName( "kcfg_CheckVersionAtStartup" );
 	
 	QVBoxLayout*const layout = new QVBoxLayout( this );
 	layout->addWidget( secureProtocol );
 	layout->addWidget( reuseLastReport );
 	layout->addLayout( notificationLayout );
 	layout->addWidget( infectedTaskNotification );
+	layout->addWidget( checkNewVersion );
 	this->setLayout( layout );
 }
 

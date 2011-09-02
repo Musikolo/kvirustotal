@@ -23,6 +23,10 @@
       <label>Show always notifications for infected tasks</label>
       <default>true</default>
     </entry>
+    <entry name="CheckVersionAtStartup" type="Bool">
+      <label>Check for new versions at startup</label>
+      <default>true</default>
+    </entry>
   </group>
   <group name="mainwindow">
     <entry name="MainWindowPos" type="Point">
