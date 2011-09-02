@@ -78,6 +78,10 @@ void FileDownloader::onDownloadReady() {
 		QTemporaryFile*const  file = new QTemporaryFile( info.fileName() );
 		if( file->open() ) {
 			file->write( reply->readAll() );
+			if( !file->flush() ) {
+				kWarning() << "WARNING! - The flush operation failed. Some data might have not been written into the file!!";
+			}
+			file->close();
 			emit( downloadReady( file ) );
 		}
 	}
