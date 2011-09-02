@@ -288,7 +288,7 @@ void TaskRowViewHandler::onDownloadProgressRate( qint64 bytesSent, qint64 bytesT
 	int seconds = this->seconds - this->transmissionSeconds; // Current time - start time
 	double rate = 100.0 * bytesSent / bytesTotal;
 	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
-	QString text( i18n( "Downloading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'g', 3 ).arg( speed ) );
+	QString text( i18n( "Downloading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'f', 1 ).arg( speed ) );
 	setSize( bytesTotal );
 	setStatus( text );
 }
@@ -302,7 +302,7 @@ void TaskRowViewHandler::onUploadProgressRate( qint64 bytesSent, qint64 bytesTot
 	int seconds = this->seconds - this->transmissionSeconds; // Current time - start time
 	double rate = 100.0 * bytesSent / bytesTotal;
 	int speed = ( int )( 0.5 + bytesSent / ( ( seconds ? seconds : 1 ) << 10 ) ); // seconds << 10 <==> seconds * 2^10 <==> seconds * 1024
-	QString text( i18n( "Uploading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'g', 3 ).arg( speed ) );
+	QString text( i18n( "Uploading (%L1%/%2 KiB/s)..." ).arg( rate, 3, 'f', 1 ).arg( speed ) );
 	setStatus( text );
 }
 
