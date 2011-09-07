@@ -151,7 +151,7 @@ void BaseHttpConnector::onRetrieveServiceWorkload() {
 	createNetworkReply( request, QByteArray(), false );
 	connect( reply, SIGNAL( finished() ), this, SLOT( onServiceWorkloadComplete() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
-			 this, SLOT( submissionReplyError( QNetworkReply::NetworkError ) ) );
+			 this, SLOT( onSubmissionReplyError( QNetworkReply::NetworkError ) ) );
 	kDebug() << "Retrieving URL report, waiting for reply...";
 }
 
