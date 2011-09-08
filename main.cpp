@@ -18,8 +18,67 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KApplication>
+#include <KUniqueApplication>
+#include <KDebug>
+
 #include "constants.h"
+#include <settings.h>
 #include "mainwindow.h"
+
+
+class ArgumentParser {
+public:
+	static void parsedArgs( MainWindow*const mainWindow ) {
+		// Process all given arguments
+		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+		if( args->isSet( "f" ) ){
+			const QString filename( args->getOption( "f" ) );
+			mainWindow->submitFile( filename );
+		}
+		else if( args->isSet( "r" ) ){
+			const QUrl url( args->getOption( "r" ) );
+			mainWindow->submitRemoteFile( url );
+		}
+		else if( args->isSet( "u" ) ){
+			const QUrl url( args->getOption( "u" ) );
+			mainWindow->submitUrl( url );
+		}
+
+		// Free some memory
+		args->clear();
+	}
+};
+
+
+/** KVirusTotal unique application.
+    Code inspired in KTorrent implementation. Thanks guys! */
+class KVirusTotalApp : public KUniqueApplication {
+private:
+	static MainWindow* mainWindow;
+	
+public:
+	KVirusTotalApp() { mainWindow = NULL; }
+    virtual ~KVirusTotalApp(){ }
+	virtual int newInstance();	
+};
+
+MainWindow* KVirusTotalApp::mainWindow = NULL;
+
+int KVirusTotalApp::newInstance() {
+
+	// Create a new main window, if none exists
+	if( mainWindow == NULL ) {
+		mainWindow = new MainWindow();
+		setTopWidget( mainWindow );
+	}
+	
+	// Show the current window
+	mainWindow->show();
+	
+	// Process all given arguments and return
+	ArgumentParser::parsedArgs( mainWindow );
+	return 0;
+}
 
 int main( int argc, char** argv ) {
 
@@ -44,14 +103,31 @@ VirusTotal and the logo are trademarks of Hispasec Sistemas S.L. Please, \
 visit <a href='http://www.virustotal.com/terms.html'>\
 http://www.virustotal.com/terms.html</a> for more details." ) );
 
+	// Set up all supported arguments
+	KCmdLineOptions options;
+	options.add( "f <file>", ki18n( "Scans the given file" ) );
+	options.add( "r <url>",  ki18n( "Scans the indicated remote file" ) );
+	options.add( "u <url>",  ki18n( "Scans the supplied URL" ) );
+	KCmdLineArgs::addCmdLineOptions( options );
+	
 	KCmdLineArgs::init( argc, argv, &about );
-    KApplication app;
-	KGlobal::locale()->setActiveCatalog( "kvirustotal" );
+	
+	if( Settings::self()->createUniqueApplicationInstance() ) {
+		kDebug() << "Creating a unique application instance...";
+		KVirusTotalApp app;
+		KGlobal::locale()->setActiveCatalog( "kvirustotal" );
+		return app.exec();
+	}
+	else {
+		kDebug() << "Creating a non-unique application instance...";
+		KApplication app;
+		KGlobal::locale()->setActiveCatalog( "kvirustotal" );
 
-	// We need to allocate the MainWindow object in the heap ( new ), rather than in the stack.
-	// It will be freed once the application finishes.
-	MainWindow* mainWindow = new MainWindow();
-	mainWindow->show();
-
-    return app.exec();
+		// We need to allocate the MainWindow object in the heap ( new ), rather than in the stack.
+		// It will be freed once the application finishes.
+		MainWindow* mainWindow = new MainWindow();
+		mainWindow->show();
+		ArgumentParser::parsedArgs( mainWindow );
+		return app.exec();
+	}
 }
