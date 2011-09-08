@@ -75,6 +75,9 @@ public:
 	inline QLabel* getSha256Label(){ return this->sha256Value; }
 	inline KUrlLabel* getPermanentLink(){ return this->permanentLinkValue; }
 	void setResultIcon( const QString& iconName, bool enabled = true );
+	void submitFile( const QString& filename );
+	void submitRemoteFile( const QUrl& url );
+	void submitUrl( const QUrl& url );
 	
 	static void showInfoNotificaton( const QString& msg );
 	static void showWarningNotificaton( const QString& msg );

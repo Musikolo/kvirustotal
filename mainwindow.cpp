@@ -117,7 +117,7 @@ MainWindow::MainWindow() {
 	invertSelectionAction->setShortcut( Qt::CTRL + Qt::Key_I );
 	editMenu->addAction( invertSelectionAction );
 
-	KAction* settingsAction = new KAction( i18n( "Settings..." ), this );
+	KAction* settingsAction = new KAction( KIcon( "configure" ), i18n( "Settings..." ), this );
 	settingsAction->setHelpText( i18n( "Show the settings dialog" ) );
 	settingsAction->setShortcut( Qt::CTRL + Qt::Key_T );
 	editMenu->addSeparator();
@@ -276,35 +276,45 @@ bool MainWindow::closeRequested() {
 void MainWindow::openFile() {
 	// Get the file name and submit it
 	QString fileName = KFileDialog::getOpenFileName( START_DIR_URL );
-	taskViewHandler->submitFile( QFile( fileName ) );
-  
-//TODO: It might be interesting to be able to get files from a network location
-/*  QString tmpFile;
-  if(KIO::NetAccess::download( fileName, tmpFile, this)) {
-    QFile file(tmpFile);
-    file.open(QIODevice::ReadOnly);
-    textArea->setPlainText(QTextStream(&file).readAll());
-    KIO::NetAccess::removeTempFile(tmpFile);
-  }
-  else {
-    KMessageBox::error( this, KIO::NetAccess::lastErrorString() );
-  }
-*/
+	submitFile( fileName );
+}
+
+void MainWindow::submitFile( const QString& filename ) {
+	if( !filename.isEmpty() ) {
+		taskViewHandler->submitFile( QFile( filename ) );
+	}
+	else {
+		kError() << "The given filename is empty!";
+	}
 }
 
 void MainWindow::openRemoteFile() {
 	// Get the remote file's URL and submit it
 	const QUrl url = promptUrl( i18n( "Remote file inputbox" ), i18n( "Please, enter a remote file's URL:" ) );
+	submitRemoteFile( url );
+}
+
+void MainWindow::submitRemoteFile( const QUrl& url ) {
 	if( !url.isEmpty() ) {
 		taskViewHandler->submitRemoteFile( networkManager, url );
+	}
+	else {
+		kError() << "The given URL is empty!";
 	}
 }
 
 void MainWindow::openUrl() {
 	// Get the URL and submit it
 	const QUrl url = promptUrl( i18n( "URL inputbox" ), i18n( "Please, enter a URL:" ) );
+	submitUrl( url );
+}
+
+void MainWindow::submitUrl( const QUrl& url ) {
 	if( !url.isEmpty() ) {
 		taskViewHandler->submitUrl( url );
+	}
+	else {
+		kError() << "The given URL is empty!";
 	}
 }
 
@@ -473,7 +483,7 @@ void MainWindow::onWorkloadReady( ServiceWorkload workload  ) {
 	// Prepare the next connection to refresh the workload
 	const int nextShot = 300;
 	kDebug() << "Preparing" << nextShot << "seconds singleShot to refresh the workload bars...";
-	QTimer::singleShot( nextShot * 1000, workloadConnector, SLOT( retrieveServiceWorkload() ) );
+	QTimer::singleShot( nextShot * 1000, workloadConnector, SLOT( onRetrieveServiceWorkload() ) );
 }
 
 void MainWindow::updateWorkloadProgressBars( ServiceWorkload workload ) {
@@ -604,7 +614,6 @@ void MainWindow::downloadVersionFile() {
 	}
 
 	// Download the latest VERSION file
-//FIXME: Set the right URL
 	const QUrl url( "http://gitorious.org/kvirustotal/kvirustotal/blobs/raw/master/VERSION" );
 	kDebug() << QString( "Checking for new version at %1..." ).arg( url.toString() );
 	downloader->download( url );

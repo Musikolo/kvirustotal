@@ -54,4 +54,5 @@ set( kvirustotal_LIBS
 target_link_libraries(kvirustotal ${kvirustotal_LIBS})
 install( TARGETS kvirustotal  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES kvirustotal.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES kvirustotal_servicemenu.desktop  DESTINATION ${SHARE_INSTALL_PREFIX}/kde4/services/ServiceMenus )
 #install(FILES settings.kcfg DESTINATION ${KCFG_INSTALL_DIR})

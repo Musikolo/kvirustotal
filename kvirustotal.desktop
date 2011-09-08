@@ -10,6 +10,7 @@ GenericName[de]=Online Antivirus und Anti-Pishing Werkzeug
 GenericName[es]=Herramienta online de antivirus y anti-phising
 GenericName[it]=Antivirus in linea e protezione anti-phishing
 Name=KVirustotal
+X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false
 X-KDE-autostart-after=panel
 Categories=Qt;KDE;Utility;

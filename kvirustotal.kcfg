@@ -27,6 +27,10 @@
       <label>Check for new versions at startup</label>
       <default>true</default>
     </entry>
+    <entry name="CreateUniqueApplicationInstance" type="Bool">
+      <label>Allow only a single application instance</label>
+      <default>true</default>
+    </entry>
   </group>
   <group name="mainwindow">
     <entry name="MainWindowPos" type="Point">

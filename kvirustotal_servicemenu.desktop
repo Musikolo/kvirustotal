@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/octet-stream;
+Actions=kvtScanFile;
+X-DBUS-StartupType=Unique
+X-KDE-Priority=TopLevel
+X-KDE-StartupNotify=false
+
+[Desktop Action kvtScanFile]
+Name=Scan with KVirusTotal
+Name[es]=Escanear con KVirusTotal
+Icon=kvirustotal
+Exec=kvirustotal -f %F
+

@@ -47,12 +47,16 @@ SettingsDialog::SettingsDialog( QWidget * parent, Qt::WindowFlags flags ) : QWid
 	QCheckBox*const checkNewVersion = new QCheckBox( i18n( "Check for new versions at startup" ) );
 	checkNewVersion->setObjectName( "kcfg_CheckVersionAtStartup" );
 	
+	QCheckBox*const checkUniqueApp = new QCheckBox( i18n( "Allow only a single application instance" ) );
+	checkUniqueApp->setObjectName( "kcfg_CreateUniqueApplicationInstance" );
+	
 	QVBoxLayout*const layout = new QVBoxLayout( this );
 	layout->addWidget( secureProtocol );
 	layout->addWidget( reuseLastReport );
 	layout->addLayout( notificationLayout );
 	layout->addWidget( infectedTaskNotification );
 	layout->addWidget( checkNewVersion );
+	layout->addWidget( checkUniqueApp );
 	this->setLayout( layout );
 }
 
