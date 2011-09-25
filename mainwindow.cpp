@@ -103,6 +103,7 @@ MainWindow::MainWindow() {
 	fileMenu->addAction( fileAction );
 	fileMenu->addAction( remoteFileAction );
 	fileMenu->addAction( urlAction );
+	fileMenu->addSeparator();
 	fileMenu->addAction( quitAction );
 
 	// Edit menu
@@ -630,7 +631,7 @@ void MainWindow::onVersionFileReady( QFile* file ) {
 	kDebug() << "Latest version is" << version;
 	if( !version.isEmpty() && version != General::APP_VERSION ) {
 		if( KMessageBox::questionYesNo( centralwidget, 
-									i18nc( "Application name", "New version %1 has been released. Do you want to open %2 homepage to find out what's new?", 
+									i18nc( "Application name", "The new version %1 has been released. Do you want to open %2 homepage to find out what's new?", 
 											version, General::APP_UI_NAME ),
 									i18n( "Vesion check" ) ) == KMessageBox::Yes ) {
 			QDesktopServices::openUrl( QUrl( General::APP_HOMEPAGE ) );
