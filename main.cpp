@@ -93,8 +93,12 @@ int main( int argc, char** argv ) {
 	about.addCredit( ki18n( "Pavel Fric" ), ki18n( "Translator" ), csEmail.toLatin1(), "fripohled.blogspot.com" );
 	const QString deEmail( QString( "Sascha Manns" ).append( "<saigkill" ).append( "@" ).append( "opensuse" ).append( ".org>" ) );
 	about.addCredit( ki18n( "Sascha Manns" ), ki18n( "Translator" ), deEmail.toLatin1(), "http://saigkill.homelinux.net" );
+	const QString huEmail( QString( "Tóth Attila" ).append( "<tothasze" ).append( "@" ).append( "gmail" ).append( ".com>" ) );
+	about.addCredit( ki18n( "Tóth Attila" ), ki18n( "Translator" ), huEmail.toLatin1() );
 	const QString itEmail( QString( "Gianluca Boiano" ).append( "<morf3089" ).append( "@" ).append( "gmail" ).append( ".com>" ) );
 	about.addCredit( ki18n( "Gianluca Boiano" ), ki18n( "Translator" ), itEmail.toLatin1() );
+	const QString ruEmail( QString( "Alexander Shevyakov" ).append( "<stavsandro" ).append( "@" ).append( "gmail" ).append( ".com>" ) );
+	about.addCredit( ki18n( "Alexander Shevyakov" ), ki18n( "Translator" ), ruEmail.toLatin1() );
 	about.addCredit( ki18n( General::APP_AUTHOR ), ki18n( "Translator" ), esEmail.toLatin1(), General::APP_HOMEPAGE );
 	about.setOtherText( ki18n( "KVirusTotal is based on the service provided by VirusTotal which is owned by \
 Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember that <b>it is not \
