@@ -1,10 +1,12 @@
-* Make service menu integration
-* Warn the user when a new version is available
 * Tray icon integration
+* Add menu for switching HttpConnectors
 * Start up automatically when the user logs in, if wanted.
 * Find out a way to set the antivirus version and real version update (when available in API)
 * Base workload progress bars on the API rather than on the Web (when available in API)
 
+* DONE - Implement service menu integration
+* DONE - Beautify percent values when decimal side is zero not being shown (70.0 => 70% --> 70.0%)
+* DONE - Warn the user when a new version is available
 * DONE - Add maxServiceFileSize to HttpConnectoCfg
 * DONE - Implement the ability to download and submit a file for scanning
 * DONE - Update the welcome wizard to support the new WebHttpConnector connector
@@ -36,11 +38,11 @@
 * DONE - Manage network errors while "Retrieving report..." message is shown
 * DONE - Fix result icon not being shown when not enough space available.
 * DONE - Manage the -2 result: "Connection limit reached". Change delay to something bigger.
-* DONE - Prevent (ask for the user) the same file to be sumitted several times
+* DONE - Prevent (ask for the user) the same file to be submitted several times
 * DONE - Create Edit menu having: Select all and Invert selection entries.
 * DONE - Create Help menu having: About KVirusTotal and About KDE entries.
 * DONE - Show report directly when a task is selected.
 * DONE - Show the selected report when using arrow keys.
-* DONE - Resize graphic objects as the main window does it.
-* DONE - Try to re-use the last report available to improve response time. Otherwise, submit the file for anaylisis.
+* DONE - Re-size graphic objects as the main window does it.
+* DONE - Try to re-use the last report available to improve response time. Otherwise, submit the file for analysis.
 * DONE - Calculate MD5, SHA1 and SHA256 within file reports.
