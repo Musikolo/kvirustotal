@@ -9,7 +9,12 @@ X-KDE-StartupNotify=false
 
 [Desktop Action kvtScanFile]
 Name=Scan with KVirusTotal
+Name[cs]=Prohledat s KVirusTotal
+Name[de]=Scannen mit KVirusTotal
 Name[es]=Escanear con KVirusTotal
+Name[hu]=Ellenőrzés a KVirusTotal programmal
+Name[it]=Analizza con KVirusTotal
+Name[ru]=Сканировать с помощью KVirusTotal
 Icon=kvirustotal
 Exec=kvirustotal -f %F
 
