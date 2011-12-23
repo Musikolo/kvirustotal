@@ -311,8 +311,10 @@ const bool reuseLastReport = false;
 
 	// Prepare the request
 	QNetworkRequest request( ServiceUrl::SEND_URL_SCAN );
+	request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
 	QByteArray params;
-	params.append( "url=" ).append( url2Scan.toString() ).
+	
+	params.append( "url=" ).append( url2Scan.toEncoded() ).
 		   append( "&force=" ).append( reuseLastReport ? "0" : "1" ) ;
 
 	 // Submit data and establish all connections to this object from scratch
@@ -459,7 +461,9 @@ HttpConnectorCfg WebHttpConnector::getFileHttpConnectorCfg() {
 }
 
 HttpConnectorCfg WebHttpConnector::getUrlHttpConnectorCfg() {
-	return getFileHttpConnectorCfg();
+	static const int levels[] = { 5 };
+	HttpConnectorCfg cfg = { (uchar)1, (uchar)0, levels, false, 20 * 1000 * 1000 }; // 20MB
+	return cfg;
 }
 
 #include "webhttpconnector.moc"

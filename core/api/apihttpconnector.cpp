@@ -216,9 +216,10 @@ void ApiHttpConnector::submitUrl( const QUrl& url2Scan ) {
 
 	// Prepare the request
 	QNetworkRequest request( ServiceUrl::SEND_URL_SCAN );
+	request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
 	QByteArray params;
 	params.append( JsonTag::KEY ).append( "=" ).append( key ).append("&").
-		   append( JsonTag::URL ).append( "=" ).append( url2Scan.toString() );
+		   append( JsonTag::URL ).append( "=" ).append( url2Scan.toEncoded() );
 
 	 // Submit data and establish all connections to this object from scratch
 	QNetworkReply*const reply = createNetworkReply( request, params );
