@@ -1,7 +1,7 @@
 ---------------------
 2011-12-24 - v.0.22.1
 ---------------------
-- Fixed error when analysing URLs due to change in service provider interface
+- Fixed error when analyzing URLs due to change in service provider interface
 
 ---------------------
 2011-09-26 - v.0.22.0
