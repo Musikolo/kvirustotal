@@ -352,6 +352,7 @@ void TaskRowViewHandler::onDownloadReady( QFile* file ) {
 }
 
 void TaskRowViewHandler::onMaximunSizeExceeded( qint64 sizeAllowed, qint64 sizeTotal ) {
+	Q_UNUSED( sizeAllowed );
 	setSize( sizeTotal );
 	const qint64 maxSize = HttpConnectorFactory::getFileHttpConnectorCfg().maxServiceFileSize;
 	viewHandler->showFileTooBigMsg( i18n( "The remote file is too big. The service does not accept files greater than %1 MiB (%2 MB).",
