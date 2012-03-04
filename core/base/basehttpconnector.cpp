@@ -116,7 +116,7 @@ bool BaseHttpConnector::isAbortRequested() {
 }
 
 
-bool BaseHttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteArray& multipartform, const QString& fileName ) {
+bool BaseHttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteArray& multipartform, const QString& fileName, const QMap< QString, QString > params ) {
 //TODO: See whether it's possible to replace QFile for QIODevice
 	// Open the file and verify it's accessible. Otherwise, return false.
 	QFile file( fileName );
@@ -138,6 +138,18 @@ bool BaseHttpConnector::setupMultipartRequest( QNetworkRequest& request, QByteAr
 	multipartform.append(QString("Content-Type: application/octet-stream" + crlf + crlf).toAscii());
 	multipartform.append(file.readAll());
 	file.close();
+	
+	// Add all additional parameters, if any
+	if( !params.isEmpty() ) {
+		const QList< QString > keys = params.keys();
+		for( int i = 0; i < keys.size(); i++ ) {
+			multipartform.append( crlf + boundary );
+			multipartform.append( "Content-Disposition: form-data; name=\"" + keys[i] + "\"" + crlf + crlf );
+			multipartform.append( params[ keys[ i ] ] );
+		}
+	}
+	
+	// Close the boundary
 	multipartform.append(QString(crlf + "--" + boundaryStr + "--" + crlf).toAscii());
 
 	// Set the right multipart and boundary headers

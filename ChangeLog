@@ -1,4 +1,11 @@
 ---------------------
+2012-03-05 - v.0.30.0
+---------------------
+- Increased maximum file size limit from 20MB to 32MB
+- Updated WebConnector to version 2 (previous interface was broken)
+- Hungarian translations fully completed
+
+---------------------
 2011-12-24 - v.0.22.1
 ---------------------
 - Fixed error when analyzing URLs due to change in service provider interface

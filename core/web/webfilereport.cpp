@@ -17,9 +17,10 @@
 
 #include "webfilereport.h"
 #include "webservicereply.h"
+#include <KLocalizedString>
 
 static const QString CLEAN_RESULT( "-" );
-static const QString SERVICE_DATE_FORMAT( "yyyy.MM.dd" );
+static const QString SERVICE_DATE_FORMAT( "yyyyMMdd" );
 
 WebFileReport::WebFileReport( const ServiceReply*const reply, const QString& fileName, FileHasher*const hasher ) {
 	setFileName( fileName );
@@ -39,22 +40,26 @@ void WebFileReport::processReply( const ServiceReply*const reply ) {
 		const WebServiceReply*const webReply = dynamic_cast< const WebServiceReply*const >( reply );
 		if( webReply != NULL ) {
 			BaseReport::setPermanentLink( QUrl() ); // Since no scanId available, some object should invoke the setPermanentLink() method below!
-			setScanDate( QDateTime::currentDateTime() );
-			setNumPositives( webReply->getNumPositives() );
+			setScanDate( reply->getScanDate() );
 			QList< ResultItem > resultList;
 			const QList< QVariant > matrix = webReply->getScanResult()[ "resultList" ].toList();
+			int positives = 0;
 			for( int i = 0, size = matrix.size(); i < size; i++ ) {
-				QList< QVariant > item = matrix[ i ].toList();
+				QMap< QString, QVariant > item = matrix[ i ].toMap();
 				ResultItem resultItem;
-				resultItem.antivirus  = item[ 1 ].toString();
-				resultItem.version    = item[ 2 ].toString();
-				resultItem.lastUpdate = QDateTime::fromString( item[ 3 ].toString(), SERVICE_DATE_FORMAT );
-				resultItem.result     = item[ 4 ].toString();
-				resultItem.infected   = ( CLEAN_RESULT == resultItem.result ? InfectionType::NO : InfectionType::YES );
+				resultItem.antivirus  = item[ "antivirus" ].toString();
+				resultItem.version    = i18n( "N/A" );
+				resultItem.lastUpdate = QDateTime::fromString( item[ "update" ].toString(), SERVICE_DATE_FORMAT );
+				resultItem.result     = item[ "result" ].toString();
+				resultItem.infected   = InfectionType::NO;
+				if( CLEAN_RESULT != resultItem.result ) {
+					resultItem.infected   = InfectionType::YES;
+					positives++;
+				}
 				resultList.append( resultItem );
 			}
 			setResultList( resultList );
-			
+			setNumPositives( positives );
 		}
 		else {
 			kError() << "ERROR: Unexpected implementation of ServiceReply object!!";

@@ -32,19 +32,25 @@ class WebHttpConnector : public BaseHttpConnector
 {
 Q_OBJECT
 private:
-	bool reusingLastReport;
-	QString serviceId;
+	QByteArray csfrToken;
+	bool reuseLastReport;
 	QString scanId;
 	bool scanReportForced;
-
-	void retrieveServiceId();
+	QString uploadUrl;
+	QDateTime scanForcedInitDate;
+	bool itemExistInServer;
+	QUrl url2Scan;
+	
+	void fetchCsfrToken();
     void retrieveLastReport();
+	void retrieveServiceId();
 	void forceScanReport();
-	void commonRetrieveFileReport();
 
 private slots:
 	/** Deals with the reply that provide us with a service identifier */
 	void onServiceIdComplete();
+	
+	void onFetchCsrfToken();
 	
 	void onScanForcedComplete();
 	
@@ -74,7 +80,7 @@ public:
 	void retrieveFileReport( const QString& scanId );
 
 	/** Submits the given URL */
- 	void submitUrl( const QUrl& url2Scan );
+ 	void submitUrl( const QUrl& url2Scan, const bool reuseLastReport );
 
 	/** Retrieves the URL report object corresponding to the given scan Id. */
 	void retrieveUrlReport( const QString& scanId );

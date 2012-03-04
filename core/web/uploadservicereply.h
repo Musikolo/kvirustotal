@@ -14,4 +14,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "baseservicereply.h"
+
+#ifndef UPLOADSERVICEREPLY_H
+#define UPLOADSERVICEREPLY_H
+
+#include <QString>
+class UploadServiceReply
+{
+
+private:
+	bool valid;
+	bool fileExists;
+	QString uploadUrl;
+	QString lastAnalysisDate;
+	
+	void processJsonReply( const QString& jsonReply );
+	
+public:
+    UploadServiceReply( const QString& jsonReply );
+    virtual ~UploadServiceReply();
+	
+	bool isValid() const { return this->valid; }
+	bool isFileExists() const { return this->fileExists; }
+	QString getUploadUrl() const { return this->uploadUrl; }
+	QString getLastAnalysisDate() const { return this->lastAnalysisDate; }
+};
+
+#endif // UPLOADSERVICEREPLY_H

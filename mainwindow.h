@@ -49,6 +49,7 @@ private:
 	bool isPreviousVersionTo( uchar major, uchar minor, uchar bugfix );
 	QUrl promptUrl(  const QString& title, const QString& message  );
 	void downloadVersionFile();
+	bool validateHttpConnectorProtocol();
 	
 private slots:
 	bool closeRequested();

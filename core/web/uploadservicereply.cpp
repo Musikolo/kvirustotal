@@ -14,4 +14,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "baseservicereply.h"
+
+#include "uploadservicereply.h"
+#include <QMap>
+#include <QVariant>
+#include <jsonutil.h>
+#include <KDebug>
+
+UploadServiceReply::UploadServiceReply( const QString& jsonText ) {
+	this->valid = false;
+	processJsonReply( jsonText );
+}
+
+UploadServiceReply::~UploadServiceReply() { }
+
+void UploadServiceReply::processJsonReply(const QString& jsonText ) {
+	kDebug() << "Data:" << jsonText;
+	const QMap< QString, QVariant > data = JsonUtil::getJsonMap( jsonText, this->valid );
+	if( this->valid && !data.isEmpty() ) {
+		this->fileExists = data[ "file_exists" ].toBool();
+		this->uploadUrl = data[ "upload_url" ].toString();
+		this->lastAnalysisDate = data[ "last_analysis_date" ].toString();
+	}
+}

@@ -208,8 +208,13 @@ MainWindow::MainWindow() {
 	// Show the minimum level and ask for the service workload
 	ServiceWorkload workload = { ServiceWorkload::MIN_VALUE ,ServiceWorkload::MIN_VALUE };
 	updateWorkloadProgressBars( workload );
-	workloadConnector->onRetrieveServiceWorkload();
+//FIXME:workloadConnector->onRetrieveServiceWorkload();
 	
+	// If the protocol is not supported by the current HttpProtocol, show the settings dialog
+	if( validateHttpConnectorProtocol() ) {
+		showSettingsDialog();
+	}
+
 	// Validate version
 	validateCurrentVersion();
 	
@@ -361,6 +366,16 @@ void MainWindow::showWelcomeWizard() {
 	connect( wizard, SIGNAL( finished( int ) ), this, SLOT( wizardFinished( int ) ) );
 }
 
+bool MainWindow::validateHttpConnectorProtocol() {
+	if( Settings::self()->httpConnectorType() == HttpConnectorType::WEB_HTTPCONNECTOR  && 
+		!Settings::self()->secureProtocol() ) {
+		KMessageBox::sorry( this, i18n( "The current connector (WebHttpConnector) does not support the HTTP protocol. Please, choose the secure HTTPS protocol instead." ) );
+		return true;
+	}
+	return false;
+}
+
+
 void MainWindow::wizardFinished( int result ) {
 	kDebug() << "result=" << result;
 	if( HttpConnectorFactory::getFileHttpConnectorCfg().serviceKeyRequired ||
@@ -370,6 +385,11 @@ void MainWindow::wizardFinished( int result ) {
 			KMessageBox::sorry( this, i18n( "No service key found! Thus, the application must be closed." ) );
 			close();
 		}
+	}
+
+	// If the protocol is not supported by the current HttpProtocol, show the settings dialog
+	if( validateHttpConnectorProtocol() ) {
+		showSettingsDialog();
 	}
 }	
 
@@ -390,6 +410,7 @@ void MainWindow::showSettingsDialog() {
 }
 
 void MainWindow::settingsChanged() {
+	validateHttpConnectorProtocol();
 	HttpConnectorFactory::loadHttpConnectorSettings();// Re-establish the protocol (HTTPS or HTTP)
 	setProgressBarSecurityIcon();
 }

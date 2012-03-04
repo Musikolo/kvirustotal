@@ -247,7 +247,7 @@ bool TaskRowViewHandler::rescan() {
 				if( url.isValid() ) {
 					this->finished = false;
 					this->seconds = 0;
-					this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::URL, this, true );
+					this->jobId = TaskScheduler::self()->enqueueJob( itemName, JobType::URL, this, false );
 					actionDone = true;
 				}
 			}

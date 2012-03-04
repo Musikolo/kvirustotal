@@ -65,7 +65,7 @@ public:
 	void retrieveFileReport( const QString& scanId );
 
 	/** Submits the given URL */
- 	void submitUrl( const QUrl& url2Scan );
+ 	void submitUrl( const QUrl& url2Scan, const bool reuseLastReport = false );
 
 	/** Retrieves the URL report object corresponding to the given scan Id. */
 	void retrieveUrlReport( const QString& scanId );

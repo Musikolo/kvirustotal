@@ -6,7 +6,9 @@ include_directories(
 # 		${KDE4_INCLUDES}
 		${CMAKE_CURRENT_BINARY_DIR})
 
-set(kvt_web_SRCS
+set(kvt_web_SRCS 
+		urlsubmissionreply.cpp 
+		uploadservicereply.cpp 
 		webfilereport.cpp
 		weburlreport.cpp
 		webservicereply.cpp 

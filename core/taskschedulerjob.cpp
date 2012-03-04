@@ -74,7 +74,7 @@ void TaskSchedulerJob::submitJob() {
 		connector->submitFile( resourceName, reuseLastReport );
 		break;
 	case JobType::URL:
-		connector->submitUrl( QUrl( resourceName ) );
+		connector->submitUrl( QUrl( resourceName ), reuseLastReport );
 		break;
 	}
 	// Update the retransmition flag

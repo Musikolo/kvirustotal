@@ -14,4 +14,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "baseservicereply.h"
+
+#ifndef JSONUTIL_H
+#define JSONUTIL_H
+#include <QMap>
+#include <QString>
+#include <QVariant>
+
+class JsonUtil
+{
+public:
+	static QMap< QString, QVariant > getJsonMap( const QString& jsonText, bool& valid  );
+	static QList< QVariant > getJsonList( const QString& jsonText, bool& valid  );
+};
+
+#endif // JSONUTIL_H

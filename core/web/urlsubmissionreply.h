@@ -14,4 +14,29 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "baseservicereply.h"
+
+#ifndef URLSUBMISSIONREPLY_H
+#define URLSUBMISSIONREPLY_H
+#include <QString>
+
+class UrlSubmissionReply
+{
+private:
+	bool valid;
+	QString scanId;
+	bool urlExists;
+	QString lastScanDate;
+	
+	void processJsonReply( const QString& jsonReply );
+
+public:
+    UrlSubmissionReply( const QString& jsonReply );
+    virtual ~UrlSubmissionReply();
+	
+	bool isValid() const { return this->valid; }
+	QString getScanId() const { return this->scanId; }
+	bool isUrlExists() const { return this->urlExists; }
+	QString getLastScanDate() const { return this->lastScanDate; }
+};
+
+#endif // URLSUBMISSIONREPLY_H

@@ -18,9 +18,9 @@
 #include "apiurlreport.h"
 #include <KLocalizedString>
 
-static const QString URL_CLEAN_SITE( "Clean site" );
-static const QString URL_UNRATED_SITE( "Unrated site" ); 
-static const QString URL_ERROR( "Error" ); 
+static const QString URL_CLEAN_SITE( "clean site" );
+static const QString URL_UNRATED_SITE( "unrated site" ); 
+static const QString URL_ERROR( "error" ); 
 
 ApiUrlReport::ApiUrlReport( const ServiceReply*const reply ) : BaseUrlReport( ) {
 	processReply( reply );
@@ -42,10 +42,10 @@ void ApiUrlReport::processReply( const ServiceReply*const reply ) {
 				ResultItem rowItem;
 				const QString& result = curItem.value().toString();
 				rowItem.result = result;
-				if( result == URL_CLEAN_SITE ) {
+				if( result.toLower() == URL_CLEAN_SITE ) {
 					rowItem.infected = InfectionType::NO;
 				}
-				else if( result == URL_UNRATED_SITE || result == URL_ERROR ){
+				else if( result.toLower() == URL_UNRATED_SITE || result.toLower() == URL_ERROR ){
 					rowItem.infected = InfectionType::UNKNOWN;
 				}
 				else {

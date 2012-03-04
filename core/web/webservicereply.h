@@ -25,7 +25,7 @@ namespace WebServiceReplyResult {
 }
 
 namespace WebServiceReplyType {
-	enum WebServiceReplyTypeEnum { FILE, URL_SERVICE_1, URL_SERVICE_2 };
+	enum WebServiceReplyTypeEnum { FILE, URL_SERVICE };
 }
 
 class WebServiceReply : public BaseServiceReply
@@ -34,13 +34,15 @@ private:
 	WebServiceReplyType::WebServiceReplyTypeEnum replyType;
 	int positives;
 
+	int getStatusFromString( const QString& status );
+	QDateTime retrieveScanDate( const QString& data );
+	QList< QVariant > processResultData( const QString& data );
+	
 protected:
-	void processHtml( const QString& htmlReply );
 	void processJsonMap( const QMap< QString, QVariant >& json );
-	void processJsonList( const QList< QVariant >& json );
 
 public:
-    WebServiceReply( const QString& textReply, WebServiceReplyType::WebServiceReplyTypeEnum replyType, bool htmlReply = false );
+    WebServiceReply( const QString& textReply, WebServiceReplyType::WebServiceReplyTypeEnum replyType );
     virtual ~WebServiceReply();
 
 	WebServiceReplyResult::WebServiceReplyResultEnum getStatus();

@@ -16,11 +16,17 @@
 */
 
 #include "apiservicereply.h"
+#include <jsonutil.h>
 
 ApiServiceReply::ApiServiceReply( QString jsonText ) {
 		
 		// Process the json text
-		const QMap< QString, QVariant > json = getJsonMap( jsonText );
+		bool valid;
+		const QMap< QString, QVariant > json = JsonUtil::getJsonMap( jsonText, valid );
+		if( !valid ) {
+			setValid( false );
+			return;
+		}
 		this->processJson( json );
 }
 

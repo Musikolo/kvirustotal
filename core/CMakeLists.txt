@@ -6,7 +6,8 @@ include_directories(
 # 		${KDE4_INCLUDES} 
 		${CMAKE_CURRENT_BINARY_DIR})
 
-set(kvt_core_SRCS
+set(kvt_core_SRCS 
+		jsonutil.cpp
 		filedownloader.cpp
 		taskschedulerjob.cpp 
 		taskscheduler.cpp 

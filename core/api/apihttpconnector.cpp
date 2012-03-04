@@ -30,7 +30,7 @@
 #include "api/apiurlreport.h"
 
 static const int DELAY_LEVELS[] = { 15, 30, 45, 60, 90, 150, 300 };
-static const qint64 SERVICE_MAX_FILE_SIZE = 20 * 1000 * 1000; // 20 MB
+static const qint64 SERVICE_MAX_FILE_SIZE = 32 * 1000 * 1000; // 32 MB
 static QString PERMANENT_LINK_URL_PATTERN  = "http://www.virustotal.com/url-scan/report.html?id=%1";
 
 /** Tags used to manage JSON objects. Extends ServiceBasicReply namespace. */
@@ -121,7 +121,7 @@ void ApiHttpConnector::uploadFile( const QString& fileName ) {
 
 	// Submit data and establish all connections to this object from scratch
 	reusingLastReport = false;
-	createNetworkReply( request, multipartform );
+	createNetworkReply( request, multipartform, true );
 	QNetworkReply*const reply = getNetworkReply();
 	connect( reply, SIGNAL( finished() ), this, SLOT( onSubmissionReply() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
@@ -198,14 +198,15 @@ void ApiHttpConnector::retrieveFileReport( const QString& scanId ){
 
 	// Submit data and establish all connections to this object from scratch
 	setReportMode( ReportMode::FILE_MODE );
-	QNetworkReply*const reply = createNetworkReply( request, params );
+	QNetworkReply*const reply = createNetworkReply( request, params, true );
 	connect( reply, SIGNAL( finished() ), this, SLOT( onReportComplete() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
 			 this, SLOT( onSubmissionReplyError( QNetworkReply::NetworkError ) ) );
 	kDebug() << "Retrieving file report, waiting for reply...";
 }
 
-void ApiHttpConnector::submitUrl( const QUrl& url2Scan ) {
+void ApiHttpConnector::submitUrl( const QUrl& url2Scan, const bool reuseLastReport ) {
+	Q_UNUSED( reuseLastReport )
 	if( !url2Scan.isValid() ) {
 		QString msg;
 		msg.append( i18n( "Invalid URL: %1", url2Scan.toString() ) );
@@ -219,10 +220,10 @@ void ApiHttpConnector::submitUrl( const QUrl& url2Scan ) {
 	request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
 	QByteArray params;
 	params.append( JsonTag::KEY ).append( "=" ).append( key ).append("&").
-		   append( JsonTag::URL ).append( "=" ).append( url2Scan.toEncoded() );
+		   append( JsonTag::URL ).append( "=" ).append( QUrl::toPercentEncoding( url2Scan.toString() ) );
 
 	 // Submit data and establish all connections to this object from scratch
-	QNetworkReply*const reply = createNetworkReply( request, params );
+	QNetworkReply*const reply = createNetworkReply( request, params, true );
 	connect( reply, SIGNAL( finished() ), this, SLOT( onSubmissionReply() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
 		     this, SLOT( onSubmissionReplyError( QNetworkReply::NetworkError ) ) );
@@ -244,7 +245,7 @@ void ApiHttpConnector::retrieveUrlReport( const QString& scanId ) {
 
 	// Submit data and establish all connections to this object from scratch
 	setReportMode( ReportMode::URL_MODE );
-	QNetworkReply*const reply = createNetworkReply( request, params );
+	QNetworkReply*const reply = createNetworkReply( request, params, true );
 	connect( reply, SIGNAL( finished() ), this, SLOT( onReportComplete() ) );
 	connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
 			 this, SLOT( onSubmissionReplyError( QNetworkReply::NetworkError ) ) );

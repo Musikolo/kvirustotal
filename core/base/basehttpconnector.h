@@ -45,10 +45,10 @@ private:
 
 protected:
 	static void loadSettings();
-	bool setupMultipartRequest( QNetworkRequest& request, QByteArray& multipartform, const QString& fileName );
+	bool setupMultipartRequest( QNetworkRequest& request, QByteArray& multipartform, const QString& fileName, const QMap< QString, QString > params = QMap<QString, QString>() );
 	void abortCurrentTask();
 	bool freeNetworkReply(); //Should be called as soon as the reply is no longer needed
-	QNetworkReply* createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart, bool usePostMethod = true );
+	QNetworkReply* createNetworkReply( const QNetworkRequest& request, const QByteArray& multipart = QByteArray(), bool usePostMethod = false );
 	QNetworkReply* getNetworkReply();
 	QString getFileName();
 	void setFileName( const QString& fileName );
@@ -87,7 +87,7 @@ public:
 	void retrieveFileReport( const QString& scanId )=0;
 
 	/** Submits the given URL */
- 	void submitUrl( const QUrl& url2Scan )=0;
+ 	void submitUrl( const QUrl& url2Scan, const bool reuseLastReport )=0;
 
 	/** Retrieves the URL report object corresponding to the given scan Id. */
 	void retrieveUrlReport( const QString& scanId )=0;

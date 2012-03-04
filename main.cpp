@@ -19,7 +19,6 @@
 #include <KCmdLineArgs>
 #include <KApplication>
 #include <KUniqueApplication>
-#include <KDebug>
 
 #include "constants.h"
 #include <settings.h>
@@ -81,7 +80,7 @@ int KVirusTotalApp::newInstance() {
 }
 
 int main( int argc, char** argv ) {
-
+	//NOTE: DO NOT use kDebug class here. It will cause the message are directed to the "unnamed" applicaiton
 	KAboutData about( General::APP_NAME, 0, ki18n( General::APP_UI_NAME ), General::APP_VERSION.toAscii(), 
 					   ki18n( "Online antivirus and anti-phishing tool" ), KAboutData::License_GPL_V3 );
 	about.setProgramIconName( "kvirustotal" );
@@ -117,13 +116,13 @@ http://www.virustotal.com/terms.html</a> for more details." ) );
 	KCmdLineArgs::init( argc, argv, &about );
 	
 	if( Settings::self()->createUniqueApplicationInstance() ) {
-		kDebug() << "Creating a unique application instance...";
+		// Creating a unique application instance...
 		KVirusTotalApp app;
 		KGlobal::locale()->setActiveCatalog( "kvirustotal" );
 		return app.exec();
 	}
 	else {
-		kDebug() << "Creating a non-unique application instance...";
+		// Creating a non-unique application instance...
 		KApplication app;
 		KGlobal::locale()->setActiveCatalog( "kvirustotal" );
 

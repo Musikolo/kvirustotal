@@ -38,15 +38,15 @@ void WebUrlReport::processReply( const ServiceReply*const reply ) {
 		const WebServiceReply*const webReply = dynamic_cast< const WebServiceReply*const >( reply );
 		if( webReply != NULL ) {
 			setPermanentLink( QUrl() ); // Since no full URL available, some object should invoke the setPermanentLink() method below!
-			setScanDate( QDateTime::currentDateTime() );
-			setNumPositives( webReply->getNumPositives() );
+			setScanDate( reply->getScanDate() );
 			
+			int positives = 0;
 			QList< ResultItem > resultList;
 			const QList< QVariant > matrix = webReply->getScanResult()[ "resultList" ].toList();
 			for( int i = 0, size = matrix.size(); i < size; i++ ) {
-				QList< QVariant > item = matrix[ i ].toList();
+				QMap< QString, QVariant > item = matrix[ i ].toMap();
 				ResultItem rowItem;
-				const QString& result = item[ 1 ].toString();
+				const QString& result = item[ "result" ].toString();
 				rowItem.result = result;
 				if( result == URL_CLEAN_SITE ) {
 					rowItem.infected = InfectionType::NO;
@@ -56,13 +56,15 @@ void WebUrlReport::processReply( const ServiceReply*const reply ) {
 				}
 				else {
 					rowItem.infected = InfectionType::YES;
+					positives++;
 				}
-				rowItem.antivirus = item[ 0 ].toString();
+				rowItem.antivirus = item[ "antivirus" ].toString();
 				rowItem.lastUpdate = reply->getScanDate();
 				rowItem.version = i18n( "N/A" );
 				resultList.append( rowItem );
 			}
 			setResultList( resultList );
+			setNumPositives( positives );
 		}
 		else {
 			kError() << "ERROR: Unexpected implementation of ServiceReply object!!";

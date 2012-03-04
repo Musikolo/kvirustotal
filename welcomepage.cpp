@@ -34,7 +34,7 @@
 #include <api/apihttpconnector.h>
 
 static const QString TEST_SERVICE_KEY_SCAN_ID( "4feed2c2e352f105f6188efd1d5a558f24aee6971bdf96d5fdb19c197d6d3fad" );
-static const QString VIRUSTOTAL_REGISTRATION_PAGE="http://www.virustotal.com/vt-community/register.html";
+static const QString VIRUSTOTAL_REGISTRATION_PAGE="http://www.virustotal.com";
 
 WelcomePage::WelcomePage( WelcomeWizard* wizard ) : QWizardPage( wizard ) {
 	this->wizard = wizard;
@@ -140,7 +140,7 @@ QWizardPage* WelcomePage::createConnectorSelectionPage( WelcomeWizard* wizard ) 
 	QVBoxLayout*const webLayout = new QVBoxLayout();
 	webLayout->addLayout( webCheckboxLayout );
 	webLayout->addWidget( new QLabel( i18n( "Not used" ) ), 0, Qt::AlignCenter );
-	webLayout->addWidget( new QLabel( i18n( "No" ) ), 0, Qt::AlignCenter );
+	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter );
 	webLayout->addWidget( new QLabel( i18n( "Unlimited" ) ), 0, Qt::AlignCenter );
 	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter  );
 	webLayout->addWidget( new QLabel( i18n( "Yes" ) ), 0, Qt::AlignCenter  );

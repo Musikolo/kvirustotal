@@ -49,7 +49,7 @@ public:
 	virtual void retrieveFileReport( const QString& scanId )=0;
 
 	/** Submits the given URL */
- 	virtual void submitUrl( const QUrl& url2Scan )=0;
+ 	virtual void submitUrl( const QUrl& url2Scan, const bool reuseLastReport )=0;
 
 	/** Retrieves the URL report object corresponding to the given scan Id. */
 	virtual void retrieveUrlReport( const QString& scanId )=0;

@@ -1,9 +1,16 @@
+* Update ApiConnector to version 2
+* Ask for rescans when the report is older than X days
+* Do not enqueue jobs while uploading
+* Workload request not working
+
 * Tray icon integration
 * Add menu for switching HttpConnectors
 * Start up automatically when the user logs in, if wanted.
 * Find out a way to set the antivirus version and real version update (when available in API)
 * Base workload progress bars on the API rather than on the Web (when available in API)
 
+* DONE - Update WebConnector to version 2
+* DONE - Offer the posibility to reuse a scan in WebConnector
 * DONE - Implement service menu integration
 * DONE - Beautify percent values when decimal side is zero not being shown (70.0 => 70% --> 70.0%)
 * DONE - Warn the user when a new version is available
