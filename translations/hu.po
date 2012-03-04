@@ -1,25 +1,25 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# root, 2011.
+# root, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-10 13:18+0200\n"
-"PO-Revision-Date: 2011-09-24 09:34+0200\n"
+"POT-Creation-Date: 2012-03-01 23:13+0100\n"
+"PO-Revision-Date: 2012-03-03 17:30+0100\n"
 "Last-Translator: root\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
-"Language: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.4\n"
 
 #. i18n: file: mainwindow.ui:181
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
-#: build/ui_mainwindow.h:283 mainwindow.cpp:140 translations/rc.cpp:45
+#: build/ui_mainwindow.h:283 mainwindow.cpp:141 translations/rc.cpp:45
 #: rc.cpp:45
 msgid "Scan analysis date:"
 msgstr "Ellenőrzés/elemzés dátuma:"
@@ -43,10 +43,11 @@ msgstr "Ellenőrzés/elemzés dátuma:"
 #: build/ui_mainwindow.h:284 build/ui_mainwindow.h:288
 #: build/ui_mainwindow.h:290 build/ui_mainwindow.h:292
 #: core/api/apifilereport.cpp:54 core/api/apiurlreport.cpp:56
-#: core/web/weburlreport.cpp:62 reportrowviewhandler.cpp:68
-#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:121 translations/rc.cpp:48
-#: translations/rc.cpp:60 translations/rc.cpp:66 translations/rc.cpp:72
-#: rc.cpp:48 rc.cpp:60 rc.cpp:66 rc.cpp:72
+#: core/web/webfilereport.cpp:51 core/web/weburlreport.cpp:63
+#: reportrowviewhandler.cpp:68 reportviewhandler.cpp:69
+#: taskrowviewhandler.cpp:121 translations/rc.cpp:48 translations/rc.cpp:60
+#: translations/rc.cpp:66 translations/rc.cpp:72 rc.cpp:48 rc.cpp:60 rc.cpp:66
+#: rc.cpp:72
 msgid "N/A"
 msgstr "Nincs adat."
 
@@ -76,73 +77,74 @@ msgstr "SHA256:"
 
 #. i18n: file: mainwindow.ui:361
 #. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
-#: build/ui_mainwindow.h:291 mainwindow.cpp:141 translations/rc.cpp:69
+#: build/ui_mainwindow.h:291 mainwindow.cpp:142 translations/rc.cpp:69
 #: rc.cpp:69
 msgid "Permanent link:"
 msgstr "Állandó hivatkozás:"
 
-#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:164
-#, fuzzy
+#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:250
 msgid "An error has occurred while submitting the file %1..."
-msgstr "An error has occurred while submitting the file %1..."
+msgstr "Hiba történt a fájl feltöltése során: %1..."
 
 #: core/api/apihttpconnector.cpp:168
-#, fuzzy
 msgid "ERROR: Unexpected service result reply: %1"
-msgstr "ERROR: Unexpected service result reply: %1"
+msgstr "HIBA! Nem várt eredmény válaszként: %1"
 
-#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:127
-#: core/web/webhttpconnector.cpp:209 core/web/webhttpconnector.cpp:221
-#: core/web/webhttpconnector.cpp:404 core/web/webhttpconnector.cpp:440
+#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:193
+#: core/web/webhttpconnector.cpp:207 core/web/webhttpconnector.cpp:484
+#: core/web/webhttpconnector.cpp:527
 msgid "ERROR: No valid response received!"
 msgstr "Hiba: nem érkezett érvényes válasz!"
 
-#: core/api/apihttpconnector.cpp:211 core/web/webhttpconnector.cpp:303
+#: core/api/apihttpconnector.cpp:212 core/web/webhttpconnector.cpp:379
 msgid "Invalid URL: %1"
 msgstr "Érvénytelen URL: %1"
 
-#: core/web/webhttpconnector.cpp:396 core/web/webhttpconnector.cpp:432
+#: core/web/webhttpconnector.cpp:119
+msgid "The reply did not have a valid token. The operation must be aborted!"
+msgstr "A válasznak nem volt érvényes tokenje. A művelet futtatása megszakadt!"
+
+#: core/web/webhttpconnector.cpp:476 core/web/webhttpconnector.cpp:519
 msgid "ERROR: No valid status response received!"
 msgstr "Hiba: nem érkezett érvényes állapotú válasz!"
 
-#: main.cpp:86
+#: main.cpp:85
 msgid "Online antivirus and anti-phishing tool"
 msgstr "Online antivírus és anti-phishing program"
 
-#: main.cpp:88
+#: main.cpp:87
 msgid "Copyright (c) 2011 - Carlos López Sánchez"
 msgstr "Minden jog fenntartva (c) 2011 - Carlos López Sánchez"
 
-#: main.cpp:91
+#: main.cpp:90
 msgid "Main developer"
 msgstr "Vezető fejlesztő"
 
-#: main.cpp:93
+#: main.cpp:92
 msgid "Pavel Fric"
 msgstr "Pavel Fric"
 
-#: main.cpp:93 main.cpp:95 main.cpp:97 main.cpp:99 main.cpp:101 main.cpp:102
+#: main.cpp:92 main.cpp:94 main.cpp:96 main.cpp:98 main.cpp:100 main.cpp:101
 msgid "Translator"
 msgstr "Fordító"
 
-#: main.cpp:95
+#: main.cpp:94
 msgid "Sascha Manns"
 msgstr "Sascha Manns"
 
-#: main.cpp:97
+#: main.cpp:96
 msgid "Tóth Attila"
 msgstr "Tóth Attila"
 
-#: main.cpp:99
+#: main.cpp:98
 msgid "Gianluca Boiano"
 msgstr "Gianluca Boiano"
 
-#: main.cpp:101
+#: main.cpp:100
 msgid "Alexander Shevyakov"
 msgstr "Alexander Shevyakov"
 
-#: main.cpp:103
-#, fuzzy
+#: main.cpp:102
 msgid ""
 "KVirusTotal is based on the service provided by VirusTotal which is owned by "
 "Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember "
@@ -151,22 +153,22 @@ msgid ""
 "Sistemas S.L. Please, visit <a href='http://www.virustotal.com/terms."
 "html'>http://www.virustotal.com/terms.html</a> for more details."
 msgstr ""
-"KVirusTotal is based on the service provided by VirusTotal which is owned by "
-"Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember "
-"that <b>it is not intended as a replacement of a full-fledged antivirus "
-"program.</b><br><br>VirusTotal and the logo are trademarks of Hispasec "
-"Sistemas S.L. Please, visit <a href='http://www.virustotal.com/terms."
-"html'>http://www.virustotal.com/terms.html</a> for more details."
+"A KVirusTotal a Hispasec Sistemas S.L. tulajdonában lévő VirusTotal "
+"szolgáltatásra épül. Bár a KVirusTotal egy nagy tudású eszköz, de </b>ennek "
+"ellenére sem képes kiváltani egy teljes értékű antivírus programot.</b><br><"
+"br>A VirusTotal márkanév és a logó a Hispasec Sistemas S.L. tulajdona. Kérem "
+"látogassa meg a weboldalunkat további részletekért: <a href='http://www."
+"virustotal.com/terms.html'>http://www.virustotal.com/terms.html</a>."
 
-#: main.cpp:112
+#: main.cpp:111
 msgid "Scans the given file"
 msgstr "Egy adott fájl ellenőrzése."
 
-#: main.cpp:113
+#: main.cpp:112
 msgid "Scans the indicated remote file"
 msgstr "A megjelölt távoli fájl ellenőrzése."
 
-#: main.cpp:114
+#: main.cpp:113
 msgid "Scans the supplied URL"
 msgstr "A megadott URL ellenőrzése."
 
@@ -227,197 +229,193 @@ msgctxt "Menu name"
 msgid "File"
 msgstr "Fájl"
 
-#: mainwindow.cpp:109
+#: mainwindow.cpp:110
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: mainwindow.cpp:110
+#: mainwindow.cpp:111
 msgid "Select All"
 msgstr "Mindent kijelöl"
 
-#: mainwindow.cpp:111
+#: mainwindow.cpp:112
 msgid "Select all tasks"
 msgstr "Minden folyamat kiválasztása"
 
-#: mainwindow.cpp:115
+#: mainwindow.cpp:116
 msgid "Invert Selection"
 msgstr "Inverz kijelölés"
 
-#: mainwindow.cpp:116
+#: mainwindow.cpp:117
 msgid "Inverts the selection of tasks"
 msgstr "A kiválasztott folyamatok inverz kijelölése."
 
-#: mainwindow.cpp:120
+#: mainwindow.cpp:121
 msgid "Settings..."
 msgstr "Beállítások..."
 
-#: mainwindow.cpp:121
+#: mainwindow.cpp:122
 msgid "Show the settings dialog"
 msgstr "Megjeleníti a beállító ablakot"
 
-#: mainwindow.cpp:127
+#: mainwindow.cpp:128
 msgid "Action"
 msgstr "Műveletek"
 
-#: mainwindow.cpp:135
+#: mainwindow.cpp:136
 msgid "Check for updates..."
 msgstr "Frissítések ellenőrzése..."
 
-#: mainwindow.cpp:136
-#, fuzzy
+#: mainwindow.cpp:137
 msgid "Show welcome wizard..."
-msgstr "Az üdvözlő varázsló megjelenítése."
+msgstr "A telepítővarázsló megjelenítése."
 
-#: mainwindow.cpp:153
+#: mainwindow.cpp:154
 msgid "Click to view detailed report"
 msgstr "Kattintson a riport részleteinek megtekintéséhez."
 
-#: mainwindow.cpp:159
+#: mainwindow.cpp:160
 msgid "Ready..."
 msgstr "Kész..."
 
-#: mainwindow.cpp:160
+#: mainwindow.cpp:161
 msgid "Online antivirus and anti-phishing tool - %1"
 msgstr "Online antivírus és anti-phishing program - %1"
 
-#: mainwindow.cpp:246
-#, fuzzy
+#: mainwindow.cpp:252
 msgid ""
 "There is one or more tasks in course and will be aborted. Do you really want "
 "to quit?"
 msgstr ""
-"There is one or more tasks in course and will be aborted. Do you really want "
-"to quit?"
+"Jelenleg egy vagy több feladat futtatása történik, de ezeket le kívánja "
+"állítani. Biztosan ki akar lépni?"
 
-#: mainwindow.cpp:247
-#, fuzzy
+#: mainwindow.cpp:253
 msgid "Tasks in course"
-msgstr "Tasks in course"
+msgstr "Jelenleg egy vagy több feladat futtatása történik."
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Remote file inputbox"
 msgstr "Távoli fájl bevitel"
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Please, enter a remote file's URL:"
 msgstr "Kérem adjon meg egy távoli hivatkozást (URL):"
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "URL inputbox"
 msgstr "URL bevitel"
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "Please, enter a URL:"
 msgstr "Kérem adjon meg egy URL-t:"
 
-#: mainwindow.cpp:369
-#, fuzzy
-msgid "No service key found! Thus, the application must be closed."
-msgstr "No service key found! Thus, the application must be closed."
+#: mainwindow.cpp:372
+msgid ""
+"The current connector (WebHttpConnector) does not support the HTTP protocol. "
+"Please, choose the secure HTTPS protocol instead."
+msgstr ""
+"Az aktuális WebHttpConnector nem támogatja a HTTP-protokollt. Válaszd ki "
+"helyette a biztonságos HTTP<b>S</b> protokollt."
 
-#: mainwindow.cpp:384
+#: mainwindow.cpp:385
+msgid "No service key found! Thus, the application must be closed."
+msgstr ""
+"Nem található a szolgáltatáshoz kulcs! Az alkalmazás futtatása most véget ér."
+
+#: mainwindow.cpp:405
 msgid "General"
 msgstr "Általános"
 
-#: mainwindow.cpp:436
+#: mainwindow.cpp:458
 msgid "Antivirus service workload"
 msgstr "Antivírus szolgáltatás betöltve"
 
-#: mainwindow.cpp:437
+#: mainwindow.cpp:459
 msgid "Antivirus %1"
 msgstr "Antivírus %1"
 
-#: mainwindow.cpp:447
+#: mainwindow.cpp:469
 msgid "Anti-phising service workload"
 msgstr "Antiphising szolgáltatás betöltve"
 
-#: mainwindow.cpp:448
+#: mainwindow.cpp:470
 msgid "Anti-phising %1"
 msgstr "Antiphising %1"
 
-#: mainwindow.cpp:470
-#, fuzzy
+#: mainwindow.cpp:492
 msgid "HTTPs is enabled, so data is being transmitted securely!"
-msgstr ""
-"HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
-"highly recommended to enable it!"
+msgstr "A HTTP<b>S</b> protokoll bekapcsolva, így az adatátvitel biztonságos."
 
-#: mainwindow.cpp:474
-#, fuzzy
+#: mainwindow.cpp:496
 msgid ""
 "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
 "highly recommended to enable it!"
 msgstr ""
-"HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
-"highly recommended to enable it!"
+"A HTTP<b>S</b> protokoll kikapcsolva, így adatokat nem lehet biztonságosan "
+"küldeni. Erősen ajánlott bekapcsolni a HTTP<b>S</b> protokollt!"
 
-#: mainwindow.cpp:513
+#: mainwindow.cpp:535
 msgctxt "Application name"
 msgid "%1 information"
 msgstr "%1 információ"
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:541
 msgctxt "Application name"
 msgid "%1 - Task completed"
 msgstr "%1 - Folyamat kész."
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:547
 msgctxt "Application name"
 msgid "%1 warning"
 msgstr "%1 figyelmeztetés"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:553
 msgctxt "Application name"
 msgid "%1 error"
 msgstr "%1 hiba"
 
-#: mainwindow.cpp:547
-#, fuzzy
+#: mainwindow.cpp:569
 msgid ""
 "The current connector requires a service key, but none has been found. Thus, "
 "the welcome wizard will be shown so you can now either set it up or change "
 "the connector to be used."
 msgstr ""
-"The current connector requires a service key, but none has been found. Thus, "
-"the welcome wizard will be shown so you can now either set it up or change "
-"the connector to be used."
+"A használt konnektor (kapcsolat) igényel egy szolgáltatói kulcsot a program "
+"működéséhez, ellenben semmit nem talált. Most elindul a telepítő varázsló, "
+"melynek segítségével be tudja állítani vagy módosítani a konnektor "
+"(kapcsolat) alapértékeit."
 
-#: mainwindow.cpp:548
+#: mainwindow.cpp:570
 msgid "Service key required"
 msgstr "A szolgáltatáshoz kulcs szükséges."
 
-#: mainwindow.cpp:557
-#, fuzzy
+#: mainwindow.cpp:579
 msgctxt "Application name"
 msgid ""
 "The new version of %1 has a new connector. Do you want the welcome wizard to "
 "be shown so you can change it?"
 msgstr ""
-"The current connector requires a service key, but none has been found. Thus, "
-"the welcome wizard will be shown so you can now either set it up or change "
-"the connector to be used."
+"Az új verziónak van egy újabb kapcsolódási lehetősége. Akarod-e a "
+"telepítővarázsló segítségével módosítani?"
 
-#: mainwindow.cpp:559
+#: mainwindow.cpp:581
 msgid "Show welcome wizard"
 msgstr "Az üdvözlő varázsló megjelenítése."
 
-#: mainwindow.cpp:635
-#, fuzzy
+#: mainwindow.cpp:655
 msgctxt "Application name"
 msgid ""
 "The new version %1 has been released. Do you want to open %2 homepage to "
 "find out what's new?"
 msgstr ""
-"The current connector requires a service key, but none has been found. Thus, "
-"the welcome wizard will be shown so you can now either set it up or change "
-"the connector to be used."
+"Egy újabb programverzió jelent meg: %1. Kíváncsi vagy a(z) %2 honlapján az "
+"újdonságokra?"
 
-#: mainwindow.cpp:637 mainwindow.cpp:643
-#, fuzzy
+#: mainwindow.cpp:657 mainwindow.cpp:663
 msgid "Vesion check"
-msgstr "Verzió"
+msgstr "Újabb verzió megjelenésének ellenőrzése..."
 
-#: mainwindow.cpp:642
+#: mainwindow.cpp:662
 msgctxt "Application name"
 msgid "You are currently using the latest version of %1"
 msgstr "Jelenleg a(z) %1 legújabb verzióját használod."
@@ -453,18 +451,15 @@ msgstr "Mutassa elsőként a létező riporto(ka)t (ha van)"
 #. i18n: file: kvirustotal.kcfg:12
 #. i18n: ectx: label, entry (TaskNotificationTime), group (general)
 #: settingsdialog.cpp:38 translations/rc.cpp:6 rc.cpp:6
-#, fuzzy
 msgid "Time tasks must take to show a notification (0=disabled)"
-msgstr "Time tasks must take to show a notification (0=disabled)"
+msgstr ""
+"Az időzített feladatoknak értesítésként jelennek meg (0 = kikapcsolva)."
 
 #. i18n: file: kvirustotal.kcfg:23
 #. i18n: ectx: label, entry (InfectedTaskNotification), group (general)
 #: settingsdialog.cpp:44 translations/rc.cpp:12 rc.cpp:12
-#, fuzzy
 msgid "Show always notifications for infected tasks"
-msgstr ""
-"HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
-"highly recommended to enable it!"
+msgstr "Mindig mutassa a fertőzött feladatokat!"
 
 #. i18n: file: kvirustotal.kcfg:27
 #. i18n: ectx: label, entry (CheckVersionAtStartup), group (general)
@@ -513,9 +508,8 @@ msgid "Error"
 msgstr "Hiba"
 
 #: taskrowviewhandler.cpp:278
-#, fuzzy
 msgid "The next error occurred while processing the task %1: %2 "
-msgstr "The next error occurred while processing the task %1: %2 "
+msgstr "A következő hiba történt a(z) %1 feladat futtatása közben: %2."
 
 #: taskrowviewhandler.cpp:291
 msgid "Downloading (%L1%/%2 KiB/s)..."
@@ -538,9 +532,8 @@ msgid "Waiting..."
 msgstr "Várakozás..."
 
 #: taskrowviewhandler.cpp:318
-#, fuzzy
 msgid "Service limit reached! (wait %1)"
-msgstr "Service limit reached! (wait %1)"
+msgstr "Szolgáltatói határérték! (wait %1)"
 
 #: taskrowviewhandler.cpp:325
 msgid "Aborted"
@@ -552,9 +545,9 @@ msgstr "Vége (%1/%2)"
 
 #: taskrowviewhandler.cpp:340
 msgid "Task %1 finished"
-msgstr "A folyamat %1 véget ért."
+msgstr "A(z) %1 folyamat véget ért."
 
-#: taskrowviewhandler.cpp:357
+#: taskrowviewhandler.cpp:358
 msgid ""
 "The remote file is too big. The service does not accept files greater than "
 "%1 MiB (%2 MB)."
@@ -591,45 +584,40 @@ msgstr ""
 "ennél nagyobb állományokat."
 
 #: taskviewhandler.cpp:116
-#, fuzzy
 msgid ""
 "The selected file is already being scanned. Do you really want to add "
 "another task to scan it again?"
 msgstr ""
-"The selected file is already being scanned. Do you really want to add "
-"another task to scan it again?"
+"A kiválasztott fájlt már vizsgálják. Tényleg hozzá akarsz adni egy másik "
+"feladatot a vizsgálathoz?"
 
 #: taskviewhandler.cpp:117 taskviewhandler.cpp:142 taskviewhandler.cpp:167
-#, fuzzy
 msgid "Duplicated scan detected"
-msgstr "Duplicated scan detected"
+msgstr "Duplikált vizsgálat érzékelve."
 
 #: taskviewhandler.cpp:141
-#, fuzzy
 msgid ""
 "The selected remote file is already being scanned. Do you really want to add "
 "another task to scan it again?"
 msgstr ""
-"The selected remote file is already being scanned. Do you really want to add "
-"another task to scan it again?"
+"A kiválasztott távoli fájlt már vizsgálják. Tényleg hozzá akarsz adni egy "
+"másik feladatot a vizsgálathoz?"
 
 #: taskviewhandler.cpp:166
-#, fuzzy
 msgid ""
 "The selected URL is already being scanned. Do you really want to add another "
 "task to scan it again?"
 msgstr ""
-"The selected remote file is already being scanned. Do you really want to add "
-"another task to scan it again?"
+"A kiválasztott URL-t már vizsgálják. Tényleg hozzá akarsz adni egy másik "
+"feladatot a vizsgálathoz?"
 
 #: taskviewhandler.cpp:269
-#, fuzzy
 msgid ""
 "The task number %1 is still in course. Please, either wait for it to "
 "finished or abort it."
 msgstr ""
-"The task number %1 is still in course. Please, either wait for it to "
-"finished or abort it."
+"A(z) %1 sorszámú feladat még feldolgozás alatt van. Vagy várjon a "
+"végeredményre vagy szakítsa félbe a feladat futtatását."
 
 #: taskviewhandler.cpp:271
 msgid "Remove selected row"
@@ -637,7 +625,7 @@ msgstr "A kiválasztott sor eltávolítása."
 
 #: taskviewhandler.cpp:312 taskviewhandler.cpp:331
 msgid "There are no task that can be selected!"
-msgstr "uThere are no task that can be selected!"
+msgstr "Nincs feladat megadva, amit ki lehetne választani!"
 
 #: taskviewhandler.cpp:313 taskviewhandler.cpp:332
 msgid "Action aborted"
@@ -654,19 +642,19 @@ msgid "Abort selected tasks"
 msgstr "A kiválasztott folyamatok megszakítása."
 
 #: taskviewhandler.cpp:377
-#, fuzzy
 msgid "There is no selected task in course that can be aborted!"
-msgstr "There is no selected task in course that can be aborted!"
+msgstr ""
+"A kiválasztott feladat nincs feldolgozás alatt, így nem lehet félbeszakítani!"
 
 #: taskviewhandler.cpp:399
-#, fuzzy
 msgid "Clean finished tasks"
-msgstr "Clean finished tasks"
+msgstr "A mentesítés (tisztítás) véget ért!"
 
 #: taskviewhandler.cpp:434
-#, fuzzy
 msgid "There are no selected tasks that can be re-scanned."
-msgstr "There are no selected tasks that can be re-scanned."
+msgstr ""
+"A jelöletlen (ki nem választott) feladatokat nem tudja újra vizsgálni "
+"(ellenőrizni)!"
 
 #: taskviewhandler.cpp:434
 msgid "Re-scan operation error"
@@ -679,15 +667,14 @@ msgstr "Fájlméret növekedés!"
 #. i18n: file: kvirustotal.kcfg:9
 #. i18n: ectx: label, entry (CurrentVersion), group (general)
 #: translations/rc.cpp:3 rc.cpp:3
-#, fuzzy
 msgid "The current version. Used for upgrading operations only"
-msgstr "The current version. Used for upgrading operations only"
+msgstr "Ez az aktuális verzió. (Used for upgrading operations only.)"
 
 #. i18n: file: kvirustotal.kcfg:18
 #. i18n: ectx: label, entry (HttpConnectorType), group (general)
 #: translations/rc.cpp:9 rc.cpp:9
 msgid "HttpConnector implementation type"
-msgstr "HttpConnector megvalósítás típusa"
+msgstr "HttpConnector megvalósításának típusa"
 
 #. i18n: file: kvirustotal.kcfg:37
 #. i18n: ectx: label, entry (MainWindowPos), group (mainwindow)
@@ -722,22 +709,20 @@ msgstr "Riporttáblák oszlopszélessége"
 #. i18n: file: kvirustotal.kcfg:56
 #. i18n: ectx: label, entry (ServiceKey), group (network)
 #: translations/rc.cpp:36 rc.cpp:36
-#, fuzzy
 msgid "API key required to access the online services provided by VirusTotal"
-msgstr "API key required to access the online services provided by VirusTotal"
+msgstr "API kulcs szükséges a VirusTotal online szolgáltatásaihoz."
 
 #. i18n: file: kvirustotal.kcfg:59
 #. i18n: ectx: label, entry (SecureProtocol), group (network)
 #: translations/rc.cpp:39 rc.cpp:39
 msgid "Whether to use HTTPS protocol rather than unsecured HTTP"
-msgstr "Használj HTTPS protokollt a kevésbé biztonságos HTTP helyett!"
+msgstr "Használj HTTP<b>S</b> protokollt a kevésbé biztonságos HTTP helyett!"
 
 #. i18n: file: kvirustotal.kcfg:63
 #. i18n: ectx: label, entry (ReuseLastReport), group (network)
 #: translations/rc.cpp:42 rc.cpp:42
-#, fuzzy
 msgid "Whether to use existant reports first, if available"
-msgstr "Whether to use existant reports first, if available"
+msgstr "Ha elérhetőek, elsőként létező jelentéseket használj."
 
 #: translations/rc.cpp:73 rc.cpp:73
 msgctxt "NAME OF TRANSLATORS"
@@ -750,10 +735,9 @@ msgid "Your emails"
 msgstr "tothasze@gmail.com"
 
 #: translations/rc.cpp:75 rc.cpp:75
-#, fuzzy
 msgctxt "HOMEPAGE OF TRANSLATORS"
 msgid "Your homepages"
-msgstr "Honlap"
+msgstr "tothabringa.blog.hu"
 
 #: welcomepage.cpp:69
 msgctxt "Application name"
@@ -766,7 +750,6 @@ msgid "<h3>What's %1?</h3>"
 msgstr "<h3>Mi ez? %1?</h3>"
 
 #: welcomepage.cpp:74
-#, fuzzy
 msgctxt "Application name"
 msgid ""
 "%1 is an online-based antivirus and anti-phising tool. It allows you to "
@@ -776,16 +759,18 @@ msgid ""
 "is not intended as a replacement of a full-fledged antivirus program.</"
 "b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
-"%1 is an online-based antivirus and anti-phising tool. It allows you to "
-"submit files that will be analysed by more than 40 up-to-dated antivirus. "
-"Besides, it will accept URLs that will be tested against the main anti-"
-"phising systems.<br><br>Although %1 is a powerful tool, remember that <b>it "
-"is not intended as a replacement of a full-fledged antivirus program.</"
-"b><br><br>Please, click on the 'Next' button to set up the application."
+"A(z) %1 egy online alapon működő antivírus és anti-phising eszköz (program). "
+"Ez az alkalmazás (program) megengedi neked, hogy fájlokat tölts fel a "
+"rendszerébe és azokat több mint 40 naprakész antivírus program keresőmotorja "
+"fogja megvizsgálni. Azonkívül olyan internetcímeket (URL) fog megvizsgálni, "
+"amelyeket tesztelni fognak különböző anti-phising rendszerek.<br><br>Bár a "
+"KVirusTotal egy nagy tudású eszköz, de </b>ennek ellenére sem képes kiváltani "
+"egy teljes értékű antivírus programot.</b><br><br>Kérem kattintson a "
+"\"Következő\" gombra, hogy beállítsa az alkalmazást (programot)."
 
 #: welcomepage.cpp:96
 msgid "%1Configuration wizard - Step 1/4%2"
-msgstr "%1Beállító varázsló - 1/4 lépés%2"
+msgstr "%1 Beállító varázsló - 1/4 lépés %2"
 
 #: welcomepage.cpp:97
 msgid "%1Connector selection%2"
@@ -817,7 +802,7 @@ msgstr "%1HTTP támogatva:%2"
 
 #: welcomepage.cpp:111
 msgid "%1HTTPs supported:%2"
-msgstr "%1HTTPS támogatva:%2"
+msgstr "%1HTTP<b>S</b> támogatva:%2"
 
 #: welcomepage.cpp:115
 msgid "%1API connector%2"
@@ -828,7 +813,8 @@ msgid "Required (freely available)"
 msgstr "Szükséges (szabadon elérhető)"
 
 #: welcomepage.cpp:125 welcomepage.cpp:128 welcomepage.cpp:129
-#: welcomepage.cpp:145 welcomepage.cpp:146 welcomepage.cpp:147
+#: welcomepage.cpp:143 welcomepage.cpp:145 welcomepage.cpp:146
+#: welcomepage.cpp:147
 msgid "Yes"
 msgstr "Igen"
 
@@ -836,13 +822,13 @@ msgstr "Igen"
 msgid "20 every 5 minutes"
 msgstr "5 percenként 20"
 
-#: welcomepage.cpp:127 welcomepage.cpp:143
+#: welcomepage.cpp:127
 msgid "No"
 msgstr "Nem"
 
 #: welcomepage.cpp:133
 msgid "%1Web connector%2"
-msgstr "%1Web connector%2"
+msgstr "%1Web konnektor%2"
 
 #: welcomepage.cpp:142
 msgid "Not used"
@@ -857,12 +843,10 @@ msgid "%1Configuration wizard - Step 2/4%2"
 msgstr "%1Beállító varázsló - 2/4 lépés%2"
 
 #: welcomepage.cpp:195
-#, fuzzy
 msgid "%1Enter your VirusTotal Community Key%2"
-msgstr "%1Enter your VirusTotal Community Key%2"
+msgstr "%1Add meg a VirusTotal Közösségi Kulcsot%2"
 
 #: welcomepage.cpp:198
-#, fuzzy
 msgctxt "Registration URL"
 msgid ""
 "The API connector, previously chosen, requires a key to access the API "
@@ -873,13 +857,14 @@ msgid ""
 "the inbox of your account (sign in and drop down the <i>My account</i> "
 "menu). Now, just copy and paste it below:"
 msgstr ""
-"The API connector, previously chosen, requires a key to access the API "
-"provided by <a href='http://virustotal.com'>VirusTotal (c)</a>. If you still "
-"don't have one, you can get it free of charge by registering at <a href='%1'>"
-"%1</a>. Once you have signed up to VT Community (using the sign in box at "
-"the top left hand side of the page), you will find your personal API key in "
-"the inbox of your account (sign in and drop down the <i>My account</i> "
-"menu). Now, just copy and paste it below:"
+"A korábban kiválasztott API konnektor (kapcsolat) megkövetel egy kulcsot, "
+"hogy hozzáférjen az API-hoz, amit a <a href='http://virustotal.com'>"
+"VirusTotal ©</a> szolgáltat. Ha nincs ilyen kulcsod, regisztrálj ingyenesen "
+"itt: <a href='%1'>%1</a>. Amint bejelentkezel a VT Community "
+"felhasználójaként (használd a bejelentkezési dobozt az oldal bal felső "
+"sarkában), és ott találod a személyes API kulcsodat (legördülő menüben a <i>"
+"My account</i> menüpontban). Jelöld ki, majd másold ki (Ctrl + C) ki a "
+"vágólapra, és illeszd be (Ctrl + V) itt, alább:"
 
 #: welcomepage.cpp:210
 msgid "Service &key:"

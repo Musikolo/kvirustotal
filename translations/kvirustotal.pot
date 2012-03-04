@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-10 13:18+0200\n"
+"POT-Creation-Date: 2012-03-01 23:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #. i18n: file: mainwindow.ui:181
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
-#: build/ui_mainwindow.h:283 mainwindow.cpp:140 translations/rc.cpp:45
+#: build/ui_mainwindow.h:283 mainwindow.cpp:141 translations/rc.cpp:45
 #: rc.cpp:45
 msgid "Scan analysis date:"
 msgstr ""
@@ -44,10 +44,11 @@ msgstr ""
 #: build/ui_mainwindow.h:284 build/ui_mainwindow.h:288
 #: build/ui_mainwindow.h:290 build/ui_mainwindow.h:292
 #: core/api/apifilereport.cpp:54 core/api/apiurlreport.cpp:56
-#: core/web/weburlreport.cpp:62 reportrowviewhandler.cpp:68
-#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:121 translations/rc.cpp:48
-#: translations/rc.cpp:60 translations/rc.cpp:66 translations/rc.cpp:72
-#: rc.cpp:48 rc.cpp:60 rc.cpp:66 rc.cpp:72
+#: core/web/webfilereport.cpp:51 core/web/weburlreport.cpp:63
+#: reportrowviewhandler.cpp:68 reportviewhandler.cpp:69
+#: taskrowviewhandler.cpp:121 translations/rc.cpp:48 translations/rc.cpp:60
+#: translations/rc.cpp:66 translations/rc.cpp:72 rc.cpp:48 rc.cpp:60 rc.cpp:66
+#: rc.cpp:72
 msgid "N/A"
 msgstr ""
 
@@ -77,12 +78,12 @@ msgstr ""
 
 #. i18n: file: mainwindow.ui:361
 #. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
-#: build/ui_mainwindow.h:291 mainwindow.cpp:141 translations/rc.cpp:69
+#: build/ui_mainwindow.h:291 mainwindow.cpp:142 translations/rc.cpp:69
 #: rc.cpp:69
 msgid "Permanent link:"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:164
+#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:250
 msgid "An error has occurred while submitting the file %1..."
 msgstr ""
 
@@ -90,57 +91,61 @@ msgstr ""
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:127
-#: core/web/webhttpconnector.cpp:209 core/web/webhttpconnector.cpp:221
-#: core/web/webhttpconnector.cpp:404 core/web/webhttpconnector.cpp:440
+#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:193
+#: core/web/webhttpconnector.cpp:207 core/web/webhttpconnector.cpp:484
+#: core/web/webhttpconnector.cpp:527
 msgid "ERROR: No valid response received!"
 msgstr ""
 
-#: core/api/apihttpconnector.cpp:211 core/web/webhttpconnector.cpp:303
+#: core/api/apihttpconnector.cpp:212 core/web/webhttpconnector.cpp:379
 msgid "Invalid URL: %1"
 msgstr ""
 
-#: core/web/webhttpconnector.cpp:396 core/web/webhttpconnector.cpp:432
+#: core/web/webhttpconnector.cpp:119
+msgid "The reply did not have a valid token. The operation must be aborted!"
+msgstr ""
+
+#: core/web/webhttpconnector.cpp:476 core/web/webhttpconnector.cpp:519
 msgid "ERROR: No valid status response received!"
 msgstr ""
 
-#: main.cpp:86
+#: main.cpp:85
 msgid "Online antivirus and anti-phishing tool"
 msgstr ""
 
-#: main.cpp:88
+#: main.cpp:87
 msgid "Copyright (c) 2011 - Carlos López Sánchez"
 msgstr ""
 
-#: main.cpp:91
+#: main.cpp:90
 msgid "Main developer"
 msgstr ""
 
-#: main.cpp:93
+#: main.cpp:92
 msgid "Pavel Fric"
 msgstr ""
 
-#: main.cpp:93 main.cpp:95 main.cpp:97 main.cpp:99 main.cpp:101 main.cpp:102
+#: main.cpp:92 main.cpp:94 main.cpp:96 main.cpp:98 main.cpp:100 main.cpp:101
 msgid "Translator"
 msgstr ""
 
-#: main.cpp:95
+#: main.cpp:94
 msgid "Sascha Manns"
 msgstr ""
 
-#: main.cpp:97
+#: main.cpp:96
 msgid "Tóth Attila"
 msgstr ""
 
-#: main.cpp:99
+#: main.cpp:98
 msgid "Gianluca Boiano"
 msgstr ""
 
-#: main.cpp:101
+#: main.cpp:100
 msgid "Alexander Shevyakov"
 msgstr ""
 
-#: main.cpp:103
+#: main.cpp:102
 msgid ""
 "KVirusTotal is based on the service provided by VirusTotal which is owned by "
 "Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember "
@@ -150,15 +155,15 @@ msgid ""
 "html'>http://www.virustotal.com/terms.html</a> for more details."
 msgstr ""
 
-#: main.cpp:112
+#: main.cpp:111
 msgid "Scans the given file"
 msgstr ""
 
-#: main.cpp:113
+#: main.cpp:112
 msgid "Scans the indicated remote file"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:113
 msgid "Scans the supplied URL"
 msgstr ""
 
@@ -219,172 +224,178 @@ msgctxt "Menu name"
 msgid "File"
 msgstr ""
 
-#: mainwindow.cpp:109
+#: mainwindow.cpp:110
 msgid "Edit"
 msgstr ""
 
-#: mainwindow.cpp:110
+#: mainwindow.cpp:111
 msgid "Select All"
 msgstr ""
 
-#: mainwindow.cpp:111
+#: mainwindow.cpp:112
 msgid "Select all tasks"
 msgstr ""
 
-#: mainwindow.cpp:115
+#: mainwindow.cpp:116
 msgid "Invert Selection"
 msgstr ""
 
-#: mainwindow.cpp:116
+#: mainwindow.cpp:117
 msgid "Inverts the selection of tasks"
 msgstr ""
 
-#: mainwindow.cpp:120
+#: mainwindow.cpp:121
 msgid "Settings..."
 msgstr ""
 
-#: mainwindow.cpp:121
+#: mainwindow.cpp:122
 msgid "Show the settings dialog"
 msgstr ""
 
-#: mainwindow.cpp:127
+#: mainwindow.cpp:128
 msgid "Action"
 msgstr ""
 
-#: mainwindow.cpp:135
+#: mainwindow.cpp:136
 msgid "Check for updates..."
 msgstr ""
 
-#: mainwindow.cpp:136
+#: mainwindow.cpp:137
 msgid "Show welcome wizard..."
 msgstr ""
 
-#: mainwindow.cpp:153
+#: mainwindow.cpp:154
 msgid "Click to view detailed report"
 msgstr ""
 
-#: mainwindow.cpp:159
+#: mainwindow.cpp:160
 msgid "Ready..."
 msgstr ""
 
-#: mainwindow.cpp:160
+#: mainwindow.cpp:161
 msgid "Online antivirus and anti-phishing tool - %1"
 msgstr ""
 
-#: mainwindow.cpp:246
+#: mainwindow.cpp:252
 msgid ""
 "There is one or more tasks in course and will be aborted. Do you really want "
 "to quit?"
 msgstr ""
 
-#: mainwindow.cpp:247
+#: mainwindow.cpp:253
 msgid "Tasks in course"
 msgstr ""
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Remote file inputbox"
 msgstr ""
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Please, enter a remote file's URL:"
 msgstr ""
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "URL inputbox"
 msgstr ""
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "Please, enter a URL:"
 msgstr ""
 
-#: mainwindow.cpp:369
+#: mainwindow.cpp:372
+msgid ""
+"The current connector (WebHttpConnector) does not support the HTTP protocol. "
+"Please, choose the secure HTTPS protocol instead."
+msgstr ""
+
+#: mainwindow.cpp:385
 msgid "No service key found! Thus, the application must be closed."
 msgstr ""
 
-#: mainwindow.cpp:384
+#: mainwindow.cpp:405
 msgid "General"
 msgstr ""
 
-#: mainwindow.cpp:436
+#: mainwindow.cpp:458
 msgid "Antivirus service workload"
 msgstr ""
 
-#: mainwindow.cpp:437
+#: mainwindow.cpp:459
 msgid "Antivirus %1"
 msgstr ""
 
-#: mainwindow.cpp:447
+#: mainwindow.cpp:469
 msgid "Anti-phising service workload"
 msgstr ""
 
-#: mainwindow.cpp:448
+#: mainwindow.cpp:470
 msgid "Anti-phising %1"
 msgstr ""
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:492
 msgid "HTTPs is enabled, so data is being transmitted securely!"
 msgstr ""
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:496
 msgid ""
 "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
 "highly recommended to enable it!"
 msgstr ""
 
-#: mainwindow.cpp:513
+#: mainwindow.cpp:535
 msgctxt "Application name"
 msgid "%1 information"
 msgstr ""
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:541
 msgctxt "Application name"
 msgid "%1 - Task completed"
 msgstr ""
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:547
 msgctxt "Application name"
 msgid "%1 warning"
 msgstr ""
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:553
 msgctxt "Application name"
 msgid "%1 error"
 msgstr ""
 
-#: mainwindow.cpp:547
+#: mainwindow.cpp:569
 msgid ""
 "The current connector requires a service key, but none has been found. Thus, "
 "the welcome wizard will be shown so you can now either set it up or change "
 "the connector to be used."
 msgstr ""
 
-#: mainwindow.cpp:548
+#: mainwindow.cpp:570
 msgid "Service key required"
 msgstr ""
 
-#: mainwindow.cpp:557
+#: mainwindow.cpp:579
 msgctxt "Application name"
 msgid ""
 "The new version of %1 has a new connector. Do you want the welcome wizard to "
 "be shown so you can change it?"
 msgstr ""
 
-#: mainwindow.cpp:559
+#: mainwindow.cpp:581
 msgid "Show welcome wizard"
 msgstr ""
 
-#: mainwindow.cpp:635
+#: mainwindow.cpp:655
 msgctxt "Application name"
 msgid ""
 "The new version %1 has been released. Do you want to open %2 homepage to "
 "find out what's new?"
 msgstr ""
 
-#: mainwindow.cpp:637 mainwindow.cpp:643
+#: mainwindow.cpp:657 mainwindow.cpp:663
 msgid "Vesion check"
 msgstr ""
 
-#: mainwindow.cpp:642
+#: mainwindow.cpp:662
 msgctxt "Application name"
 msgid "You are currently using the latest version of %1"
 msgstr ""
@@ -515,7 +526,7 @@ msgstr ""
 msgid "Task %1 finished"
 msgstr ""
 
-#: taskrowviewhandler.cpp:357
+#: taskrowviewhandler.cpp:358
 msgid ""
 "The remote file is too big. The service does not accept files greater than "
 "%1 MiB (%2 MB)."
@@ -758,7 +769,8 @@ msgid "Required (freely available)"
 msgstr ""
 
 #: welcomepage.cpp:125 welcomepage.cpp:128 welcomepage.cpp:129
-#: welcomepage.cpp:145 welcomepage.cpp:146 welcomepage.cpp:147
+#: welcomepage.cpp:143 welcomepage.cpp:145 welcomepage.cpp:146
+#: welcomepage.cpp:147
 msgid "Yes"
 msgstr ""
 
@@ -766,7 +778,7 @@ msgstr ""
 msgid "20 every 5 minutes"
 msgstr ""
 
-#: welcomepage.cpp:127 welcomepage.cpp:143
+#: welcomepage.cpp:127
 msgid "No"
 msgstr ""
 

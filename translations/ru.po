@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-10 13:18+0200\n"
+"POT-Creation-Date: 2012-03-01 23:13+0100\n"
 "PO-Revision-Date: 2011-09-17 10:40+0400\n"
 "Last-Translator: Alexander Shevyakov <stavsandro@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #. i18n: file: mainwindow.ui:181
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
-#: build/ui_mainwindow.h:283 mainwindow.cpp:140 translations/rc.cpp:45
+#: build/ui_mainwindow.h:283 mainwindow.cpp:141 translations/rc.cpp:45
 #: rc.cpp:45
 msgid "Scan analysis date:"
 msgstr "Дата сканирования:"
@@ -44,10 +44,11 @@ msgstr "Дата сканирования:"
 #: build/ui_mainwindow.h:284 build/ui_mainwindow.h:288
 #: build/ui_mainwindow.h:290 build/ui_mainwindow.h:292
 #: core/api/apifilereport.cpp:54 core/api/apiurlreport.cpp:56
-#: core/web/weburlreport.cpp:62 reportrowviewhandler.cpp:68
-#: reportviewhandler.cpp:69 taskrowviewhandler.cpp:121 translations/rc.cpp:48
-#: translations/rc.cpp:60 translations/rc.cpp:66 translations/rc.cpp:72
-#: rc.cpp:48 rc.cpp:60 rc.cpp:66 rc.cpp:72
+#: core/web/webfilereport.cpp:51 core/web/weburlreport.cpp:63
+#: reportrowviewhandler.cpp:68 reportviewhandler.cpp:69
+#: taskrowviewhandler.cpp:121 translations/rc.cpp:48 translations/rc.cpp:60
+#: translations/rc.cpp:66 translations/rc.cpp:72 rc.cpp:48 rc.cpp:60 rc.cpp:66
+#: rc.cpp:72
 msgid "N/A"
 msgstr "Недоступно"
 
@@ -77,12 +78,12 @@ msgstr "SHA256:"
 
 #. i18n: file: mainwindow.ui:361
 #. i18n: ectx: property (text), widget (QLabel, permanentLinkLabel)
-#: build/ui_mainwindow.h:291 mainwindow.cpp:141 translations/rc.cpp:69
+#: build/ui_mainwindow.h:291 mainwindow.cpp:142 translations/rc.cpp:69
 #: rc.cpp:69
 msgid "Permanent link:"
 msgstr "Прямая ссылка"
 
-#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:164
+#: core/api/apihttpconnector.cpp:116 core/web/webhttpconnector.cpp:250
 msgid "An error has occurred while submitting the file %1..."
 msgstr "Произошла ошибка при отправке файла %1..."
 
@@ -90,57 +91,61 @@ msgstr "Произошла ошибка при отправке файла %1...
 msgid "ERROR: Unexpected service result reply: %1"
 msgstr "ОШИБКА: Неожиданный ответ от сервиса: %1"
 
-#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:127
-#: core/web/webhttpconnector.cpp:209 core/web/webhttpconnector.cpp:221
-#: core/web/webhttpconnector.cpp:404 core/web/webhttpconnector.cpp:440
+#: core/api/apihttpconnector.cpp:174 core/web/webhttpconnector.cpp:193
+#: core/web/webhttpconnector.cpp:207 core/web/webhttpconnector.cpp:484
+#: core/web/webhttpconnector.cpp:527
 msgid "ERROR: No valid response received!"
 msgstr "ОШИБКА: Получен неправильный ответ!"
 
-#: core/api/apihttpconnector.cpp:211 core/web/webhttpconnector.cpp:303
+#: core/api/apihttpconnector.cpp:212 core/web/webhttpconnector.cpp:379
 msgid "Invalid URL: %1"
 msgstr "Неправильный URL: %1"
 
-#: core/web/webhttpconnector.cpp:396 core/web/webhttpconnector.cpp:432
+#: core/web/webhttpconnector.cpp:119
+msgid "The reply did not have a valid token. The operation must be aborted!"
+msgstr ""
+
+#: core/web/webhttpconnector.cpp:476 core/web/webhttpconnector.cpp:519
 msgid "ERROR: No valid status response received!"
 msgstr "ОШИБКА: Получен неправильный статус ответа!"
 
-#: main.cpp:86
+#: main.cpp:85
 msgid "Online antivirus and anti-phishing tool"
 msgstr "Онлайн-антивирус и антифишинг"
 
-#: main.cpp:88
+#: main.cpp:87
 msgid "Copyright (c) 2011 - Carlos López Sánchez"
 msgstr "Copyright (c) 2011 - Carlos López Sánchez"
 
-#: main.cpp:91
+#: main.cpp:90
 msgid "Main developer"
 msgstr "Главный разработчик"
 
-#: main.cpp:93
+#: main.cpp:92
 msgid "Pavel Fric"
 msgstr "Pavel Fric"
 
-#: main.cpp:93 main.cpp:95 main.cpp:97 main.cpp:99 main.cpp:101 main.cpp:102
+#: main.cpp:92 main.cpp:94 main.cpp:96 main.cpp:98 main.cpp:100 main.cpp:101
 msgid "Translator"
 msgstr "Переводчик"
 
-#: main.cpp:95
+#: main.cpp:94
 msgid "Sascha Manns"
 msgstr "Sascha Manns"
 
-#: main.cpp:97
+#: main.cpp:96
 msgid "Tóth Attila"
 msgstr "Tóth Attila"
 
-#: main.cpp:99
+#: main.cpp:98
 msgid "Gianluca Boiano"
 msgstr "Gianluca Boiano"
 
-#: main.cpp:101
+#: main.cpp:100
 msgid "Alexander Shevyakov"
 msgstr "Александр Шевяков"
 
-#: main.cpp:103
+#: main.cpp:102
 msgid ""
 "KVirusTotal is based on the service provided by VirusTotal which is owned by "
 "Hispasec Sistemas S.L. Although KVirusTotal is a powerful tool, remember "
@@ -151,23 +156,20 @@ msgid ""
 msgstr ""
 "KVirusTotal основан на сервисе VirusTotal, который принадлежит компании "
 "Hispasec Sistemas S.L. Несмотря на то, что KVirusTotal довольно мощная "
-"утилита, "
-"помните, что <b>она не является полноценной заменой антивируса.</b><br><br> "
-"VirusTotal и логотип - зарегистрированные товарные знаки Hispasec Sistemas S."
-"L. "
-"Посетите <a href='http://www.virustotal.com/terms.html'>http://www.virustotal."
-"com/terms.html</a> "
-"для подробной информации."
+"утилита, помните, что <b>она не является полноценной заменой антивируса.</"
+"b><br><br> VirusTotal и логотип - зарегистрированные товарные знаки Hispasec "
+"Sistemas S.L. Посетите <a href='http://www.virustotal.com/terms.html'>http://"
+"www.virustotal.com/terms.html</a> для подробной информации."
 
-#: main.cpp:112
+#: main.cpp:111
 msgid "Scans the given file"
 msgstr "Сканирует указанный файл"
 
-#: main.cpp:113
+#: main.cpp:112
 msgid "Scans the indicated remote file"
 msgstr "Сканирует указанный удалённый файл"
 
-#: main.cpp:114
+#: main.cpp:113
 msgid "Scans the supplied URL"
 msgstr "Сканирует указанный URL"
 
@@ -228,159 +230,165 @@ msgctxt "Menu name"
 msgid "File"
 msgstr "Файл"
 
-#: mainwindow.cpp:109
+#: mainwindow.cpp:110
 msgid "Edit"
 msgstr "Правка"
 
-#: mainwindow.cpp:110
+#: mainwindow.cpp:111
 msgid "Select All"
 msgstr "Выбрать всё"
 
-#: mainwindow.cpp:111
+#: mainwindow.cpp:112
 msgid "Select all tasks"
 msgstr "Выбрать все задания"
 
-#: mainwindow.cpp:115
+#: mainwindow.cpp:116
 msgid "Invert Selection"
 msgstr "Инвертировать выделение"
 
-#: mainwindow.cpp:116
+#: mainwindow.cpp:117
 msgid "Inverts the selection of tasks"
 msgstr "Инвертирует выделение в списке заданий"
 
-#: mainwindow.cpp:120
+#: mainwindow.cpp:121
 msgid "Settings..."
 msgstr "Настройки..."
 
-#: mainwindow.cpp:121
+#: mainwindow.cpp:122
 msgid "Show the settings dialog"
 msgstr "Показывает диалог настроек"
 
-#: mainwindow.cpp:127
+#: mainwindow.cpp:128
 msgid "Action"
 msgstr "Сервис"
 
-#: mainwindow.cpp:135
+#: mainwindow.cpp:136
 msgid "Check for updates..."
 msgstr "Проверить обновления..."
 
-#: mainwindow.cpp:136
+#: mainwindow.cpp:137
 msgid "Show welcome wizard..."
 msgstr "Показать мастер первоначальной настройки..."
 
-#: mainwindow.cpp:153
+#: mainwindow.cpp:154
 msgid "Click to view detailed report"
 msgstr "Щелкните, чтобы посмотреть детальный отчёт"
 
-#: mainwindow.cpp:159
+#: mainwindow.cpp:160
 msgid "Ready..."
 msgstr "Готово..."
 
-#: mainwindow.cpp:160
+#: mainwindow.cpp:161
 msgid "Online antivirus and anti-phishing tool - %1"
 msgstr "Онлайн-антивирус и антифишинг - %1"
 
-#: mainwindow.cpp:246
+#: mainwindow.cpp:252
 msgid ""
 "There is one or more tasks in course and will be aborted. Do you really want "
 "to quit?"
 msgstr ""
-"Одно или более заданий еще выполняются, и их выполнение будет прервано. "
-"Вы действительно хотите выйти?"
+"Одно или более заданий еще выполняются, и их выполнение будет прервано. Вы "
+"действительно хотите выйти?"
 
-#: mainwindow.cpp:247
+#: mainwindow.cpp:253
 msgid "Tasks in course"
 msgstr "Задания в очереди"
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Remote file inputbox"
 msgstr "Поле для выбора удаленного файла"
 
-#: mainwindow.cpp:293
+#: mainwindow.cpp:299
 msgid "Please, enter a remote file's URL:"
 msgstr "Пожалуйста, введите URL удаленного файла:"
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "URL inputbox"
 msgstr "Поле для ввода URL"
 
-#: mainwindow.cpp:308
+#: mainwindow.cpp:314
 msgid "Please, enter a URL:"
 msgstr "Пожалуйста, введите URL:"
 
-#: mainwindow.cpp:369
+#: mainwindow.cpp:372
+msgid ""
+"The current connector (WebHttpConnector) does not support the HTTP protocol. "
+"Please, choose the secure HTTPS protocol instead."
+msgstr ""
+
+#: mainwindow.cpp:385
 msgid "No service key found! Thus, the application must be closed."
 msgstr ""
 "Не найден сервисный ключ! Приложение не может продолжать работу и будет "
 "закрыто."
 
-#: mainwindow.cpp:384
+#: mainwindow.cpp:405
 msgid "General"
 msgstr "Общие"
 
-#: mainwindow.cpp:436
+#: mainwindow.cpp:458
 msgid "Antivirus service workload"
 msgstr "Загрузка антивирусного сканера"
 
-#: mainwindow.cpp:437
+#: mainwindow.cpp:459
 msgid "Antivirus %1"
 msgstr "Антивирус %1"
 
-#: mainwindow.cpp:447
+#: mainwindow.cpp:469
 msgid "Anti-phising service workload"
 msgstr "Загрузка антифишингового сканера"
 
-#: mainwindow.cpp:448
+#: mainwindow.cpp:470
 msgid "Anti-phising %1"
 msgstr "Антифишинг %1"
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:492
 msgid "HTTPs is enabled, so data is being transmitted securely!"
 msgstr "HTTPS включен, данные передаются по защищенному соединению!"
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:496
 msgid ""
 "HTTPs is disabled, so data is being transmitted insecurely. Thus, it is "
 "highly recommended to enable it!"
 msgstr ""
-"HTTPS выключен, данные передаются по незащищенному соединению. "
-"Настоятельно рекомендуется включить HTTPS."
+"HTTPS выключен, данные передаются по незащищенному соединению. Настоятельно "
+"рекомендуется включить HTTPS."
 
-#: mainwindow.cpp:513
+#: mainwindow.cpp:535
 msgctxt "Application name"
 msgid "%1 information"
 msgstr "Информация о %1"
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:541
 msgctxt "Application name"
 msgid "%1 - Task completed"
 msgstr "%1 - задание выполнено"
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:547
 msgctxt "Application name"
 msgid "%1 warning"
 msgstr "%1 - предупреждение"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:553
 msgctxt "Application name"
 msgid "%1 error"
 msgstr "%1 - ошибка"
 
-#: mainwindow.cpp:547
+#: mainwindow.cpp:569
 msgid ""
 "The current connector requires a service key, but none has been found. Thus, "
 "the welcome wizard will be shown so you can now either set it up or change "
 "the connector to be used."
 msgstr ""
-"Вы не указали сервисный ключ, который необходим текущему коннектору. "
-"Сейчас будет открыт мастер первоначальной настройки, где вы сможете "
-"указать сервисный ключ или изменить коннектор."
+"Вы не указали сервисный ключ, который необходим текущему коннектору. Сейчас "
+"будет открыт мастер первоначальной настройки, где вы сможете указать "
+"сервисный ключ или изменить коннектор."
 
-#: mainwindow.cpp:548
+#: mainwindow.cpp:570
 msgid "Service key required"
 msgstr "Необходим сервисный ключ"
 
-#: mainwindow.cpp:557
+#: mainwindow.cpp:579
 msgctxt "Application name"
 msgid ""
 "The new version of %1 has a new connector. Do you want the welcome wizard to "
@@ -389,24 +397,24 @@ msgstr ""
 "Новая версия %1 содержит новый коннектор. Открыть диалог первоначальной "
 "настройки для изменения коннектора?"
 
-#: mainwindow.cpp:559
+#: mainwindow.cpp:581
 msgid "Show welcome wizard"
 msgstr "Открыть диалог первоначальной настройки"
 
-#: mainwindow.cpp:635
+#: mainwindow.cpp:655
 msgctxt "Application name"
 msgid ""
 "The new version %1 has been released. Do you want to open %2 homepage to "
 "find out what's new?"
 msgstr ""
-"Вышла новая версия %1. Вы хотите открыть домашнюю страницу %2, "
-"чтобы посмотреть, что есть нового?"
+"Вышла новая версия %1. Вы хотите открыть домашнюю страницу %2, чтобы "
+"посмотреть, что есть нового?"
 
-#: mainwindow.cpp:637 mainwindow.cpp:643
+#: mainwindow.cpp:657 mainwindow.cpp:663
 msgid "Vesion check"
 msgstr "Проверка версии"
 
-#: mainwindow.cpp:642
+#: mainwindow.cpp:662
 msgctxt "Application name"
 msgid "You are currently using the latest version of %1"
 msgstr "Вы используете последнюю версию %1"
@@ -443,9 +451,7 @@ msgstr "Показать последние отчёты, если они ест
 #. i18n: ectx: label, entry (TaskNotificationTime), group (general)
 #: settingsdialog.cpp:38 translations/rc.cpp:6 rc.cpp:6
 msgid "Time tasks must take to show a notification (0=disabled)"
-msgstr ""
-"Время, в течение которого задачи отображают уведомления. "
-"(0=выкл.)"
+msgstr "Время, в течение которого задачи отображают уведомления. (0=выкл.)"
 
 #. i18n: file: kvirustotal.kcfg:23
 #. i18n: ectx: label, entry (InfectedTaskNotification), group (general)
@@ -539,13 +545,13 @@ msgstr "Завершено (%1/%2)"
 msgid "Task %1 finished"
 msgstr "Задание %1 завершено"
 
-#: taskrowviewhandler.cpp:357
+#: taskrowviewhandler.cpp:358
 msgid ""
 "The remote file is too big. The service does not accept files greater than "
 "%1 MiB (%2 MB)."
 msgstr ""
-"Удаленный файл слишком велик. Сервис не принимает файлы больше "
-"%1 Мбит (%2 МБ)"
+"Удаленный файл слишком велик. Сервис не принимает файлы больше %1 Мбит (%2 "
+"МБ)"
 
 #: taskviewhandler.cpp:54
 msgid "Type"
@@ -571,17 +577,15 @@ msgstr "Оставшееся время"
 msgid ""
 "The given file is too big. The service does not accept files greater than %1 "
 "MiB (%2 MB)."
-msgstr ""
-"Файл слишком велик. Сервис не принимает файлы больше "
-"%1 Мбит (%2 МБ)"
+msgstr "Файл слишком велик. Сервис не принимает файлы больше %1 Мбит (%2 МБ)"
 
 #: taskviewhandler.cpp:116
 msgid ""
 "The selected file is already being scanned. Do you really want to add "
 "another task to scan it again?"
 msgstr ""
-"Выбранный файл уже был просканирован. Вы действительно хотите "
-"добавить его в другое задание для повторного сканирования?"
+"Выбранный файл уже был просканирован. Вы действительно хотите добавить его в "
+"другое задание для повторного сканирования?"
 
 #: taskviewhandler.cpp:117 taskviewhandler.cpp:142 taskviewhandler.cpp:167
 msgid "Duplicated scan detected"
@@ -600,16 +604,16 @@ msgid ""
 "The selected URL is already being scanned. Do you really want to add another "
 "task to scan it again?"
 msgstr ""
-"Выбранный URL уже был просканирован. Вы действительно хотите "
-"добавить его в другое задание для повторного сканирования?"
+"Выбранный URL уже был просканирован. Вы действительно хотите добавить его в "
+"другое задание для повторного сканирования?"
 
 #: taskviewhandler.cpp:269
 msgid ""
 "The task number %1 is still in course. Please, either wait for it to "
 "finished or abort it."
 msgstr ""
-"Задание №%1 сейчас обрабатывается. Пожалуйста, подождите "
-"завершения или прервите его выполнение."
+"Задание №%1 сейчас обрабатывается. Пожалуйста, подождите завершения или "
+"прервите его выполнение."
 
 #: taskviewhandler.cpp:271
 msgid "Remove selected row"
@@ -748,13 +752,12 @@ msgid ""
 "is not intended as a replacement of a full-fledged antivirus program.</"
 "b><br><br>Please, click on the 'Next' button to set up the application."
 msgstr ""
-"%1 - онлайн-антивирус и антифишинг. Позволяет вам отправлять файлы "
-"для сканирования более чем 40 антивирусами с обновленными базами. "
-"Кроме того, утилита позволяет протестировать URL с помощью известных "
-"антифишинговых систем.<br><br>Хотя %1 и достаточно мощная утилита, "
-"помните, что <b>она не является полноценной заменой антивирусной программы</b>"
-" "
-"<br><br>Пожалуйста, нажмите кнопку \"Далее\", чтобы настроить приложение."
+"%1 - онлайн-антивирус и антифишинг. Позволяет вам отправлять файлы для "
+"сканирования более чем 40 антивирусами с обновленными базами. Кроме того, "
+"утилита позволяет протестировать URL с помощью известных антифишинговых "
+"систем.<br><br>Хотя %1 и достаточно мощная утилита, помните, что <b>она не "
+"является полноценной заменой антивирусной программы</b> <br><br>Пожалуйста, "
+"нажмите кнопку \"Далее\", чтобы настроить приложение."
 
 #: welcomepage.cpp:96
 msgid "%1Configuration wizard - Step 1/4%2"
@@ -801,7 +804,8 @@ msgid "Required (freely available)"
 msgstr "Требуется (доступно бесплатно)"
 
 #: welcomepage.cpp:125 welcomepage.cpp:128 welcomepage.cpp:129
-#: welcomepage.cpp:145 welcomepage.cpp:146 welcomepage.cpp:147
+#: welcomepage.cpp:143 welcomepage.cpp:145 welcomepage.cpp:146
+#: welcomepage.cpp:147
 msgid "Yes"
 msgstr "Да"
 
@@ -809,7 +813,7 @@ msgstr "Да"
 msgid "20 every 5 minutes"
 msgstr "20 каждые 5 минут"
 
-#: welcomepage.cpp:127 welcomepage.cpp:143
+#: welcomepage.cpp:127
 msgid "No"
 msgstr "Нет"
 
@@ -845,12 +849,11 @@ msgid ""
 "menu). Now, just copy and paste it below:"
 msgstr ""
 "Выбранный API коннектор требует указания ключа для доступа к API "
-"предоставляемого <a href='http://virustotal.com'>VirusTotal (c)</a>. Если "
-"у вас нет ключа, то вы можете бесплатно получить его, зарегистрировавшись "
-"здесь: "
-"<a href='%1'>%1</a>. После регистрации в VT Community вы найдете "
-"ваш API ключ во входящих сообщениях вашего аккаунта. "
-"Просто скопируйте его и вставьте в поле ввода внизу:"
+"предоставляемого <a href='http://virustotal.com'>VirusTotal (c)</a>. Если у "
+"вас нет ключа, то вы можете бесплатно получить его, зарегистрировавшись "
+"здесь: <a href='%1'>%1</a>. После регистрации в VT Community вы найдете ваш "
+"API ключ во входящих сообщениях вашего аккаунта. Просто скопируйте его и "
+"вставьте в поле ввода внизу:"
 
 #: welcomepage.cpp:210
 msgid "Service &key:"
@@ -869,8 +872,7 @@ msgid ""
 "<br><br>%1 is verifying that the key you entered is valid. Please, wait for "
 "a few seconds..."
 msgstr ""
-"<br><br>%1 проверяет ключ на корректность. Пожалуйста, немного "
-"подождите..."
+"<br><br>%1 проверяет ключ на корректность. Пожалуйста, немного подождите..."
 
 #: welcomepage.cpp:255
 msgid "<b>Status:</b>"
@@ -893,8 +895,8 @@ msgid ""
 "<br><br>%1 is ready to work! Please, click on the 'Finish' button to close "
 "this wizard."
 msgstr ""
-"<br><br>%1 готов к работе! Нажмите на кнопке \"Завершить\",  "
-"чтобы закрыть мастер."
+"<br><br>%1 готов к работе! Нажмите на кнопке \"Завершить\",  чтобы закрыть "
+"мастер."
 
 #: welcomepage.cpp:318
 msgid "Validating your key..."
@@ -915,5 +917,3 @@ msgstr "Ошибка: \"%1\". Пожалуйста, вернитесь наза�
 #: welcomewizard.cpp:50
 msgid "Welcome wizard - %1"
 msgstr "Мастер первоначальной настройки - %1"
-
-
