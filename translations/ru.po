@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Alexander Shevyakov <stavsandro@yandex.ru>, 2011.
-# Alexander Shevyakov <stavsandro@gmail.com>, 2011.
+# Alexander Shevyakov <stavsandro@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-01 23:13+0100\n"
-"PO-Revision-Date: 2011-09-17 10:40+0400\n"
+"PO-Revision-Date: 2012-03-05 22:44+0400\n"
 "Last-Translator: Alexander Shevyakov <stavsandro@gmail.com>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language-Team: American English <kde-russian@lists.kde.ru>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,6 +104,7 @@ msgstr "Неправильный URL: %1"
 #: core/web/webhttpconnector.cpp:119
 msgid "The reply did not have a valid token. The operation must be aborted!"
 msgstr ""
+"В ответе сервера не обнаружен корректный токен. Операция должна быть прервана."
 
 #: core/web/webhttpconnector.cpp:476 core/web/webhttpconnector.cpp:519
 msgid "ERROR: No valid status response received!"
@@ -315,6 +316,8 @@ msgid ""
 "The current connector (WebHttpConnector) does not support the HTTP protocol. "
 "Please, choose the secure HTTPS protocol instead."
 msgstr ""
+"Текущий коннектор (WebHttpConnector) не поддерживает протокол HTTP. "
+"Пожалуйста, выберите защищенный протокол HTTPS."
 
 #: mainwindow.cpp:385
 msgid "No service key found! Thus, the application must be closed."
@@ -917,3 +920,4 @@ msgstr "Ошибка: \"%1\". Пожалуйста, вернитесь наза�
 #: welcomewizard.cpp:50
 msgid "Welcome wizard - %1"
 msgstr "Мастер первоначальной настройки - %1"
+
