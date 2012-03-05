@@ -1,21 +1,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Gianluca Boiano <morf3089@gmail.com>, 2011.
+# Gianluca Boiano <morf3089@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-01 23:13+0100\n"
-"PO-Revision-Date: 2011-09-24 20:59+0200\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2012-03-05 01:00+0100\n"
+"Last-Translator: Gianluca Boiano <morf3089@gmail.com>\n"
 "Language-Team: American English <kde-i18n-it@kde.org>\n"
-"Language: \n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.4\n"
 
 #. i18n: file: mainwindow.ui:181
 #. i18n: ectx: property (text), widget (QLabel, scanAnalysisDateLabel)
@@ -103,6 +103,7 @@ msgstr "Indirizzo non valido: %1"
 #: core/web/webhttpconnector.cpp:119
 msgid "The reply did not have a valid token. The operation must be aborted!"
 msgstr ""
+"La risposta non contiene un token valido. L'operazione deve essere annullata!"
 
 #: core/web/webhttpconnector.cpp:476 core/web/webhttpconnector.cpp:519
 msgid "ERROR: No valid status response received!"
@@ -314,6 +315,8 @@ msgid ""
 "The current connector (WebHttpConnector) does not support the HTTP protocol. "
 "Please, choose the secure HTTPS protocol instead."
 msgstr ""
+"L'attuale connettore (WebHttpConnector) non supporta il protocollo HTTP. "
+"Per favore, scegliere in alternativa il protocollo sicuro HTTPS."
 
 #: mainwindow.cpp:385
 msgid "No service key found! Thus, the application must be closed."
